@@ -5,10 +5,9 @@ using System.Threading.Tasks;
 
 namespace ZreperujTo.Web.Models.CommonModels
 {
-    public class Category
+    public class Subcategory
     {
-        public int CategoryId { get; set; }
+        public int SubcategoryId { get; set; }
         public string Name { get; set; }
-        public List<Subcategory> Subcategories { get; set; }
     }
 }

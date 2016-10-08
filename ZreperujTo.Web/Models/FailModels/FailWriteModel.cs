@@ -9,6 +9,7 @@ namespace ZreperujTo.Web.Models.FailModels
     public class FailWriteModel
     {
         public int CategoryId { get; set; }
+        public int SubcategoryId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime AuctionValidThrough { get; set; }
@@ -16,6 +17,7 @@ namespace ZreperujTo.Web.Models.FailModels
         public LocationInfo Location { get; set; }
         public Budget Budget { get; set; }
         public List<SpecialRequirement> Requirements { get; set; }
+        // TODO: Highlited enum
     }
     
 }
