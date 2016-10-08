@@ -1,0 +1,9 @@
+https://zreperujto.azurewebsites.net
+
+AZURE SQL:
+	USERNAME: zreperuj_to_db
+	PASSWORD: djkdSD23&*LJ%352jK3!d5,23x67_#d
+
+ADMIN:
+	USERNAME: admin@zreperujto.com
+	PASSWORD: Lublin2016!

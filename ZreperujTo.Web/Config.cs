@@ -8,7 +8,7 @@ namespace ZreperujTo.Web
 {
     public class Config
     {
-        public const string App_URL = @"http://localhost:5000";
+        public const string App_URL = @"https://zreperujto.azurewebsites.net";
         public static IEnumerable<Scope> GetScopes()
         {
             return new List<Scope>
