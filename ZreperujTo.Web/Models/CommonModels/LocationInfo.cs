@@ -8,7 +8,6 @@ namespace ZreperujTo.Web.Models.CommonModels
 {
     public class LocationInfo
     {
-        public LocationType Type { get; set; }
         public decimal Latitude { get; set; }
         public decimal Longitude { get; set; }
         public string City { get; set; }
@@ -16,13 +15,7 @@ namespace ZreperujTo.Web.Models.CommonModels
         public string District { get; set; }
         public string Street { get; set; }
         public string Number { get; set; }
+        public string Apartment { get; set; }
         public string AdditionalInfo { get; set; }
-    }
-
-    public enum LocationType : int
-    {
-        AccurateAddress = 1,
-        AreaLocation = 2,
-        GeoLocation = 3
     }
 }
