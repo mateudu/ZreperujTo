@@ -20,7 +20,7 @@ namespace ZreperujTo.Web.Controllers.Api
         [HttpGet("Browse")]
         [HttpGet("Browse/{categoryId:int}")]
         [HttpGet("Browse/{categoryId:int}/{subcategoryId:int?}")]
-        [ProducesResponseType(typeof(IEnumerable<FailReadModel>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IEnumerable<FailListModel>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Get(
             int? categoryId,
             int? subcategoryId,

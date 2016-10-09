@@ -6,7 +6,7 @@ using ZreperujTo.Web.Models.CommonModels;
 
 namespace ZreperujTo.Web.Models.DbModels
 {
-    public class UserDbModel
+    public class UserInfoDbModel
     {
         public string Id { get; set; }
         public string UserId { get; set; }
