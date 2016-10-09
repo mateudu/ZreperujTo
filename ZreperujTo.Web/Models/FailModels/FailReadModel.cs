@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ZreperujTo.Web.Models.BidModels;
 using ZreperujTo.Web.Models.CommonModels;
 
 namespace ZreperujTo.Web.Models.FailModels
@@ -17,6 +18,9 @@ namespace ZreperujTo.Web.Models.FailModels
         public LocationInfo Location { get; set; }
         public Budget Budget { get; set; }
         public List<SpecialRequirement> Requirements { get; set; }
+        public bool Highlited { get; set; }
+        public bool Active { get; set; }
         public UserInfo UserInfo { get; set; }
+        public List<BidReadModel> Bids { get; set; }
     }
 }
