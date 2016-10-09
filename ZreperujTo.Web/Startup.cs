@@ -64,6 +64,7 @@ namespace ZreperujTo.Web
             var cert = new X509Certificate2(Path.Combine(Environment.ContentRootPath, "idsrvtest.pfx"), "idsrv3test");
             services.AddDeveloperIdentityServer()
                 .SetSigningCredential(cert)
+                //.SetTemporarySigningCredential()
                 .AddInMemoryScopes(Config.GetScopes())
                 .AddInMemoryClients(Config.GetClients())
                 .AddAspNetIdentity<ApplicationUser>();

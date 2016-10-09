@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using IdentityServer4.Models;
+using Microsoft.AspNetCore.Hosting;
 
 namespace ZreperujTo.Web
 {
@@ -86,7 +87,11 @@ namespace ZreperujTo.Web
                         "http://localhost:5002/signin-oidc",
                         "http://localhost:5000",
                         App_URL,
-                        "https://win10-zreperujto-oidc/redirect"
+                        "https://win10-zreperujto-oidc/redirect",
+                        "http://localhost",
+                        "ms-app://s-1-15-2-2050536310-1306873734-3207892531-995458344-1891825097-3412375605-3504831819/",
+                        @"ms-app://s-1-15-2-2050536310-1306873734-3207892531-995458344-1891825097-3412375605-3504831819/",
+                        "http://lubcycle.pl"
                     },
                     PostLogoutRedirectUris = new List<string>
                     {

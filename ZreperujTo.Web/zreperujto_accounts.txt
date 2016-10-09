@@ -2,7 +2,7 @@ https://zreperujto.azurewebsites.net
 
 AZURE SQL:
 	USERNAME: zreperuj_to_db
-	PASSWORD: djkdSD23&*LJ%352jK3!d5,23x67_#d
+	PASSWORD: djkdSD23LJ352jK3d523x67d
 
 ADMIN:
 	USERNAME: admin@zreperujto.com
