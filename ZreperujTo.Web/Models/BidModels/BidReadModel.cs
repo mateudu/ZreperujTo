@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ZreperujTo.Web.Models.CommonModels;
+using ZreperujTo.Web.Models.UserInfoModels;
 
 namespace ZreperujTo.Web.Models.BidModels
 {

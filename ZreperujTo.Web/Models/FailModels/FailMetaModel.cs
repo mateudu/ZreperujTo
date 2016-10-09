@@ -7,7 +7,7 @@ using ZreperujTo.Web.Models.CommonModels;
 
 namespace ZreperujTo.Web.Models.FailModels
 {
-    public class FailListModel
+    public class FailMetaModel
     {
         public string FailId { get; set; }
         public Category Category { get; set; }
