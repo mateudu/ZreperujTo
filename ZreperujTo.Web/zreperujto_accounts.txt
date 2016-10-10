@@ -1,4 +1,5 @@
 https://zreperujto.azurewebsites.net
+https://zreperujto.azurewebsites.net/connect/authorize?client_id=mobile&redirect_uri=https://zreperujto.azurewebsites.net/api/Profile&response_type=code id_token token&scope=openid zreperuj_to_api offline_access&nonce=a18800e2-78cc-4757-a79c-542e4d01517f
 
 AZURE SQL:
 	USERNAME: zreperuj_to_db
