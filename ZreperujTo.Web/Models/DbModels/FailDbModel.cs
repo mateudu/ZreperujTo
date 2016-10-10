@@ -12,9 +12,11 @@ namespace ZreperujTo.Web.Models.DbModels
         public ObjectId Id { get; set; }
         public string UserId { get; set; }
         public int CategoryId { get; set; }
+        public int SubcategoryId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime AuctionValidThrough { get; set; }
+        public DateTime CreatedAt { get; set; }
         public List<string> Pictures { get; set; }
         public LocationInfo Location { get; set; }
         public Budget Budget { get; set; }

@@ -40,7 +40,7 @@ namespace ZreperujTo.Web.Controllers.Api
                         x => x.Type == @"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
             if (!String.IsNullOrWhiteSpace(userId))
             {
-                var obj = await _zreperujDb.GetUserInfoDbModel(userId);
+                var obj = await _zreperujDb.GetUserInfoDbModelAsync(userId);
                 var result = new UserInfo
                 {
                     Email = obj.Email,

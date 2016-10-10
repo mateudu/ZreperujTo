@@ -10,8 +10,7 @@ namespace ZreperujTo.Web.Models.UserInfoModels
         public string UserId { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
-        public string Mobile { get; set; }
-        public int Points { get; set; }
+        public string MobileNumber { get; set; }
         public bool Company { get; set; }
         public int RatingCount { get; set; }
         public int RatingSum { get; set; }
