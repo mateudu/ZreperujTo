@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MongoDB.Bson;
 using ZreperujTo.Web.Models.CommonModels;
 
 namespace ZreperujTo.Web.Models.DbModels
 {
     public class FailDbModel
     {
-        // TODO: Replace for MONGODB ID
-        public int Id { get; set; }
+        public ObjectId Id { get; set; }
         public string UserId { get; set; }
         public int CategoryId { get; set; }
         public string Title { get; set; }

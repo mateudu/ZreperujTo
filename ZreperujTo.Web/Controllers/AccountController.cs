@@ -9,8 +9,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
+using ZreperujTo.Web.Data;
 using ZreperujTo.Web.Models;
 using ZreperujTo.Web.Models.AccountViewModels;
+using ZreperujTo.Web.Models.DbModels;
 using ZreperujTo.Web.Services;
 
 namespace ZreperujTo.Web.Controllers
@@ -24,6 +26,7 @@ namespace ZreperujTo.Web.Controllers
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
         private readonly IIdentityServerInteractionService _interaction;
+        private readonly ZreperujToDbClient _zreperujDb;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
@@ -31,7 +34,8 @@ namespace ZreperujTo.Web.Controllers
             IEmailSender emailSender,
             ISmsSender smsSender,
             ILoggerFactory loggerFactory,
-            IIdentityServerInteractionService interaction)
+            IIdentityServerInteractionService interaction,
+            ZreperujToDbClient zreperujDb)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -39,6 +43,7 @@ namespace ZreperujTo.Web.Controllers
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
             _interaction = interaction;
+            _zreperujDb = zreperujDb;
         }
 
         //
@@ -109,7 +114,7 @@ namespace ZreperujTo.Web.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, PhoneNumber = model.MobileNumber};
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -119,6 +124,20 @@ namespace ZreperujTo.Web.Controllers
                     //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
                     //await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
                     //    $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
+
+                    var userInfo = new UserInfoDbModel
+                    {
+                        Email = user.Email,
+                        UserId = user.Id,
+                        MobileNumber = model.MobileNumber,
+                        Name = model.Name,
+                        Company = false,
+                        RatingCount = 0,
+                        RatingSum = 0,
+                        ReportCount = 0
+                    };
+                    await _zreperujDb.AddUserInfoAsync(userInfo);
+
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User created a new account with password.");
                     return RedirectToLocal(returnUrl);

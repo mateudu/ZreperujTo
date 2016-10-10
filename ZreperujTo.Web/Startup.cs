@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using MongoDB.Driver;
 using ZreperujTo.Web.Data;
 using ZreperujTo.Web.Models;
 using ZreperujTo.Web.Services;
@@ -53,6 +54,15 @@ namespace ZreperujTo.Web
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddTransient<IMongoClient>(provider => new MongoClient(@"mongodb://mdu01.cloudapp.net"));
+            services.AddTransient<IMongoDatabase>(provider => provider.GetService<IMongoClient>().GetDatabase("local"));
+            services.AddTransient<ZreperujToDbClient>(
+                provider => new ZreperujToDbClient(
+                    provider.GetService<IMongoClient>(), 
+                    provider.GetService<IMongoDatabase>(),
+                    provider.GetService<ApplicationDbContext>()
+                    ));
 
             services.AddMvc();
 
@@ -107,6 +117,7 @@ namespace ZreperujTo.Web
 
             app.UseJwtBearerAuthentication(new JwtBearerOptions
             {
+                AuthenticationScheme = "Bearer",
                 //Authority = "http://localhost:5000",
                 Authority = Config.App_URL,
                 //Audience = "http://localhost:5000/resources",

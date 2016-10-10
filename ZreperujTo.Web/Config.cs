@@ -9,6 +9,7 @@ namespace ZreperujTo.Web
 {
     public class Config
     {
+        //public const string App_URL = @"http://localhost:5000";
         public const string App_URL = @"https://zreperujto.azurewebsites.net";
         public static IEnumerable<Scope> GetScopes()
         {
@@ -53,21 +54,22 @@ namespace ZreperujTo.Web
                 //    }
                 //},
 
-                //// resource owner password grant client
-                //new Client
-                //{
-                //    ClientId = "ro.client",
-                //    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                // resource owner password grant client
+                new Client
+                {
+                    ClientId = "ro.client",
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
 
-                //    ClientSecrets = new List<Secret>
-                //    {
-                //        new Secret("secret".Sha256())
-                //    },
-                //    AllowedScopes = new List<string>
-                //    {
-                //        "api1"
-                //    }
-                //},
+                    ClientSecrets = new List<Secret>
+                    {
+                        new Secret("secret".Sha256())
+                    },
+                    AllowedScopes = new List<string>
+                    {
+                        "zreperuj_to_api",
+                        "api"
+                    }
+                },
 
                 // OpenID Connect hybrid flow and client credentials client (MVC)
                 new Client
