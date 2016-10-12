@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -23,7 +23,7 @@ namespace ZreperujTo.Web.Controllers.Api
                 new Category
                 {
                     CategoryId = 1,
-                    Name = "Zwierz?ta",
+                    Name = "Zwierzęta",
                     Subcategories = new List<Subcategory>
                     {
                         new Subcategory

@@ -97,9 +97,19 @@ namespace ZreperujTo.Web.Controllers.Api
         [ProducesResponseType(typeof(FailReadModel), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Post([FromBody]FailWriteModel writeModel)
         {
+            if (writeModel == null)
+            {
+                ModelState.AddModelError("writeModel","Request BODY cannot be empty");
+                return BadRequest(ModelState);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             writeModel.Location = writeModel.Location.TrimStrings();
-
-
+            
             if (writeModel.AuctionValidThrough == null || writeModel.AuctionValidThrough < DateTime.Now ||
                 writeModel.AuctionValidThrough - DateTime.Now > TimeSpan.FromDays(7.0))
             {
