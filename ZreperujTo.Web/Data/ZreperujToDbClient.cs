@@ -73,8 +73,8 @@ namespace ZreperujTo.Web.Data
                 .FindAsync(x => x.Active && x.AssignedBidId == null);
             var list = await collection.ToListAsync();
             list =
-                list.Where(x => (categoryId.HasValue) ? x.CategoryId == categoryId.Value : true
-                      && (subcategoryId.HasValue) ? x.SubcategoryId == subcategoryId.Value : true
+                list.Where(x => (categoryId.HasValue && categoryId.Value != ObjectId.Empty) ? x.CategoryId == categoryId.Value : true
+                      && (subcategoryId.HasValue && subcategoryId.Value != ObjectId.Empty) ? x.SubcategoryId == subcategoryId.Value : true
                           && (!String.IsNullOrWhiteSpace(city)) ? x.Location.City.ToLower().Contains(city.ToLower()) : true
                               && (!String.IsNullOrWhiteSpace(district)) ? x.Location.District.ToLower().Contains(district.ToLower()) : true
                                   && (minPrice.HasValue && minPrice.Value != 0) ? x.Budget.MinimalPrice >= minPrice.Value : true

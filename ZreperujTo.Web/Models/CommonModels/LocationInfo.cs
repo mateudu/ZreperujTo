@@ -30,8 +30,11 @@ namespace ZreperujTo.Web.Models.CommonModels
             foreach (var prop in this.GetType().GetProperties().Where(x => x.PropertyType == typeof(string)))
             {
                 var value = prop.GetValue(this) as string;
-                value = value.Trim();
-                prop.SetValue(obj, value);
+                if (!String.IsNullOrWhiteSpace(value))
+                {
+                    value = value.Trim();
+                    prop.SetValue(obj, value);
+                }
             }
             return obj;
         }
