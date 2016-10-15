@@ -34,7 +34,7 @@ namespace ZreperujTo.Web.Controllers.Api
         }
 
         [HttpGet("Info")]
-        [ProducesResponseType(typeof(UserInfo), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(UserInfoReadModel), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetUserInfo()
         {
             string userId = User.Claims.FirstOrDefault(
@@ -42,7 +42,7 @@ namespace ZreperujTo.Web.Controllers.Api
             if (!String.IsNullOrWhiteSpace(userId))
             {
                 var obj = await _zreperujDb.GetUserInfoDbModelAsync(userId);
-                var result = new UserInfo
+                var result = new UserInfoReadModel
                 {
                     Email = obj.Email,
                     Name = obj.Name,
@@ -57,6 +57,15 @@ namespace ZreperujTo.Web.Controllers.Api
                 return Ok(result);
             }
             else return NoContent();
+        }
+
+        [HttpGet("Info/Bids")]
+        public async Task<IActionResult> GetBids()
+        {
+            string userId = User.Claims.FirstOrDefault(
+                        x => x.Type == @"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
+            var obj = await _zreperujDb.GetBidsAsync(userId);
+            return Ok(obj);
         }
     }
 }

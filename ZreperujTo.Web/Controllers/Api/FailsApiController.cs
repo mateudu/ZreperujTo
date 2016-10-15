@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing.Constraints;
 using MongoDB.Bson;
 using ZreperujTo.Web.Data;
+using ZreperujTo.Web.Models.BidModels;
 using ZreperujTo.Web.Models.CategoryModels;
 using ZreperujTo.Web.Models.CommonModels;
 using ZreperujTo.Web.Models.DbModels;
@@ -62,13 +63,32 @@ namespace ZreperujTo.Web.Controllers.Api
         [ProducesResponseType(typeof(FailReadModel),(int)HttpStatusCode.OK)]
         public async Task<IActionResult> Get(string id)
         {
-            var objId = ObjectId.Parse(id);
-            var dbModel = await _zreperujDb.GetFailDbModelAsync(objId);
+            var failId = ObjectId.Parse(id);
+            var dbModel = await _zreperujDb.GetFailDbModelAsync(failId);
 
             var category = (await _zreperujDb.GetCategoriesAsync()).FirstOrDefault(x => x.Id == dbModel.CategoryId);
             var subcategory = (await _zreperujDb.GetSubcategoriesAsync()).FirstOrDefault(x => x.Id == dbModel.SubcategoryId);
 
             var userInfo = await _zreperujDb.GetUserInfoDbModelAsync(dbModel.UserId);
+            var bidsDb = await _zreperujDb.GetBidsAsync(failId);
+            List<BidReadModel> bids = new List<BidReadModel>();
+            Parallel.ForEach(bidsDb, x =>
+            {
+                var user = _zreperujDb.GetUserInfoDbModelAsync(x.UserId).Result;
+                user.Ratings = null;
+                user.Badges = null;
+                bids.Add(new BidReadModel
+                {
+                    Active = x.Active,
+                    Assigned = x.Assigned,
+                    Budget = x.Budget,
+                    Id = x.Id.ToString(),
+                    Description = x.Description,
+                    UserId = x.UserId,
+                    FailId = failId.ToString(),
+                    UserInfo = new UserInfoReadModel(user)
+                });
+            });
 
             var read = new FailReadModel
             {
@@ -76,7 +96,7 @@ namespace ZreperujTo.Web.Controllers.Api
                 AuctionValidThrough = dbModel.AuctionValidThrough,
                 Category = (category != null) ? new CategoryReadModel(category) : null,
                 Subcategory = (subcategory != null) ? new SubcategoryReadModel(subcategory) : null,
-                // TODO: Bids
+                Bids = bids,
                 Budget = dbModel.Budget,
                 Description = dbModel.Description,
                 FailId = dbModel.Id.ToString(),
@@ -115,6 +135,7 @@ namespace ZreperujTo.Web.Controllers.Api
             if (writeModel == null)
             {
                 ModelState.AddModelError("writeModel","Request BODY cannot be empty");
+                return BadRequest(ModelState);
             }
             if (!ObjectId.TryParse(writeModel.CategoryId, out categoryId))
             {
@@ -148,13 +169,11 @@ namespace ZreperujTo.Web.Controllers.Api
 
             string userId = User.Claims.FirstOrDefault(
                         x => x.Type == @"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
-            
-
 
             var dbModel = new FailDbModel
             {
                 Active = true,
-                AssignedBidId = null,
+                AssignedBidId = ObjectId.Empty,
                 AuctionValidThrough = writeModel.AuctionValidThrough,
                 CreatedAt = DateTime.Now,
                 UserId = userId,
@@ -200,17 +219,75 @@ namespace ZreperujTo.Web.Controllers.Api
             
             return Ok(result);
         }
-        
-        //// PUT: api/Fails/
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody]string value)
-        //{
-        //}
-        
-        //// DELETE: api/ApiWithActions/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
+
+
+        // POST: api/Fails/Details/5/MakeBid
+        [HttpPost("Details/{id}/Bids/MakeBid")]
+        [Authorize(ActiveAuthenticationSchemes = "Bearer")]
+        public async Task<IActionResult> MakeBid(string id, [FromBody]BidWriteModel bid)
+        {
+            ObjectId failId;
+            if (!ObjectId.TryParse(id, out failId))
+            {
+                ModelState.AddModelError("id", "Invalid 'id' of fail");
+            }
+
+            var fail = await _zreperujDb.GetFailDbModelAsync(failId);
+            if (fail.AssignedBidId != null && fail.AssignedBidId != ObjectId.Empty)
+            {
+                ModelState.AddModelError("id", "Fail is already assigned");
+            }
+            if (fail.Active == false)
+            {
+                ModelState.AddModelError("id", "Fail is canceled/closed");
+            }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            string userId = User.Claims.FirstOrDefault(
+                        x => x.Type == @"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
+
+            var dbModel = new BidDbModel
+            {
+                Active = true,
+                Assigned = false,
+                Budget = bid.Budget,
+                Description = bid.Description,
+                FailId = fail.Id,
+                UserId = userId
+            };
+            await _zreperujDb.AddBidAsync(dbModel);
+            return Ok();
+        }
+
+        // DELETE: api/ApiWithActions/5
+        [HttpGet("Details/{id}/Bids")]
+        [ProducesResponseType(typeof(List<BidReadModel>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetBids(string id)
+        {
+            var failId = ObjectId.Parse(id);
+            var bidsDb = await _zreperujDb.GetBidsAsync(failId);
+            List<BidReadModel> bids = new List<BidReadModel>();
+            Parallel.ForEach(bidsDb, x =>
+            {
+                var user = _zreperujDb.GetUserInfoDbModelAsync(x.UserId).Result;
+                user.Ratings = null;
+                user.Badges = null;
+                bids.Add(new BidReadModel
+                {
+                    Active = x.Active,
+                    Assigned = x.Assigned,
+                    Budget = x.Budget,
+                    Id = x.Id.ToString(),
+                    Description = x.Description,
+                    UserId = x.UserId,
+                    FailId = failId.ToString(),
+                    UserInfo = new UserInfoReadModel(user)
+                });
+            });
+            return Ok(bids);
+        }
     }
 }

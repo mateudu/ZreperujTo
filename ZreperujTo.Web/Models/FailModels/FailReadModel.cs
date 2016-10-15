@@ -19,11 +19,12 @@ namespace ZreperujTo.Web.Models.FailModels
         public DateTime AuctionValidThrough { get; set; }
         public List<string> Pictures { get; set; }
         public LocationInfo Location { get; set; }
-        public Budget Budget { get; set; }
+        public decimal Budget { get; set; }
         public List<SpecialRequirement> Requirements { get; set; }
         public bool Highlited { get; set; }
         public bool Active { get; set; }
         public UserInfoMetaModel UserInfo { get; set; }
         public List<BidReadModel> Bids { get; set; }
+        public BidReadModel AssignedBid { get; set; }
     }
 }

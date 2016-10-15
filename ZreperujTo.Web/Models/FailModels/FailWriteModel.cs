@@ -21,7 +21,7 @@ namespace ZreperujTo.Web.Models.FailModels
         [Required]
         public LocationInfo Location { get; set; }
         [Required]
-        public Budget Budget { get; set; }
+        public decimal Budget { get; set; }
         public List<SpecialRequirement> Requirements { get; set; }
         public bool Highlited { get; set; }
         // TODO: Highlited enum
