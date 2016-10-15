@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using ZreperujTo.Web.Models.CategoryModels;
 using ZreperujTo.Web.Models.CommonModels;
 using ZreperujTo.Web.Models.DbModels;
 using ZreperujTo.Web.Models.FailModels;
@@ -21,6 +22,7 @@ namespace ZreperujTo.Web.Data
         private const string BidsCollectionName = "bids";
         private const string FailsCollectionName = "fails";
         private const string CategoriesCollectionName = "categories";
+        private const string SubcategoriesCollectionName = "subcategories";
 
         public ZreperujToDbClient(
             IMongoClient mongoClient,
@@ -55,8 +57,8 @@ namespace ZreperujTo.Web.Data
             return result;
         }
 
-        public async Task<List<FailMetaModel>> GetFailsMetaAsync(int? categoryId,
-            int? subcategoryId,
+        public async Task<List<FailMetaModel>> GetFailsMetaAsync(ObjectId? categoryId,
+            ObjectId? subcategoryId,
             string city,
             string district,
             decimal? minPrice,
@@ -71,8 +73,8 @@ namespace ZreperujTo.Web.Data
                 .FindAsync(x => x.Active && x.AssignedBidId == null);
             var list = await collection.ToListAsync();
             list =
-                list.Where(x => (categoryId.HasValue && categoryId.Value != 0) ? x.CategoryId == categoryId.Value : true
-                      && (subcategoryId.HasValue && subcategoryId.Value != 0) ? x.SubcategoryId == subcategoryId.Value : true
+                list.Where(x => (categoryId.HasValue) ? x.CategoryId == categoryId.Value : true
+                      && (subcategoryId.HasValue) ? x.SubcategoryId == subcategoryId.Value : true
                           && (!String.IsNullOrWhiteSpace(city)) ? x.Location.City.ToLower().Contains(city.ToLower()) : true
                               && (!String.IsNullOrWhiteSpace(district)) ? x.Location.District.ToLower().Contains(district.ToLower()) : true
                                   && (minPrice.HasValue && minPrice.Value != 0) ? x.Budget.MinimalPrice >= minPrice.Value : true
@@ -111,13 +113,20 @@ namespace ZreperujTo.Web.Data
             list.Skip((pageNumber - 1)*pageLimit).Take(pageLimit).ToList();
 
             var result = new List<FailMetaModel>();
+            var categories = await GetCategoriesAsync();
+            var subcategories = await GetSubcategoriesAsync();
+
             // TODO: Add category 
             foreach (var e in list)
             {
+                var category = categories.FirstOrDefault(x => x.Id == e.CategoryId);
+                var subcategory = subcategories.FirstOrDefault(x => x.Id == e.SubcategoryId);
+
                 result.Add(new FailMetaModel
                 {
                     Active = e.Active,
-                    //Category = 
+                    Category = (category != null) ? new CategoryReadModel(category) : null,
+                    Subcategory = (subcategory != null) ? new SubcategoryReadModel(subcategory) : null,
                     AuctionValidThrough = e.AuctionValidThrough,
                     Budget = e.Budget,
                     Description = e.Description,
@@ -142,6 +151,31 @@ namespace ZreperujTo.Web.Data
             var collection = _mongoDb.GetCollection<FailDbModel>(FailsCollectionName);
             var result = await (await collection.FindAsync(x => x.Id == objId)).FirstOrDefaultAsync();
             return result;
+        }
+
+        public async Task<List<CategoryDbModel>> GetCategoriesAsync()
+        {
+            var collection = _mongoDb.GetCollection<CategoryDbModel>(CategoriesCollectionName);
+            var result = await collection.AsQueryable().ToListAsync();
+            return result;
+        }
+        public async Task<List<SubcategoryDbModel>> GetSubcategoriesAsync()
+        {
+            var collection = _mongoDb.GetCollection<SubcategoryDbModel>(SubcategoriesCollectionName);
+            var result = await collection.AsQueryable().ToListAsync();
+            return result;
+        }
+
+        public async Task<bool> AddCategoryAsync(CategoryDbModel cat)
+        {
+            await _mongoDb.GetCollection<CategoryDbModel>(CategoriesCollectionName).InsertOneAsync(cat);
+            return true;
+        }
+
+        public async Task<bool> AddSubcategoryAsync(SubcategoryDbModel cat)
+        {
+            await _mongoDb.GetCollection<SubcategoryDbModel>(SubcategoriesCollectionName).InsertOneAsync(cat);
+            return true;
         }
     }
 }

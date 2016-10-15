@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ZreperujTo.Web.Models.BidModels;
+using ZreperujTo.Web.Models.CategoryModels;
 using ZreperujTo.Web.Models.CommonModels;
 using ZreperujTo.Web.Models.UserInfoModels;
 
@@ -11,7 +12,8 @@ namespace ZreperujTo.Web.Models.FailModels
     public class FailReadModel
     {
         public string FailId { get; set; }
-        public Category Category { get; set; }
+        public CategoryReadModel Category { get; set; }
+        public SubcategoryReadModel Subcategory { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime AuctionValidThrough { get; set; }

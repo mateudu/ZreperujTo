@@ -11,8 +11,8 @@ namespace ZreperujTo.Web.Models.DbModels
     {
         public ObjectId Id { get; set; }
         public string UserId { get; set; }
-        public int CategoryId { get; set; }
-        public int SubcategoryId { get; set; }
+        public ObjectId CategoryId { get; set; }
+        public ObjectId SubcategoryId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime AuctionValidThrough { get; set; }

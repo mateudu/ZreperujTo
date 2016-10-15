@@ -10,9 +10,9 @@ namespace ZreperujTo.Web.Models.FailModels
     public class FailWriteModel
     {
         [Required]
-        public int CategoryId { get; set; }
+        public string CategoryId { get; set; }
         [Required]
-        public int SubcategoryId { get; set; }
+        public string SubcategoryId { get; set; }
         [Required]
         public string Title { get; set; }
         public string Description { get; set; }

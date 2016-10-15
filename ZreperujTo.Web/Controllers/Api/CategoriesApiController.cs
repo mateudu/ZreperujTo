@@ -5,6 +5,9 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
+using ZreperujTo.Web.Data;
+using ZreperujTo.Web.Models.CategoryModels;
 using ZreperujTo.Web.Models.CommonModels;
 
 namespace ZreperujTo.Web.Controllers.Api
@@ -13,50 +16,85 @@ namespace ZreperujTo.Web.Controllers.Api
     [Route("api/Categories")]
     public class CategoriesApiController : Controller
     {
+        private readonly ZreperujToDbClient _zreperujDb;
+
+        public CategoriesApiController(ZreperujToDbClient zreperujDb)
+        {
+            _zreperujDb = zreperujDb;
+        }
+
         // GET: api/Categories
         [HttpGet]
-        [ProducesResponseType(typeof(List<Category>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(List<CategoryReadModel>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Get()
         {
-            return Ok(new List<Category>
+            var categories = await _zreperujDb.GetCategoriesAsync();
+            var subcategories = await _zreperujDb.GetSubcategoriesAsync();
+            var result = categories.Select(x=>new CategoryReadModel(x)).ToList();
+            foreach (var sub in subcategories)
             {
-                new Category
+                var obj = result.FirstOrDefault(x => x.Id == sub.CategoryId.ToString());
+                if (obj != null)
                 {
-                    CategoryId = 1,
-                    Name = "Zwierzęta",
-                    Subcategories = new List<Subcategory>
+                    if (obj.Subcategories == null)
                     {
-                        new Subcategory
-                        {
-                            SubcategoryId = 1,
-                            Name = "Spacery"
-                        },
-                        new Subcategory
-                        {
-                            SubcategoryId = 2,
-                            Name = "Opieka"
-                        }
+                        obj.Subcategories = new List<SubcategoryReadModel>();
                     }
-                },
-                new Category
-                {
-                    CategoryId = 1,
-                    Name = "Motoryzacja",
-                    Subcategories = new List<Subcategory>
-                    {
-                        new Subcategory
-                        {
-                            SubcategoryId = 1,
-                            Name = "Serwis"
-                        },
-                        new Subcategory
-                        {
-                            SubcategoryId = 2,
-                            Name = "Wulkanizacja"
-                        }
-                    }
+                    obj.Subcategories.Add(new SubcategoryReadModel(sub));
                 }
-            });
+            }
+            return Ok(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddCategory([FromBody] CategoryWriteModel category)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                var obj = new CategoryDbModel
+                {
+                    Name = category.Name
+                };
+                await _zreperujDb.AddCategoryAsync(obj);
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return StatusCode((int) HttpStatusCode.InternalServerError);
+            }
+            
+        }
+
+        [HttpPost("{categoryId}")]
+        public async Task<IActionResult> AddSubcategory([FromBody] SubcategoryReadModel subcategory, string categoryId)
+        {
+            ObjectId categoryObjectId;
+            if (!ObjectId.TryParse(categoryId, out categoryObjectId))
+            {
+                ModelState.AddModelError("categoryId", "Invalid 'categoryId' URI parameter");
+            }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var categories = await _zreperujDb.GetCategoriesAsync();
+            var category = categories.FirstOrDefault(x => x.Id == categoryObjectId);
+            if (category == null)
+            {
+                ModelState.AddModelError("categoryId", "This category does not exist");
+                return BadRequest(ModelState);
+            }
+            var model = new SubcategoryDbModel
+            {
+                CategoryId = categoryObjectId,
+                Name = subcategory.Name
+            };
+            await _zreperujDb.AddSubcategoryAsync(model);
+            return Ok();
         }
     }
 }

@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using MongoDB.Bson;
 
 namespace ZreperujTo.Web.Models.CommonModels
 {
-    public class Category
+    public class CategoryDbModel
     {
-        public int CategoryId { get; set; }
+        public ObjectId Id { get; set; }
+
+        [Required]
         public string Name { get; set; }
-        public List<Subcategory> Subcategories { get; set; }
     }
 }
