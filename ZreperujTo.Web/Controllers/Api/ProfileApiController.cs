@@ -34,7 +34,7 @@ namespace ZreperujTo.Web.Controllers.Api
         }
 
         [HttpGet("Info")]
-        [ProducesResponseType(typeof(UserInfo), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(UserInfoReadModel), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetUserInfo()
         {
             string userId = User.Claims.FirstOrDefault(
@@ -42,7 +42,7 @@ namespace ZreperujTo.Web.Controllers.Api
             if (!String.IsNullOrWhiteSpace(userId))
             {
                 var obj = await _zreperujDb.GetUserInfoDbModelAsync(userId);
-                var result = new UserInfo
+                var result = new UserInfoReadModel
                 {
                     Email = obj.Email,
                     Name = obj.Name,

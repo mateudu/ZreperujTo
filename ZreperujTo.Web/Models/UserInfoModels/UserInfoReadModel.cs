@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ZreperujTo.Web.Models.CommonModels;
+using ZreperujTo.Web.Models.DbModels;
 
 namespace ZreperujTo.Web.Models.UserInfoModels
 {
-    public class UserInfo
+    public class UserInfoReadModel
     {
         public string UserId { get; set; }
         public string Name { get; set; }
@@ -18,5 +19,24 @@ namespace ZreperujTo.Web.Models.UserInfoModels
         public int RatingSum { get; set; }
         public List<Rating> Ratings { get; set; }
         public List<Badge> Badges { get; set; }
+
+        public UserInfoReadModel(UserInfoDbModel dbModel)
+        {
+
+            Badges = dbModel.Badges;
+            Company = dbModel.Company;
+            Email = dbModel.Email;
+            MobileNumber = dbModel.MobileNumber;
+            Name = dbModel.Name;
+            Ratings = dbModel.Ratings;
+            RatingCount = dbModel.RatingCount;
+            RatingSum = dbModel.RatingSum;
+            UserId = dbModel.UserId;
+        }
+
+        public UserInfoReadModel()
+        {
+            
+        }
     }
 }

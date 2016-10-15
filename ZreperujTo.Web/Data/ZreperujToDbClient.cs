@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using ZreperujTo.Web.Models.BidModels;
 using ZreperujTo.Web.Models.CategoryModels;
 using ZreperujTo.Web.Models.CommonModels;
 using ZreperujTo.Web.Models.DbModels;
@@ -77,20 +78,20 @@ namespace ZreperujTo.Web.Data
                       && (subcategoryId.HasValue && subcategoryId.Value != ObjectId.Empty) ? x.SubcategoryId == subcategoryId.Value : true
                           && (!String.IsNullOrWhiteSpace(city)) ? x.Location.City.ToLower().Contains(city.ToLower()) : true
                               && (!String.IsNullOrWhiteSpace(district)) ? x.Location.District.ToLower().Contains(district.ToLower()) : true
-                                  && (minPrice.HasValue && minPrice.Value != 0) ? x.Budget.MinimalPrice >= minPrice.Value : true
-                                      && (maxPrice.HasValue && maxPrice.Value != 0) ? x.Budget.MaximalPrice >= maxPrice.Value : true
+                                  && (minPrice.HasValue && minPrice.Value != 0) ? x.Budget >= minPrice.Value : true
+                                      && (maxPrice.HasValue && maxPrice.Value != 0) ? x.Budget >= maxPrice.Value : true
                                       ).ToList();
             switch (sortOrder)
             {
-                case "maxprice_asc":
+                case "budget_asc":
                     list =
-                        list.OrderBy(x => x.Budget.MaximalPrice)
+                        list.OrderBy(x => x.Budget)
                             .ThenBy(x => x.Highlited)
                             .ToList();
                     break;
-                case "maxprice_desc":
+                case "budget_desc":
                     list =
-                        list.OrderByDescending(x => x.Budget.MaximalPrice)
+                        list.OrderByDescending(x => x.Budget)
                             .ThenBy(x => x.Highlited)
                             .ToList();
                     break;
@@ -115,8 +116,7 @@ namespace ZreperujTo.Web.Data
             var result = new List<FailMetaModel>();
             var categories = await GetCategoriesAsync();
             var subcategories = await GetSubcategoriesAsync();
-
-            // TODO: Add category 
+            
             foreach (var e in list)
             {
                 var category = categories.FirstOrDefault(x => x.Id == e.CategoryId);
@@ -176,6 +176,24 @@ namespace ZreperujTo.Web.Data
         {
             await _mongoDb.GetCollection<SubcategoryDbModel>(SubcategoriesCollectionName).InsertOneAsync(cat);
             return true;
+        }
+
+        public async Task<bool> AddBidAsync(BidDbModel bid)
+        {
+            await _mongoDb.GetCollection<BidDbModel>(BidsCollectionName).InsertOneAsync(bid);
+            return true;
+        }
+
+        public async Task<List<BidDbModel>> GetBidsAsync()
+        {
+            var bids = _mongoDb.GetCollection<BidDbModel>(BidsCollectionName).AsQueryable().ToList();
+            return bids;
+        }
+
+        public async Task<List<BidDbModel>> GetBidsAsync(ObjectId failId)
+        {
+            var bids = _mongoDb.GetCollection<BidDbModel>(BidsCollectionName).AsQueryable().Where(x=>x.FailId == failId).ToList();
+            return bids;
         }
     }
 }

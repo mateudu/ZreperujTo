@@ -10,6 +10,6 @@ namespace ZreperujTo.Web.Models.BidModels
     {
         public string FailId { get; set; }
         public string Description { get; set; }
-        public Budget Budget { get; set; }
+        public decimal Budget { get; set; }
     }
 }
