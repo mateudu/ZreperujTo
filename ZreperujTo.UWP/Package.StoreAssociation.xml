@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <StoreAssociation xmlns="http://schemas.microsoft.com/appx/2010/storeassociation">
   <Publisher>CN=F396A3B4-9720-4EED-9937-5997D0EAC2F4</Publisher>
-  <PublisherDisplayName>mateudu</PublisherDisplayName>
+  <PublisherDisplayName>mateudu and Yanusheck</PublisherDisplayName>
   <GeneratePackageHash>http://www.w3.org/2001/04/xmlenc#sha256</GeneratePackageHash>
   <SupportedLocales>
     <Language Code="af" InMinimumRequirementSet="true" />
