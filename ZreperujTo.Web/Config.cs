@@ -78,6 +78,7 @@ namespace ZreperujTo.Web
                     ClientName = "Klient mobilny Zreperuj.To",
                     AllowedGrantTypes = GrantTypes.HybridAndClientCredentials,
                     AllowAccessTokensViaBrowser = true,
+                    AccessTokenLifetime = 86400,
 
                     ClientSecrets = new List<Secret>
                     {
