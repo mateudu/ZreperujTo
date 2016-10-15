@@ -58,5 +58,14 @@ namespace ZreperujTo.Web.Controllers.Api
             }
             else return NoContent();
         }
+
+        [HttpGet("Info/Bids")]
+        public async Task<IActionResult> GetBids()
+        {
+            string userId = User.Claims.FirstOrDefault(
+                        x => x.Type == @"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
+            var obj = await _zreperujDb.GetBidsAsync(userId);
+            return Ok(obj);
+        }
     }
 }

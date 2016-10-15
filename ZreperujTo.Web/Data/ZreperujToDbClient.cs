@@ -195,5 +195,11 @@ namespace ZreperujTo.Web.Data
             var bids = _mongoDb.GetCollection<BidDbModel>(BidsCollectionName).AsQueryable().Where(x=>x.FailId == failId).ToList();
             return bids;
         }
+
+        public async Task<List<BidDbModel>> GetBidsAsync(string userId)
+        {
+            var bids = _mongoDb.GetCollection<BidDbModel>(BidsCollectionName).AsQueryable().Where(x => x.UserId == userId).ToList();
+            return bids;
+        }
     }
 }
