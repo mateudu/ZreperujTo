@@ -27,6 +27,7 @@ namespace ZreperujTo.Web.Controllers.Api
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Get()
         {
             return Ok();

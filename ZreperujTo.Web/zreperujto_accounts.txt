@@ -8,3 +8,7 @@ AZURE SQL:
 ADMIN:
 	USERNAME: admin@zreperujto.com
 	PASSWORD: Lublin2016!
+
+USER 1:
+	USERNAME: aet1@o2.pl
+	PASSWORD: Lublin2016!
