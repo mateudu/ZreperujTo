@@ -3,9 +3,10 @@ using System.Threading.Tasks;
 using ZreperujTo.UWP.Services.SettingsServices;
 using Windows.ApplicationModel.Activation;
 using Template10.Controls;
-using Template10.Common;
 using System;
-using System.Linq;
+using Windows.Foundation.Metadata;
+using Windows.UI;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml.Data;
 
 namespace ZreperujTo.UWP
@@ -14,7 +15,7 @@ namespace ZreperujTo.UWP
     /// https://github.com/Windows-XAML/Template10/wiki
 
     [Bindable]
-    sealed partial class App : Template10.Common.BootStrapper
+    sealed partial class App
     {
         public App()
         {
@@ -23,17 +24,17 @@ namespace ZreperujTo.UWP
 
             #region App settings
 
-            var _settings = SettingsService.Instance;
-            RequestedTheme = _settings.AppTheme;
-            CacheMaxDuration = _settings.CacheMaxDuration;
-            ShowShellBackButton = _settings.UseShellBackButton;
+            var settings = SettingsService.Instance;
+            RequestedTheme = settings.AppTheme;
+            CacheMaxDuration = settings.CacheMaxDuration;
+            ShowShellBackButton = settings.UseShellBackButton;
 
             #endregion
         }
 
         public override async Task OnInitializeAsync(IActivatedEventArgs args)
         {
-            if (Window.Current.Content as ModalDialog == null)
+            if (!(Window.Current.Content is ModalDialog))
             {
                 // create a new frame 
                 var nav = NavigationServiceFactory(BackButton.Attach, ExistingContent.Include);
@@ -46,6 +47,49 @@ namespace ZreperujTo.UWP
                     ModalContent = new Views.Busy(),
                 };
             }
+
+            Color primaryDark;
+
+            // Assign brushes
+            try
+            {
+                if (Resources["PrimaryDark"] != null)
+                {
+                    primaryDark = (Color)Resources["PrimaryDark"];
+                }
+
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
+            //PC customization
+            if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.ApplicationView"))
+            {
+                var titleBar = ApplicationView.GetForCurrentView().TitleBar;
+                if (titleBar != null)
+                {
+                    titleBar.BackgroundColor = primaryDark;
+                    titleBar.ButtonBackgroundColor = primaryDark;
+                }
+            }
+
+            ////Mobile customization //ToDo something went wrong and 
+            //if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
+            //{
+
+            //    var statusBar = StatusBar.GetForCurrentView();
+            //    if (statusBar != null)
+            //    {
+            //        statusBar.BackgroundOpacity = 1;
+            //        statusBar.BackgroundColor = CacheData.CustomColor;
+            //        statusBar.ForegroundColor = CacheData.ContrastColor;
+            //    }
+            //}
+
+
+
             await Task.CompletedTask;
         }
 
