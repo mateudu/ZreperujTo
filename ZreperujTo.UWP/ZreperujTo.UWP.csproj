@@ -100,6 +100,21 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\ZreperujToHelper.cs" />
+    <Compile Include="Models\BidModels\BidReadModel.cs" />
+    <Compile Include="Models\BidModels\BidWriteModel.cs" />
+    <Compile Include="Models\CategoryModels\CategoryReadModel.cs" />
+    <Compile Include="Models\CategoryModels\CategoryWriteModel.cs" />
+    <Compile Include="Models\CategoryModels\SubcategoryReadModel.cs" />
+    <Compile Include="Models\CommonModels\Badge.cs" />
+    <Compile Include="Models\CommonModels\Budget.cs" />
+    <Compile Include="Models\CommonModels\LocationInfo.cs" />
+    <Compile Include="Models\CommonModels\Rating.cs" />
+    <Compile Include="Models\CommonModels\SpecialRequirement.cs" />
+    <Compile Include="Models\FailModels\FailMetaModel.cs" />
+    <Compile Include="Models\FailModels\FailReadModel.cs" />
+    <Compile Include="Models\FailModels\FailWriteModel.cs" />
+    <Compile Include="Models\UserInfoModels\UserInfoMetaModel.cs" />
+    <Compile Include="Models\UserInfoModels\UserInfoReadModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\SettingsServices\SettingsService.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
@@ -178,9 +193,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
