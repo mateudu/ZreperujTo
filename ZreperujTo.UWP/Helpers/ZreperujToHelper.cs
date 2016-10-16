@@ -9,6 +9,7 @@ using ZreperujTo.UWP.Models.BidModels;
 using ZreperujTo.UWP.Models.CategoryModels;
 using ZreperujTo.UWP.Models.FailModels;
 using ZreperujTo.UWP.Models.UserInfoModels;
+using ZreperujTo.Web.Models.CategoryModels;
 
 namespace ZreperujTo.UWP.Helpers
 {
@@ -16,14 +17,15 @@ namespace ZreperujTo.UWP.Helpers
     {
         private readonly string _apiUrl = @"https://zreperujto.azurewebsites.net/api/";
         private readonly HttpClient _client = new HttpClient();
+
+        ZreperujToHelper(string token)
+        {
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        }
         private HttpContent SerializeObject(object obj)
         {
             var output = JsonConvert.SerializeObject(obj);
             return new StringContent(output, Encoding.UTF8, "application/json");
-        }
-        public void AddTokenToHeader(string token)
-        {
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
         public async Task<List<CategoryReadModel>> GetCategories()
         {
@@ -52,13 +54,12 @@ namespace ZreperujTo.UWP.Helpers
                 return false;
             }
         }
-        public async Task<bool> AddCategories(CategoryReadModel categoryReadModel, string name)
+        public async Task<bool> AddSubCategories(CategoryReadModel categoryReadModel, SubcategoryWriteModel subcategoryWriteModel)
         {
             try
             {
                 var url = new Uri($"{_apiUrl}/Categories/{categoryReadModel.Id}");
-                var content = new FormUrlEncodedContent(new[] { new KeyValuePair<string, string>("name", $"{name}") });
-                var result = await _client.PostAsync(url, content);
+                var result = await _client.PostAsync(url, SerializeObject(subcategoryWriteModel));
                 return result.IsSuccessStatusCode;
             }
             catch (Exception)
@@ -115,7 +116,7 @@ namespace ZreperujTo.UWP.Helpers
         {
             try
             {
-                var url = new Uri($"{_apiUrl}/Fails/Details/{failMetaModel.FailId}");
+                var url = new Uri($"{_apiUrl}/Fails/Details/{failMetaModel.Id}");
                 var result = await _client.GetAsync(url);
                 var response = await result.Content.ReadAsStringAsync();
                 var obj = JsonConvert.DeserializeObject<FailReadModel>(response);
@@ -143,7 +144,7 @@ namespace ZreperujTo.UWP.Helpers
         {
             try
             {
-                var url = new Uri($"{_apiUrl}/Fails/Details/{failReadModel.FailId}/Bids/MakeBid");
+                var url = new Uri($"{_apiUrl}/Fails/Details/{failReadModel.Id}/Bids/MakeBid");
                 var result = await _client.PostAsync(url, SerializeObject(bidWriteModel));
                 return result.IsSuccessStatusCode;
             }
@@ -171,8 +172,8 @@ namespace ZreperujTo.UWP.Helpers
         {
             try
             {
-                var url = new Uri($"{_apiUrl}/api/Profile/Info");
-                var result = await _client.PostAsync(url,new StringContent(""));//ToDo for sure?
+                var url = new Uri($"{_apiUrl}/Fails/Details/{failReadModel.Id}/Bids/{bidReadModel.Id}/Accept");
+                var result = await _client.PostAsync(url,new StringContent(""));
                 return result.IsSuccessStatusCode;
             }
             catch (Exception)

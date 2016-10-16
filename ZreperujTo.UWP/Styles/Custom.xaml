@@ -8,12 +8,12 @@
 
     <Color x:Key="CustomColor">#673AB7</Color>
     <Color x:Key="ContrastColor">White</Color>
-    <Color x:Key="SystemAccentColor">#FFEB3B</Color>
+    <Color x:Key="SystemAccentColor">#FFC107</Color>
 
     <Color x:Key="Primary">#673AB7</Color>
     <Color x:Key="PrimaryDark">#512DA8</Color>
     <Color x:Key="PrimaryLight">#D1C4E9</Color>
-    <Color x:Key="Accent">#FFEB3B</Color>
+    <Color x:Key="Accent">#FFC107</Color>
     <Color x:Key="PrimaryText">#212121</Color>
     <Color x:Key="SecondaryText">#757575</Color>
     <Color x:Key="ContrastText">#FFFFFF</Color>
