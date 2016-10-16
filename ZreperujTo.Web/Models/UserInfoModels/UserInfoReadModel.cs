@@ -9,7 +9,7 @@ namespace ZreperujTo.Web.Models.UserInfoModels
 {
     public class UserInfoReadModel
     {
-        public string UserId { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public string MobileNumber { get; set; }
@@ -31,7 +31,7 @@ namespace ZreperujTo.Web.Models.UserInfoModels
             Ratings = dbModel.Ratings;
             RatingCount = dbModel.RatingCount;
             RatingSum = dbModel.RatingSum;
-            UserId = dbModel.UserId;
+            Id = dbModel.UserId;
         }
 
         public UserInfoReadModel()

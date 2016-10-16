@@ -49,7 +49,7 @@ namespace ZreperujTo.Web.Controllers.Api
                     Email = obj.Email,
                     Name = obj.Name,
                     MobileNumber = obj.MobileNumber,
-                    UserId = obj.UserId,
+                    Id = obj.UserId,
                     Company = obj.Company,
                     RatingSum = obj.RatingSum,
                     RatingCount = obj.RatingCount,

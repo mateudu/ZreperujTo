@@ -123,7 +123,7 @@ namespace ZreperujTo.Web.Controllers.Api
                     Name = userInfo.Name,
                     RatingCount = userInfo.RatingCount,
                     RatingSum = userInfo.RatingSum,
-                    UserId = userInfo.UserId
+                    Id = userInfo.UserId
                 },
                 AssignedBid = bids.FirstOrDefault(x=>x.Id == dbModel.AssignedBidId.ToString())
             };
@@ -222,7 +222,7 @@ namespace ZreperujTo.Web.Controllers.Api
                     Email = userInfo.Email,
                     MobileNumber = userInfo.MobileNumber,
                     Name = userInfo.Name,
-                    UserId = userInfo.UserId,
+                    Id = userInfo.UserId,
                     RatingSum = userInfo.RatingSum,
                     RatingCount = userInfo.RatingCount
                 }
