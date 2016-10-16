@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using ZreperujTo.UWP.Models.BidModels;
 using ZreperujTo.UWP.Models.CategoryModels;
 using ZreperujTo.UWP.Models.FailModels;
+using ZreperujTo.UWP.Models.UserInfoModels;
 
 namespace ZreperujTo.UWP.Helpers
 {
@@ -14,7 +16,15 @@ namespace ZreperujTo.UWP.Helpers
     {
         private readonly string _apiUrl = @"https://zreperujto.azurewebsites.net/api/";
         private readonly HttpClient _client = new HttpClient();
-
+        private HttpContent SerializeObject(object obj)
+        {
+            var output = JsonConvert.SerializeObject(obj);
+            return new StringContent(output, Encoding.UTF8, "application/json");
+        }
+        public void AddTokenToHeader(string token)
+        {
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        }
         public async Task<List<CategoryReadModel>> GetCategories()
         {
             try
@@ -29,15 +39,12 @@ namespace ZreperujTo.UWP.Helpers
                 return null;
             }
         }
-
         public async Task<bool> AddCategories(CategoryWriteModel categoryWriteModel)
         {
             try
             {
-                var url = new Uri($"{_apiUrl}/Categories");
-                string output = JsonConvert.SerializeObject(categoryWriteModel);
-                var content = new StringContent(output, Encoding.UTF8, "application/json");
-                var result = await _client.PostAsync(url, content);
+                var url = new Uri($"{_apiUrl}/Categories");          
+                var result = await _client.PostAsync(url, SerializeObject(categoryWriteModel));
                 return result.IsSuccessStatusCode;
             }
             catch (Exception)
@@ -45,7 +52,6 @@ namespace ZreperujTo.UWP.Helpers
                 return false;
             }
         }
-
         public async Task<bool> AddCategories(CategoryReadModel categoryReadModel, string name)
         {
             try
@@ -75,7 +81,6 @@ namespace ZreperujTo.UWP.Helpers
                 return null;
             }
         }
-
         public async Task<List<FailMetaModel>> BrowseFails(CategoryReadModel categoryReadModel)
         {
             try
@@ -106,7 +111,6 @@ namespace ZreperujTo.UWP.Helpers
                 return null;
             }
         }
-
         public async Task<FailReadModel> GetFailDetail(FailMetaModel failMetaModel) //ToDo something is not clear
         {
             try
@@ -127,9 +131,7 @@ namespace ZreperujTo.UWP.Helpers
             try
             {
                 var url = new Uri($"{_apiUrl}/Fails/Create");
-                string output = JsonConvert.SerializeObject(failWriteModel);
-                var content = new StringContent(output, Encoding.UTF8, "application/json");
-                var result = await _client.PostAsync(url, content);
+                var result = await _client.PostAsync(url, SerializeObject(failWriteModel));
                 return result.IsSuccessStatusCode;
             }
             catch (Exception)
@@ -142,9 +144,7 @@ namespace ZreperujTo.UWP.Helpers
             try
             {
                 var url = new Uri($"{_apiUrl}/Fails/Details/{failReadModel.FailId}/Bids/MakeBid");
-                var output = JsonConvert.SerializeObject(bidWriteModel);
-                var content = new StringContent(output, Encoding.UTF8, "application/json");
-                var result = await _client.PostAsync(url, content);
+                var result = await _client.PostAsync(url, SerializeObject(bidWriteModel));
                 return result.IsSuccessStatusCode;
             }
             catch (Exception)
@@ -152,7 +152,6 @@ namespace ZreperujTo.UWP.Helpers
                 return false;
             }
         }
-
         public async Task<List<BidReadModel>> GetBidsForFail(string id) //ToDo something is not clear
         {
             try
@@ -172,7 +171,7 @@ namespace ZreperujTo.UWP.Helpers
         {
             try
             {
-                var url = new Uri($"{_apiUrl}/Fails/Details/{failReadModel.FailId}/Bids/{bidReadModel.Id}/Accept");
+                var url = new Uri($"{_apiUrl}/api/Profile/Info");
                 var result = await _client.PostAsync(url,new StringContent(""));//ToDo for sure?
                 return result.IsSuccessStatusCode;
             }
@@ -181,6 +180,50 @@ namespace ZreperujTo.UWP.Helpers
                 return false;
             }
         }
-        //ToDo profile?
+        public async Task<UserInfoReadModel> GetProfileInfo()
+        {
+            try
+            {
+                var url = new Uri($"{_apiUrl}/Profile/Info");
+                var result = await _client.GetAsync(url);
+                var response = await result.Content.ReadAsStringAsync();
+                var obj = JsonConvert.DeserializeObject<UserInfoReadModel>(response);
+                return obj;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+        public async Task<List<BidReadModel>> GetProfileBids()
+        {
+            try
+            {
+                var url = new Uri($"{_apiUrl}/Profile/Info/Bids");
+                var result = await _client.GetAsync(url);
+                var response = await result.Content.ReadAsStringAsync();
+                var obj = JsonConvert.DeserializeObject<List<BidReadModel>>(response);
+                return obj;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+        public async Task<List<FailMetaModel>> GetProfileFails()
+        {
+            try
+            {
+                var url = new Uri($"{_apiUrl}/Profile/Info/Fails");
+                var result = await _client.GetAsync(url);
+                var response = await result.Content.ReadAsStringAsync();
+                var obj = JsonConvert.DeserializeObject<List<FailMetaModel>>(response);
+                return obj;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
     }
 }
