@@ -27,7 +27,7 @@ namespace ZreperujTo.UWP.Helpers
             var output = JsonConvert.SerializeObject(obj);
             return new StringContent(output, Encoding.UTF8, "application/json");
         }
-        public async Task<List<CategoryReadModel>> GetCategories()
+        public async Task<List<CategoryReadModel>> GetCategoriesAsync()
         {
             try
             {
@@ -41,7 +41,7 @@ namespace ZreperujTo.UWP.Helpers
                 return null;
             }
         }
-        public async Task<bool> AddCategories(CategoryWriteModel categoryWriteModel)
+        public async Task<bool> AddCategoriesAsync(CategoryWriteModel categoryWriteModel)
         {
             try
             {
@@ -54,7 +54,7 @@ namespace ZreperujTo.UWP.Helpers
                 return false;
             }
         }
-        public async Task<bool> AddSubCategories(CategoryReadModel categoryReadModel, SubcategoryWriteModel subcategoryWriteModel)
+        public async Task<bool> AddSubCategoriesAsync(CategoryReadModel categoryReadModel, SubcategoryWriteModel subcategoryWriteModel)
         {
             try
             {
@@ -67,7 +67,7 @@ namespace ZreperujTo.UWP.Helpers
                 return false;
             }
         }
-        public async Task<List<FailMetaModel>> BrowseFails()
+        public async Task<List<FailMetaModel>> BrowseFailsAsync()
         {
             try
             {
@@ -82,7 +82,7 @@ namespace ZreperujTo.UWP.Helpers
                 return null;
             }
         }
-        public async Task<List<FailMetaModel>> BrowseFails(CategoryReadModel categoryReadModel)
+        public async Task<List<FailMetaModel>> BrowseFailsAsync(CategoryReadModel categoryReadModel)
         {
             try
             {
@@ -97,11 +97,11 @@ namespace ZreperujTo.UWP.Helpers
                 return null;
             }
         }
-        public async Task<List<FailMetaModel>> BrowseFails(CategoryReadModel categoryReadModel, SubcategoryReadModel subcategoryReadModel)
+        public async Task<List<FailMetaModel>> BrowseFailsAsync(CategoryReadModel categoryReadModel, SubcategoryReadModel subcategoryReadModel)
         {
             try
             {
-                var url = new Uri($"{_apiUrl}/Fails/Browse/{categoryReadModel.Id}/{categoryReadModel.Id}");
+                var url = new Uri($"{_apiUrl}/Fails/Browse/{categoryReadModel.Id}/{subcategoryReadModel.Id}");
                 var result = await _client.GetAsync(url);
                 var response = await result.Content.ReadAsStringAsync();
                 var obj = JsonConvert.DeserializeObject<List<FailMetaModel>>(response);
@@ -112,7 +112,7 @@ namespace ZreperujTo.UWP.Helpers
                 return null;
             }
         }
-        public async Task<FailReadModel> GetFailDetail(FailMetaModel failMetaModel) //ToDo something is not clear
+        public async Task<FailReadModel> GetFailDetailAsync(FailMetaModel failMetaModel) //ToDo something is not clear
         {
             try
             {
@@ -127,7 +127,7 @@ namespace ZreperujTo.UWP.Helpers
                 return null;
             }
         }
-        public async Task<bool> AddFail(FailWriteModel failWriteModel)
+        public async Task<bool> AddFailAsync(FailWriteModel failWriteModel)
         {
             try
             {
@@ -140,7 +140,7 @@ namespace ZreperujTo.UWP.Helpers
                 return false;
             }
         }
-        public async Task<bool> MakeBid(FailReadModel failReadModel, BidWriteModel bidWriteModel)
+        public async Task<bool> MakeBidAsync(FailReadModel failReadModel, BidWriteModel bidWriteModel)
         {
             try
             {
@@ -153,7 +153,7 @@ namespace ZreperujTo.UWP.Helpers
                 return false;
             }
         }
-        public async Task<List<BidReadModel>> GetBidsForFail(string id) //ToDo something is not clear
+        public async Task<List<BidReadModel>> GetBidsForFailAsync(string id) //ToDo something is not clear
         {
             try
             {
@@ -168,7 +168,7 @@ namespace ZreperujTo.UWP.Helpers
                 return null;
             }
         }
-        public async Task<bool> AcceptBid(FailReadModel failReadModel, BidReadModel bidReadModel)
+        public async Task<bool> AcceptBidAsync(FailReadModel failReadModel, BidReadModel bidReadModel)
         {
             try
             {
@@ -181,7 +181,7 @@ namespace ZreperujTo.UWP.Helpers
                 return false;
             }
         }
-        public async Task<UserInfoReadModel> GetProfileInfo()
+        public async Task<UserInfoReadModel> GetProfileInfoAsync()
         {
             try
             {
@@ -196,7 +196,7 @@ namespace ZreperujTo.UWP.Helpers
                 return null;
             }
         }
-        public async Task<List<BidReadModel>> GetProfileBids()
+        public async Task<List<BidReadModel>> GetProfileBidsAsync()
         {
             try
             {
@@ -211,7 +211,7 @@ namespace ZreperujTo.UWP.Helpers
                 return null;
             }
         }
-        public async Task<List<FailMetaModel>> GetProfileFails()
+        public async Task<List<FailMetaModel>> GetProfileFailsAsync()
         {
             try
             {
