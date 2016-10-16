@@ -11,7 +11,7 @@ namespace ZreperujTo.Web.Models.FailModels
 {
     public class FailReadModel
     {
-        public string FailId { get; set; }
+        public string Id { get; set; }
         public CategoryReadModel Category { get; set; }
         public SubcategoryReadModel Subcategory { get; set; }
         public string Title { get; set; }

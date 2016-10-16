@@ -130,7 +130,7 @@ namespace ZreperujTo.Web.Data
                     AuctionValidThrough = e.AuctionValidThrough,
                     Budget = e.Budget,
                     Description = e.Description,
-                    FailId = e.Id.ToString(),
+                    Id = e.Id.ToString(),
                     Highlited = e.Highlited,
                     Location = new LocationInfo
                     {
@@ -170,7 +170,7 @@ namespace ZreperujTo.Web.Data
                     AuctionValidThrough = e.AuctionValidThrough,
                     Budget = e.Budget,
                     Description = e.Description,
-                    FailId = e.Id.ToString(),
+                    Id = e.Id.ToString(),
                     Highlited = e.Highlited,
                     Location = new LocationInfo
                     {
