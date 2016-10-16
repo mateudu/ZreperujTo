@@ -289,5 +289,41 @@ namespace ZreperujTo.Web.Controllers.Api
             });
             return Ok(bids);
         }
+
+        [HttpPost("Details/{failId}/Bids/{bidId}/Accept")]
+        [Authorize(ActiveAuthenticationSchemes = "Bearer")]
+        [ProducesResponseType(typeof(FailReadModel), (int) HttpStatusCode.OK)]
+        public async Task<IActionResult> AcceptBid(string failId, string bidId)
+        {
+            var failObjectId = ObjectId.Parse(failId);
+            var bidObjectId = ObjectId.Parse(bidId);
+
+            var fail = await _zreperujDb.GetFailDbModelAsync(failObjectId);
+            var bid = await _zreperujDb.GetBidAsync(bidObjectId);
+            string userId = User.Claims.FirstOrDefault(
+                        x => x.Type == @"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
+
+            if (fail != null && bid != null && fail.UserId == userId)
+            {
+                await _zreperujDb.AcceptBid(bidObjectId, failObjectId);
+                return Ok();
+            }
+            else
+            {
+                if (fail == null)
+                {
+                    ModelState.AddModelError("failId", "The fail does not exist");
+                }
+                if (bid == null)
+                {
+                    ModelState.AddModelError("bidId", "The bid does not exist");
+                }
+                if (fail.UserId != userId)
+                {
+                    ModelState.AddModelError("error", "You are not the owner of this fail");
+                }
+                return BadRequest(ModelState);
+            }
+        }
     }
 }

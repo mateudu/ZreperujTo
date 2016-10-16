@@ -71,7 +71,7 @@ namespace ZreperujTo.Web.Data
             int pageNumber = 1)
         {
             var collection = await _mongoDb.GetCollection<FailDbModel>(FailsCollectionName)
-                .FindAsync(x => x.Active && x.AssignedBidId == null);
+                .FindAsync(x => x.Active && (x.AssignedBidId == ObjectId.Empty));
             var list = await collection.ToListAsync();
             list =
                 list.Where(x => (categoryId.HasValue && categoryId.Value != ObjectId.Empty) ? x.CategoryId == categoryId.Value : true
@@ -146,6 +146,47 @@ namespace ZreperujTo.Web.Data
             return result;
         }
 
+        public async Task<List<FailMetaModel>> GetFailsMetaAsync(string userId)
+        {
+            var collection = _mongoDb.GetCollection<FailDbModel>(FailsCollectionName)
+                .FindAsync(x => x.UserId == userId);
+            var categories = GetCategoriesAsync();
+            var subcategories = GetSubcategoriesAsync();
+            await Task.WhenAll(collection, categories, subcategories);
+
+            var result = new List<FailMetaModel>();
+            var list = await collection.Result.ToListAsync();
+
+            foreach (var e in list)
+            {
+                var category = categories.Result.FirstOrDefault(x => x.Id == e.CategoryId);
+                var subcategory = subcategories.Result.FirstOrDefault(x => x.Id == e.SubcategoryId);
+
+                result.Add(new FailMetaModel
+                {
+                    Active = e.Active,
+                    Category = (category != null) ? new CategoryReadModel(category) : null,
+                    Subcategory = (subcategory != null) ? new SubcategoryReadModel(subcategory) : null,
+                    AuctionValidThrough = e.AuctionValidThrough,
+                    Budget = e.Budget,
+                    Description = e.Description,
+                    FailId = e.Id.ToString(),
+                    Highlited = e.Highlited,
+                    Location = new LocationInfo
+                    {
+                        City = e.Location.City,
+                        District = e.Location.District,
+                        PostalCode = e.Location.PostalCode
+                    },
+                    Pictures = e.Pictures,
+                    Title = e.Title,
+                    Requirements = e.Requirements
+                });
+            }
+            result = result.OrderByDescending(x=>x.AuctionValidThrough).ToList();
+            return result;
+        }
+
         public async Task<FailDbModel> GetFailDbModelAsync(ObjectId objId)
         {
             var collection = _mongoDb.GetCollection<FailDbModel>(FailsCollectionName);
@@ -200,6 +241,43 @@ namespace ZreperujTo.Web.Data
         {
             var bids = _mongoDb.GetCollection<BidDbModel>(BidsCollectionName).AsQueryable().Where(x => x.UserId == userId).ToList();
             return bids;
+        }
+
+        public async Task<BidDbModel> GetBidAsync(ObjectId bidId)
+        {
+            var bid = _mongoDb.GetCollection<BidDbModel>(BidsCollectionName).AsQueryable().Where(x => x.Id == bidId).FirstOrDefault();
+            return bid;
+        }
+
+        public async Task<bool> AcceptBid(ObjectId bidId, ObjectId failId)
+        {
+            var bidsCollection = _mongoDb.GetCollection<BidDbModel>(BidsCollectionName);
+            var failsCollection = _mongoDb.GetCollection<FailDbModel>(FailsCollectionName);
+
+            var fail = GetFailDbModelAsync(failId);
+            var bids = GetBidsAsync(failId);
+            await Task.WhenAll(fail, bids);
+
+            fail.Result.AssignedBidId = bidId;
+
+            var updateBids = bids.Result.Select(x =>
+            {
+                if (x.Id == bidId)
+                {
+                    x.Active = true;
+                    x.Assigned = true;
+                }
+                else
+                {
+                    x.Active = false;
+                    x.Assigned = false;
+                }
+                return bidsCollection.FindOneAndReplaceAsync(y => y.Id == x.Id, x);
+            });
+            var updateFail = failsCollection.FindOneAndReplaceAsync(x => x.Id == failId, fail.Result);
+            await Task.WhenAll(updateBids);
+            
+            return true;
         }
     }
 }
