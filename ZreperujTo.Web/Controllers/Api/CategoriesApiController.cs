@@ -70,7 +70,7 @@ namespace ZreperujTo.Web.Controllers.Api
         }
 
         [HttpPost("{categoryId}")]
-        public async Task<IActionResult> AddSubcategory([FromBody] SubcategoryReadModel subcategory, string categoryId)
+        public async Task<IActionResult> AddSubcategory([FromBody] SubcategoryWriteModel subcategory, string categoryId)
         {
             ObjectId categoryObjectId;
             if (!ObjectId.TryParse(categoryId, out categoryObjectId))
