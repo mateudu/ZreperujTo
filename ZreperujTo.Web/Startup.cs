@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
+using Newtonsoft.Json.Serialization;
 using ZreperujTo.Web.Data;
 using ZreperujTo.Web.Models;
 using ZreperujTo.Web.Services;
@@ -64,7 +65,16 @@ namespace ZreperujTo.Web
                     provider.GetService<ApplicationDbContext>()
                     ));
 
-            services.AddMvc();
+            services.AddMvc()
+                .AddJsonOptions(opt =>
+                {
+                    var resolver = opt.SerializerSettings.ContractResolver;
+                    if (resolver != null)
+                    {
+                        var res = resolver as DefaultContractResolver;
+                        res.NamingStrategy = null;  // <<!-- this removes the camelcasing
+                    }
+                });
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
