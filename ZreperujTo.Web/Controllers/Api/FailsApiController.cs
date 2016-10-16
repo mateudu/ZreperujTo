@@ -66,12 +66,22 @@ namespace ZreperujTo.Web.Controllers.Api
             var failId = ObjectId.Parse(id);
             var dbModel = await _zreperujDb.GetFailDbModelAsync(failId);
 
-            var category = (await _zreperujDb.GetCategoriesAsync()).FirstOrDefault(x => x.Id == dbModel.CategoryId);
-            var subcategory = (await _zreperujDb.GetSubcategoriesAsync()).FirstOrDefault(x => x.Id == dbModel.SubcategoryId);
+            CategoryDbModel category;
+            SubcategoryDbModel subcategory;
+
+            {
+                var _categoryTask = _zreperujDb.GetCategoriesAsync();
+                var _subsubcategoryTask = _zreperujDb.GetSubcategoriesAsync();
+                await Task.WhenAll(_categoryTask, _subsubcategoryTask);
+
+                category = _categoryTask.Result.FirstOrDefault(x => x.Id == dbModel.CategoryId);
+                subcategory = _subsubcategoryTask.Result.FirstOrDefault(x => x.Id == dbModel.SubcategoryId);
+            }
 
             var userInfo = await _zreperujDb.GetUserInfoDbModelAsync(dbModel.UserId);
             var bidsDb = await _zreperujDb.GetBidsAsync(failId);
             List<BidReadModel> bids = new List<BidReadModel>();
+
             Parallel.ForEach(bidsDb, x =>
             {
                 var user = _zreperujDb.GetUserInfoDbModelAsync(x.UserId).Result;
@@ -114,7 +124,8 @@ namespace ZreperujTo.Web.Controllers.Api
                     RatingCount = userInfo.RatingCount,
                     RatingSum = userInfo.RatingSum,
                     UserId = userInfo.UserId
-                }
+                },
+                AssignedBid = bids.FirstOrDefault(x=>x.Id == dbModel.AssignedBidId.ToString())
             };
 
             return Ok(read);
