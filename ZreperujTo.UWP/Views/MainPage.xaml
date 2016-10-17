@@ -87,6 +87,11 @@
                 Click="{x:Bind ViewModel.GotoDetailsPage}" Content="Submit"
                 RelativePanel.AlignBottomWith="parameterResizer"
                 RelativePanel.RightOf="parameterResizer" />
+        
+        <Button x:Name="authorizeButton"
+                Click="{x:Bind ViewModel.Authorization}" Content="authorize"
+                RelativePanel.AlignLeftWith="parameterResizer"
+                   RelativePanel.Below="parameterResizer" />
 
         <TextBlock x:Name="stateTextBox" Margin="16,16,0,0"
                    RelativePanel.AlignLeftWith="parameterResizer"
