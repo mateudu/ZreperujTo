@@ -7,7 +7,7 @@ namespace ZreperujTo.UWP.Models.FailModels
 {
     public class FailMetaModel
     {
-        public string FailId { get; set; }
+        public string Id { get; set; }
         public CategoryReadModel Category { get; set; }
         public SubcategoryReadModel Subcategory { get; set; }
         public string Title { get; set; }

@@ -9,6 +9,7 @@ using ZreperujTo.UWP.Models.BidModels;
 using ZreperujTo.UWP.Models.CategoryModels;
 using ZreperujTo.UWP.Models.FailModels;
 using ZreperujTo.UWP.Models.UserInfoModels;
+using ZreperujTo.Web.Models.CategoryModels;
 
 namespace ZreperujTo.UWP.Helpers
 {
@@ -16,16 +17,17 @@ namespace ZreperujTo.UWP.Helpers
     {
         private readonly string _apiUrl = @"https://zreperujto.azurewebsites.net/api/";
         private readonly HttpClient _client = new HttpClient();
+
+        ZreperujToHelper(string token)
+        {
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        }
         private HttpContent SerializeObject(object obj)
         {
             var output = JsonConvert.SerializeObject(obj);
             return new StringContent(output, Encoding.UTF8, "application/json");
         }
-        public void AddTokenToHeader(string token)
-        {
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-        }
-        public async Task<List<CategoryReadModel>> GetCategories()
+        public async Task<List<CategoryReadModel>> GetCategoriesAsync()
         {
             try
             {
@@ -39,7 +41,7 @@ namespace ZreperujTo.UWP.Helpers
                 return null;
             }
         }
-        public async Task<bool> AddCategories(CategoryWriteModel categoryWriteModel)
+        public async Task<bool> AddCategoriesAsync(CategoryWriteModel categoryWriteModel)
         {
             try
             {
@@ -52,13 +54,12 @@ namespace ZreperujTo.UWP.Helpers
                 return false;
             }
         }
-        public async Task<bool> AddCategories(CategoryReadModel categoryReadModel, string name)
+        public async Task<bool> AddSubCategoriesAsync(CategoryReadModel categoryReadModel, SubcategoryWriteModel subcategoryWriteModel)
         {
             try
             {
                 var url = new Uri($"{_apiUrl}/Categories/{categoryReadModel.Id}");
-                var content = new FormUrlEncodedContent(new[] { new KeyValuePair<string, string>("name", $"{name}") });
-                var result = await _client.PostAsync(url, content);
+                var result = await _client.PostAsync(url, SerializeObject(subcategoryWriteModel));
                 return result.IsSuccessStatusCode;
             }
             catch (Exception)
@@ -66,7 +67,7 @@ namespace ZreperujTo.UWP.Helpers
                 return false;
             }
         }
-        public async Task<List<FailMetaModel>> BrowseFails()
+        public async Task<List<FailMetaModel>> BrowseFailsAsync()
         {
             try
             {
@@ -81,7 +82,7 @@ namespace ZreperujTo.UWP.Helpers
                 return null;
             }
         }
-        public async Task<List<FailMetaModel>> BrowseFails(CategoryReadModel categoryReadModel)
+        public async Task<List<FailMetaModel>> BrowseFailsAsync(CategoryReadModel categoryReadModel)
         {
             try
             {
@@ -96,11 +97,11 @@ namespace ZreperujTo.UWP.Helpers
                 return null;
             }
         }
-        public async Task<List<FailMetaModel>> BrowseFails(CategoryReadModel categoryReadModel, SubcategoryReadModel subcategoryReadModel)
+        public async Task<List<FailMetaModel>> BrowseFailsAsync(CategoryReadModel categoryReadModel, SubcategoryReadModel subcategoryReadModel)
         {
             try
             {
-                var url = new Uri($"{_apiUrl}/Fails/Browse/{categoryReadModel.Id}/{categoryReadModel.Id}");
+                var url = new Uri($"{_apiUrl}/Fails/Browse/{categoryReadModel.Id}/{subcategoryReadModel.Id}");
                 var result = await _client.GetAsync(url);
                 var response = await result.Content.ReadAsStringAsync();
                 var obj = JsonConvert.DeserializeObject<List<FailMetaModel>>(response);
@@ -111,11 +112,11 @@ namespace ZreperujTo.UWP.Helpers
                 return null;
             }
         }
-        public async Task<FailReadModel> GetFailDetail(FailMetaModel failMetaModel) //ToDo something is not clear
+        public async Task<FailReadModel> GetFailDetailAsync(FailMetaModel failMetaModel) //ToDo something is not clear
         {
             try
             {
-                var url = new Uri($"{_apiUrl}/Fails/Details/{failMetaModel.FailId}");
+                var url = new Uri($"{_apiUrl}/Fails/Details/{failMetaModel.Id}");
                 var result = await _client.GetAsync(url);
                 var response = await result.Content.ReadAsStringAsync();
                 var obj = JsonConvert.DeserializeObject<FailReadModel>(response);
@@ -126,7 +127,7 @@ namespace ZreperujTo.UWP.Helpers
                 return null;
             }
         }
-        public async Task<bool> AddFail(FailWriteModel failWriteModel)
+        public async Task<bool> AddFailAsync(FailWriteModel failWriteModel)
         {
             try
             {
@@ -139,11 +140,11 @@ namespace ZreperujTo.UWP.Helpers
                 return false;
             }
         }
-        public async Task<bool> MakeBid(FailReadModel failReadModel, BidWriteModel bidWriteModel)
+        public async Task<bool> MakeBidAsync(FailReadModel failReadModel, BidWriteModel bidWriteModel)
         {
             try
             {
-                var url = new Uri($"{_apiUrl}/Fails/Details/{failReadModel.FailId}/Bids/MakeBid");
+                var url = new Uri($"{_apiUrl}/Fails/Details/{failReadModel.Id}/Bids/MakeBid");
                 var result = await _client.PostAsync(url, SerializeObject(bidWriteModel));
                 return result.IsSuccessStatusCode;
             }
@@ -152,7 +153,7 @@ namespace ZreperujTo.UWP.Helpers
                 return false;
             }
         }
-        public async Task<List<BidReadModel>> GetBidsForFail(string id) //ToDo something is not clear
+        public async Task<List<BidReadModel>> GetBidsForFailAsync(string id) //ToDo something is not clear
         {
             try
             {
@@ -167,12 +168,12 @@ namespace ZreperujTo.UWP.Helpers
                 return null;
             }
         }
-        public async Task<bool> AcceptBid(FailReadModel failReadModel, BidReadModel bidReadModel)
+        public async Task<bool> AcceptBidAsync(FailReadModel failReadModel, BidReadModel bidReadModel)
         {
             try
             {
-                var url = new Uri($"{_apiUrl}/api/Profile/Info");
-                var result = await _client.PostAsync(url,new StringContent(""));//ToDo for sure?
+                var url = new Uri($"{_apiUrl}/Fails/Details/{failReadModel.Id}/Bids/{bidReadModel.Id}/Accept");
+                var result = await _client.PostAsync(url,new StringContent(""));
                 return result.IsSuccessStatusCode;
             }
             catch (Exception)
@@ -180,7 +181,7 @@ namespace ZreperujTo.UWP.Helpers
                 return false;
             }
         }
-        public async Task<UserInfoReadModel> GetProfileInfo()
+        public async Task<UserInfoReadModel> GetProfileInfoAsync()
         {
             try
             {
@@ -195,7 +196,7 @@ namespace ZreperujTo.UWP.Helpers
                 return null;
             }
         }
-        public async Task<List<BidReadModel>> GetProfileBids()
+        public async Task<List<BidReadModel>> GetProfileBidsAsync()
         {
             try
             {
@@ -210,7 +211,7 @@ namespace ZreperujTo.UWP.Helpers
                 return null;
             }
         }
-        public async Task<List<FailMetaModel>> GetProfileFails()
+        public async Task<List<FailMetaModel>> GetProfileFailsAsync()
         {
             try
             {

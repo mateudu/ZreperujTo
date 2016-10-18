@@ -105,6 +105,7 @@
     <Compile Include="Models\CategoryModels\CategoryReadModel.cs" />
     <Compile Include="Models\CategoryModels\CategoryWriteModel.cs" />
     <Compile Include="Models\CategoryModels\SubcategoryReadModel.cs" />
+    <Compile Include="Models\CategoryModels\SubcategoryWriteModel.cs" />
     <Compile Include="Models\CommonModels\Badge.cs" />
     <Compile Include="Models\CommonModels\Budget.cs" />
     <Compile Include="Models\CommonModels\LocationInfo.cs" />
