@@ -60,12 +60,12 @@
             </controls:PageHeader.SecondaryCommands>
 
         </controls:PageHeader>
-        
-        
-        
-        <TextBlock x:Name="NameTextBlock" DataContext="{Binding LoggedProfile}" Text="{Binding Name}" RelativePanel.Below="pageHeader" />
 
-        <ScrollViewer DataContext="{Binding LoggedProfile}" RelativePanel.Below="NameTextBlock">
+
+
+        <TextBlock x:Name="NameTextBlock" DataContext="{Binding LoggedProfile}" Text="{Binding Name}" RelativePanel.Below="pageHeader" MinWidth="150"/>
+
+        <ScrollViewer x:Name="ScrollViewer" DataContext="{Binding LoggedProfile}" RelativePanel.Below="NameTextBlock" MinWidth="150" MinHeight="80">
             <StackPanel>
                 <TextBlock Text="{Binding Company}"/>
                 <TextBlock Text="{Binding Email}"/>
@@ -74,20 +74,18 @@
             </StackPanel>
         </ScrollViewer>
         
-        <!--<controls:Resizer x:Name="parameterResizer" Margin="16,16,16,0"
+        <controls:Resizer x:Name="parameterResizer" Margin="16,16,16,0"
                           RelativePanel.AlignLeftWithPanel="True"
-                          RelativePanel.Below="pageHeader">
+                          RelativePanel.Below="ScrollViewer">
 
             <TextBox MinWidth="150" MinHeight="62"
                      Header="Parameter to pass"
-                     Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     Text="{Binding LoggedProfile.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      TextWrapping="Wrap">
                 <Interactivity:Interaction.Behaviors>
-                    --><!--  enable submit on enter key  --><!--
                     <Behaviors:KeyBehavior Key="Enter">
                         <Core:CallMethodAction MethodName="GotoDetailsPage" TargetObject="{Binding}" />
                     </Behaviors:KeyBehavior>
-                    --><!--  focus on textbox when page loads  --><!--
                     <Core:EventTriggerBehavior>
                         <Behaviors:FocusAction />
                     </Core:EventTriggerBehavior>
@@ -95,22 +93,17 @@
             </TextBox>
 
         </controls:Resizer>
-        
+
 
         <Button x:Name="submitButton"
                 Click="{x:Bind ViewModel.GotoDetailsPage}" Content="Submit"
                 RelativePanel.AlignBottomWith="parameterResizer"
                 RelativePanel.RightOf="parameterResizer" />
-        
-        <Button x:Name="authorizeButton"
-                Click="{x:Bind ViewModel.Authorization}" Content="authorize"
-                RelativePanel.AlignLeftWith="parameterResizer"
-                   RelativePanel.Below="parameterResizer" />
 
         <TextBlock x:Name="stateTextBox" Margin="16,16,0,0"
                    RelativePanel.AlignLeftWith="parameterResizer"
                    RelativePanel.Below="parameterResizer"
-                   Text="Current Visual State" />-->
+                   Text="Current Visual State" />
 
     </RelativePanel>
 </Page>

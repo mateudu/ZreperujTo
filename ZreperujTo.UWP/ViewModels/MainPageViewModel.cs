@@ -19,6 +19,7 @@ namespace ZreperujTo.UWP.ViewModels
         {
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
             {
+                LoggedProfile = new UserInfoReadModel {Name = "janusz", Email = "heheszek"};
             }
         }
 
