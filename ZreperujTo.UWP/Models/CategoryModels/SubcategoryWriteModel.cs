@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace ZreperujTo.Web.Models.CategoryModels
+﻿namespace ZreperujTo.UWP.Models.CategoryModels
 {
     public class SubcategoryWriteModel
     {

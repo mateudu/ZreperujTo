@@ -114,6 +114,9 @@
     <Compile Include="Models\FailModels\FailMetaModel.cs" />
     <Compile Include="Models\FailModels\FailReadModel.cs" />
     <Compile Include="Models\FailModels\FailWriteModel.cs" />
+    <Compile Include="Models\FileInfoModels\BlobUploadResult.cs" />
+    <Compile Include="Models\FileInfoModels\PictureInfoReadModel.cs" />
+    <Compile Include="Models\FileInfoModels\PictureUploadReadModel.cs" />
     <Compile Include="Models\UserInfoModels\UserInfoMetaModel.cs" />
     <Compile Include="Models\UserInfoModels\UserInfoReadModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

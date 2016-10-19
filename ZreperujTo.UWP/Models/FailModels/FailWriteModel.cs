@@ -15,7 +15,7 @@ namespace ZreperujTo.UWP.Models.FailModels
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime AuctionValidThrough { get; set; }
-        public List<string> Pictures { get; set; }
+        public List<string> PictureIds { get; set; }
         [Required]
         public LocationInfo Location { get; set; }
         [Required]

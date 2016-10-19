@@ -15,5 +15,6 @@ namespace ZreperujTo.UWP.Models.UserInfoModels
         public int RatingSum { get; set; }
         public List<Rating> Ratings { get; set; }
         public List<Badge> Badges { get; set; }
+
     }
 }

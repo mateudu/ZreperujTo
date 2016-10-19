@@ -5,6 +5,7 @@ namespace ZreperujTo.UWP.Models.CategoryModels
 {
     public class CategoryReadModel
     {
+
         public string Id { get; set; }
 
         [Required]

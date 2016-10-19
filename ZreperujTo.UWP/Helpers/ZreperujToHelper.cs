@@ -9,7 +9,6 @@ using ZreperujTo.UWP.Models.BidModels;
 using ZreperujTo.UWP.Models.CategoryModels;
 using ZreperujTo.UWP.Models.FailModels;
 using ZreperujTo.UWP.Models.UserInfoModels;
-using ZreperujTo.Web.Models.CategoryModels;
 
 namespace ZreperujTo.UWP.Helpers
 {
@@ -19,11 +18,11 @@ namespace ZreperujTo.UWP.Helpers
         private readonly HttpClient _client = new HttpClient();
 
         public static string Token { get; set; }
-        ZreperujToHelper(string token)
+        public ZreperujToHelper(string token)
         {
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
-        ZreperujToHelper()
+        public ZreperujToHelper()
         {
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
         }
