@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.WindowsAzure.Storage;
 using MongoDB.Driver;
 using Newtonsoft.Json.Serialization;
 using ZreperujTo.Web.Data;
@@ -62,7 +63,8 @@ namespace ZreperujTo.Web
                 provider => new ZreperujToDbClient(
                     provider.GetService<IMongoClient>(), 
                     provider.GetService<IMongoDatabase>(),
-                    provider.GetService<ApplicationDbContext>()
+                    provider.GetService<ApplicationDbContext>(),
+                    CloudStorageAccount.Parse(Configuration.GetConnectionString("StorageAccount"))
                     ));
 
             services.AddMvc()

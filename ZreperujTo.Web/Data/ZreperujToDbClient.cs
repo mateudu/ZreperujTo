@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using ZreperujTo.Web.Controllers.Api;
 using ZreperujTo.Web.Models.BidModels;
 using ZreperujTo.Web.Models.CategoryModels;
 using ZreperujTo.Web.Models.CommonModels;
 using ZreperujTo.Web.Models.DbModels;
 using ZreperujTo.Web.Models.FailModels;
+using ZreperujTo.Web.Models.FileInfoModels;
 using ZreperujTo.Web.Models.UserInfoModels;
 
 namespace ZreperujTo.Web.Data
@@ -18,21 +23,26 @@ namespace ZreperujTo.Web.Data
         private IMongoClient _mongoClient;
         private IMongoDatabase _mongoDb;
         private ApplicationDbContext _db;
+        private CloudStorageAccount _cloudStorageAccount;
 
         private const string UserInfoCollectionName = "user_info";
         private const string BidsCollectionName = "bids";
         private const string FailsCollectionName = "fails";
         private const string CategoriesCollectionName = "categories";
         private const string SubcategoriesCollectionName = "subcategories";
+        private const string PictureInfoCollectionName = "picture_info";
+        private const string ContainerName = "zreperujto";
 
         public ZreperujToDbClient(
             IMongoClient mongoClient,
             IMongoDatabase mongoDb,
-            ApplicationDbContext db)
+            ApplicationDbContext db,
+            CloudStorageAccount cloudStorageAccount)
         {
             _mongoClient = mongoClient;
             _mongoDb = mongoDb;
             _db = db;
+            _cloudStorageAccount = cloudStorageAccount;
         }
 
         public async Task<bool> AddUserInfoAsync(UserInfoDbModel model)
@@ -285,6 +295,41 @@ namespace ZreperujTo.Web.Data
             await Task.WhenAll(updateBids);
             
             return true;
+        }
+
+        public async Task<BlobUploadResult> UploadToBlobAsync(byte[] buffer, string name = null)
+        {
+            // Create the blob client.
+            CloudBlobClient blobClient = _cloudStorageAccount.CreateCloudBlobClient();
+            // Retrieve a reference to a container.
+            CloudBlobContainer container = blobClient.GetContainerReference(ContainerName);
+            name = String.IsNullOrWhiteSpace(name) ? Guid.NewGuid().ToString() : name;
+            CloudBlockBlob blockBlob = container.GetBlockBlobReference(name);
+
+            await blockBlob.UploadFromByteArrayAsync(buffer, 0, (int)buffer.Length);
+
+            var result = new BlobUploadResult
+            {
+                FileName = blockBlob?.Name,
+                Size = blockBlob?.Properties.Length,
+                Uri = blockBlob?.Uri.ToString()
+            };
+
+            return result;
+        }
+
+        public async Task<bool> InsertPictureInfoDbModelAsync(PictureInfoDbModel model)
+        {
+            var bidsCollection = _mongoDb.GetCollection<PictureInfoDbModel>(PictureInfoCollectionName);
+            await bidsCollection.InsertOneAsync(model);
+            return true;
+        }
+
+        public async Task<List<PictureInfoDbModel>> GetPictureInfoDbModelsAsync(List<string> ids)
+        {
+            var bidsCollection = _mongoDb.GetCollection<PictureInfoDbModel>(PictureInfoCollectionName);
+            var query = Builders<PictureInfoDbModel>.Filter.In(x => x.BaseName, ids);
+            return await (await bidsCollection.FindAsync(query)).ToListAsync();
         }
     }
 }

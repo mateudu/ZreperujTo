@@ -16,6 +16,7 @@ using ZreperujTo.Web.Models.CategoryModels;
 using ZreperujTo.Web.Models.CommonModels;
 using ZreperujTo.Web.Models.DbModels;
 using ZreperujTo.Web.Models.FailModels;
+using ZreperujTo.Web.Models.FileInfoModels;
 using ZreperujTo.Web.Models.UserInfoModels;
 
 namespace ZreperujTo.Web.Controllers.Api
@@ -173,6 +174,8 @@ namespace ZreperujTo.Web.Controllers.Api
             SubcategoryDbModel subcategory;
             UserInfoDbModel userInfo;
             string userId = User.GetSubId();
+            if (writeModel.PictureIds == null)
+                writeModel.PictureIds = new List<string>();
 
             if (!ObjectId.TryParse(writeModel.CategoryId, out categoryId))
             {
@@ -193,14 +196,17 @@ namespace ZreperujTo.Web.Controllers.Api
 
             List<CategoryDbModel> categories;
             List<SubcategoryDbModel> subcategories;
+            List<PictureInfoDbModel> pictureDbModels;
             {
                 var _categoriesTask = _zreperujDb.GetCategoriesAsync();
                 var _subcategoriesTask = _zreperujDb.GetSubcategoriesAsync();
                 var _userInfoTask = _zreperujDb.GetUserInfoDbModelAsync(userId);
-                await Task.WhenAll(_categoriesTask, _subcategoriesTask, _userInfoTask);
+                var _picturesTask = _zreperujDb.GetPictureInfoDbModelsAsync(writeModel.PictureIds);
+                await Task.WhenAll(_categoriesTask, _subcategoriesTask, _userInfoTask, _picturesTask);
                 categories = _categoriesTask.Result;
                 subcategories = _subcategoriesTask.Result;
                 userInfo = _userInfoTask.Result;
+                pictureDbModels = _picturesTask.Result;
             }
 
             if ((category = categories.FirstOrDefault(x => x.Id == categoryId)) == null)
@@ -222,6 +228,7 @@ namespace ZreperujTo.Web.Controllers.Api
             {
                 writeModel.AuctionValidThrough = DateTime.Now.AddDays(7.0);
             }
+            
 
             var dbModel = new FailDbModel
             {
@@ -237,7 +244,11 @@ namespace ZreperujTo.Web.Controllers.Api
                 Description = writeModel.Description,
                 Highlited = writeModel.Highlited,
                 Location = writeModel.Location,
-                Pictures = writeModel.Pictures,
+                Pictures = pictureDbModels.Select(x=>new PictureInfoReadModel
+                {
+                    OriginalFileUri = x.OriginalSizeUri,
+                    ThumbnailFileUri = x.ThumbnailUri
+                }).ToList(),
                 Title = writeModel.Title
             };
 
@@ -280,9 +291,17 @@ namespace ZreperujTo.Web.Controllers.Api
         public async Task<IActionResult> MakeBid(string id, [FromBody]BidWriteModel bid)
         {
             ObjectId failId;
+            if (bid == null)
+            {
+                ModelState.AddModelError("bid", "Request body cannot be empty");
+            }
             if (!ObjectId.TryParse(id, out failId))
             {
                 ModelState.AddModelError("id", "Invalid 'id' of fail");
+            }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
             }
 
             var fail = await _zreperujDb.GetFailDbModelAsync(failId);
@@ -353,8 +372,7 @@ namespace ZreperujTo.Web.Controllers.Api
 
             var fail = await _zreperujDb.GetFailDbModelAsync(failObjectId);
             var bid = await _zreperujDb.GetBidAsync(bidObjectId);
-            string userId = User.Claims.FirstOrDefault(
-                        x => x.Type == @"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
+            string userId = User.GetSubId();
 
             if (fail != null && bid != null && fail.UserId == userId)
             {

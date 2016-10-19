@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 using ZreperujTo.Web.Models.CommonModels;
+using ZreperujTo.Web.Models.FileInfoModels;
 
 namespace ZreperujTo.Web.Models.DbModels
 {
@@ -17,7 +18,7 @@ namespace ZreperujTo.Web.Models.DbModels
         public string Description { get; set; }
         public DateTime AuctionValidThrough { get; set; }
         public DateTime CreatedAt { get; set; }
-        public List<string> Pictures { get; set; }
+        public List<PictureInfoReadModel> Pictures { get; set; }
         public LocationInfo Location { get; set; }
         public decimal Budget { get; set; }
         public bool Highlited { get; set; }

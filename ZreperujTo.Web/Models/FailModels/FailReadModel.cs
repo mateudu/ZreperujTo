@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ZreperujTo.Web.Models.BidModels;
 using ZreperujTo.Web.Models.CategoryModels;
 using ZreperujTo.Web.Models.CommonModels;
+using ZreperujTo.Web.Models.FileInfoModels;
 using ZreperujTo.Web.Models.UserInfoModels;
 
 namespace ZreperujTo.Web.Models.FailModels
@@ -17,7 +18,7 @@ namespace ZreperujTo.Web.Models.FailModels
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime AuctionValidThrough { get; set; }
-        public List<string> Pictures { get; set; }
+        public List<PictureInfoReadModel> Pictures { get; set; }
         public LocationInfo Location { get; set; }
         public decimal Budget { get; set; }
         public List<SpecialRequirement> Requirements { get; set; }
