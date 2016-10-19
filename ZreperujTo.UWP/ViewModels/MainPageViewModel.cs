@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Windows.Security.Authentication.Web;
 using Template10.Services.NavigationService;
 using Windows.UI.Xaml.Navigation;
+using ZreperujTo.UWP.Helpers;
 
 namespace ZreperujTo.UWP.ViewModels
 {
@@ -21,6 +22,8 @@ namespace ZreperujTo.UWP.ViewModels
             }
         }
 
+        private readonly string _resourceName = Windows.ApplicationModel.Package.Current.DisplayName;
+
         string _Value = "Gas";
         public string Value { get { return _Value; } set { Set(ref _Value, value); } }
 
@@ -31,6 +34,45 @@ namespace ZreperujTo.UWP.ViewModels
                 Value = suspensionState[nameof(Value)]?.ToString();
             }
             await Task.CompletedTask;
+
+            var token = GetCredentialFromLocker();
+
+            if (token == null || Convert.ToDateTime(token.UserName) < DateTime.Now)
+            {
+                Authorization();
+            }
+
+            ZreperujToHelper.Token = token?.Password;
+
+            Value = token?.UserName + ZreperujToHelper.Token;
+        }
+
+        private Windows.Security.Credentials.PasswordCredential GetCredentialFromLocker()
+        {
+            Windows.Security.Credentials.PasswordCredential credential = null;
+
+            var vault = new Windows.Security.Credentials.PasswordVault();
+            var credentialList = vault.FindAllByResource(_resourceName);
+            if (credentialList.Count <= 0) return null;
+            if (credentialList.Count == 1)
+            {
+                credential = credentialList[0];
+            }
+            else
+            {
+                // When there are multiple tokens
+                while (credentialList.Count > 1)
+                {
+                    vault.Remove(Convert.ToDateTime(credentialList[0].UserName) >
+                                 Convert.ToDateTime(credentialList[1].UserName)
+                        ? credentialList[1]
+                        : credentialList[0]);
+                }
+
+                credential = credentialList[0];
+            }
+
+            return credential;
         }
 
         public override async Task OnNavigatedFromAsync(IDictionary<string, object> suspensionState, bool suspending)
@@ -69,11 +111,14 @@ namespace ZreperujTo.UWP.ViewModels
                           .ToDictionary(element => element.Name, element => element.Value);
 
                     var vault = new Windows.Security.Credentials.PasswordVault();
-                    if (parameters.ContainsKey("access_token")) vault.Add(new Windows.Security.Credentials.PasswordCredential("ZreperujTo", "access_token", parameters["access_token"]));
-                    if (parameters.ContainsKey("expires_in"))
+                    if (parameters.ContainsKey("access_token") && parameters.ContainsKey("expires_in"))
                     {
-                        var date = DateTime.Now.AddSeconds(Convert.ToDouble(parameters["expires_in"])).ToString(CultureInfo.InvariantCulture);
-                        vault.Add(new Windows.Security.Credentials.PasswordCredential("ZreperujTo", "expiration_date", date)); //ToDo this name can not work
+                        var date =
+                            DateTime.Now.AddSeconds(Convert.ToDouble(parameters["expires_in"]))
+                                .ToString(CultureInfo.InvariantCulture);
+
+                        vault.Add(new Windows.Security.Credentials.PasswordCredential(_resourceName, date,
+                            parameters["access_token"]));
                     }
 
                     //Claims.Clear();

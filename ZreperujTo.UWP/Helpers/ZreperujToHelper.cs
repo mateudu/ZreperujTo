@@ -18,9 +18,14 @@ namespace ZreperujTo.UWP.Helpers
         private readonly string _apiUrl = @"https://zreperujto.azurewebsites.net/api/";
         private readonly HttpClient _client = new HttpClient();
 
+        public static string Token { get; set; }
         ZreperujToHelper(string token)
         {
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        }
+        ZreperujToHelper()
+        {
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
         }
         private HttpContent SerializeObject(object obj)
         {
