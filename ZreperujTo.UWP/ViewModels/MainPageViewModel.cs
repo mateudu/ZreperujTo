@@ -26,14 +26,13 @@ namespace ZreperujTo.UWP.ViewModels
         private readonly string _resourceName = Windows.ApplicationModel.Package.Current.DisplayName;
         private ZreperujToHelper _zreperujToHelper;
         private UserInfoReadModel _loggedProfile;
-        private UserInfoReadModel _loggedProfile1;
 
         public UserInfoReadModel LoggedProfile
         {
-            get { return _loggedProfile1; }
+            get { return _loggedProfile; }
             set
             {
-                _loggedProfile1 = value;
+                _loggedProfile = value;
                 RaisePropertyChanged();
             }
         }
@@ -54,7 +53,7 @@ namespace ZreperujTo.UWP.ViewModels
         {
             _zreperujToHelper = new ZreperujToHelper();
             var prof = await _zreperujToHelper.GetProfileInfoAsync();
-            _loggedProfile = prof;
+            LoggedProfile = prof;
 
         }
 
