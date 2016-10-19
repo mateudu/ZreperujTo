@@ -39,8 +39,9 @@ namespace ZreperujTo.UWP.ViewModels
 
             if (token == null || Convert.ToDateTime(token.UserName) < DateTime.Now)
             {
-                Authorization();
+                await Authorization();
             }
+            token = GetCredentialFromLocker();
             token?.RetrievePassword();
             ZreperujToHelper.Token = token?.Password;
 
@@ -97,7 +98,7 @@ namespace ZreperujTo.UWP.ViewModels
             await Task.CompletedTask;
         }
 
-        public async void Authorization()
+        public async Task Authorization()
         {
 
             var callback = new Uri(@"https://zreperujto.azurewebsites.net/api/Profile");
