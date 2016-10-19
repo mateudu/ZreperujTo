@@ -1,6 +1,7 @@
 using Template10.Mvvm;
 using System.Collections.Generic;
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -66,6 +67,15 @@ namespace ZreperujTo.UWP.ViewModels
                                       let pair = parameter.Split('=')
                                       select new { Name = pair[0], Value = pair[1] })
                           .ToDictionary(element => element.Name, element => element.Value);
+
+                    var vault = new Windows.Security.Credentials.PasswordVault();
+                    if (parameters.ContainsKey("access_token")) vault.Add(new Windows.Security.Credentials.PasswordCredential("ZreperujTo", "access_token", parameters["access_token"]));
+                    if (parameters.ContainsKey("expires_in"))
+                    {
+                        var date = DateTime.Now.AddSeconds(Convert.ToDouble(parameters["expires_in"])).ToString(CultureInfo.InvariantCulture);
+                        vault.Add(new Windows.Security.Credentials.PasswordCredential("ZreperujTo", "expiration_date", date)); //ToDo this name can not work
+                    }
+
                     //Claims.Clear();
                     //foreach (var par in parameters)
                     //{
