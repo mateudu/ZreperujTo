@@ -41,7 +41,7 @@ namespace ZreperujTo.UWP.ViewModels
             {
                 Authorization();
             }
-
+            token?.RetrievePassword();
             ZreperujToHelper.Token = token?.Password;
 
             Value = token?.UserName + ZreperujToHelper.Token;
@@ -49,7 +49,9 @@ namespace ZreperujTo.UWP.ViewModels
 
         private Windows.Security.Credentials.PasswordCredential GetCredentialFromLocker()
         {
-            Windows.Security.Credentials.PasswordCredential credential = null;
+            try
+            {
+            Windows.Security.Credentials.PasswordCredential credential;
 
             var vault = new Windows.Security.Credentials.PasswordVault();
             var credentialList = vault.FindAllByResource(_resourceName);
@@ -73,6 +75,11 @@ namespace ZreperujTo.UWP.ViewModels
             }
 
             return credential;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public override async Task OnNavigatedFromAsync(IDictionary<string, object> suspensionState, bool suspending)
