@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing.Constraints;
 using MongoDB.Bson;
 using ZreperujTo.Web.Data;
+using ZreperujTo.Web.Helpers;
 using ZreperujTo.Web.Models.BidModels;
 using ZreperujTo.Web.Models.CategoryModels;
 using ZreperujTo.Web.Models.CommonModels;
@@ -63,28 +64,52 @@ namespace ZreperujTo.Web.Controllers.Api
         [ProducesResponseType(typeof(FailReadModel),(int)HttpStatusCode.OK)]
         public async Task<IActionResult> Get(string id)
         {
-            var failId = ObjectId.Parse(id);
-            var dbModel = await _zreperujDb.GetFailDbModelAsync(failId);
+            ObjectId failId;
+            FailDbModel failDbModel;
+            if (!ObjectId.TryParse(id, out failId))
+            {
+                ModelState.AddModelError("failId", "'failId' is incorrect");
+                return BadRequest(ModelState);
+            }
 
             CategoryDbModel category;
             SubcategoryDbModel subcategory;
-
+            #region Getting categories, subcategories and fail from database
             {
+                var _failDbModelTask = _zreperujDb.GetFailDbModelAsync(failId);
                 var _categoryTask = _zreperujDb.GetCategoriesAsync();
                 var _subsubcategoryTask = _zreperujDb.GetSubcategoriesAsync();
-                await Task.WhenAll(_categoryTask, _subsubcategoryTask);
+                await Task.WhenAll(_categoryTask, _subsubcategoryTask, _failDbModelTask);
 
-                category = _categoryTask.Result.FirstOrDefault(x => x.Id == dbModel.CategoryId);
-                subcategory = _subsubcategoryTask.Result.FirstOrDefault(x => x.Id == dbModel.SubcategoryId);
+                failDbModel = _failDbModelTask.Result;
+                if (failDbModel == null)
+                {
+                    ModelState.AddModelError("failId", "The fail does not exist");
+                    return BadRequest(ModelState);
+                }
+                category = _categoryTask.Result.FirstOrDefault(x => x.Id == failDbModel.CategoryId);
+                subcategory = _subsubcategoryTask.Result.FirstOrDefault(x => x.Id == failDbModel.SubcategoryId);
             }
+            #endregion
 
-            var userInfo = await _zreperujDb.GetUserInfoDbModelAsync(dbModel.UserId);
-            var bidsDb = await _zreperujDb.GetBidsAsync(failId);
-            List<BidReadModel> bids = new List<BidReadModel>();
 
-            Parallel.ForEach(bidsDb, x =>
+            UserInfoDbModel userInfoDbModel;
+            List<BidDbModel> bidsDbModel;
+            #region Getting fail's owner userInfo and fail's bids
             {
-                var user = _zreperujDb.GetUserInfoDbModelAsync(x.UserId).Result;
+                var _userInfoTask = _zreperujDb.GetUserInfoDbModelAsync(failDbModel.UserId);
+                var _bidsDbModelTask = _zreperujDb.GetBidsAsync(failId);
+                await Task.WhenAll(_userInfoTask, _bidsDbModelTask);
+                userInfoDbModel = _userInfoTask.Result;
+                bidsDbModel = _bidsDbModelTask.Result;
+            }
+            #endregion
+
+            List<BidReadModel> bids = new List<BidReadModel>();
+            var userInfoDbModels = await _zreperujDb.GetUserInfoDbModelAsync(bidsDbModel.Select(x => x.UserId).ToArray());
+            foreach (var x in bidsDbModel)
+            {
+                var user = userInfoDbModels.FirstOrDefault(u => u.UserId == x.UserId);
                 user.Ratings = null;
                 user.Badges = null;
                 bids.Add(new BidReadModel
@@ -98,34 +123,34 @@ namespace ZreperujTo.Web.Controllers.Api
                     FailId = failId.ToString(),
                     UserInfo = new UserInfoReadModel(user)
                 });
-            });
+            }
 
             var read = new FailReadModel
             {
-                Active = dbModel.Active,
-                AuctionValidThrough = dbModel.AuctionValidThrough,
+                Active = failDbModel.Active,
+                AuctionValidThrough = failDbModel.AuctionValidThrough,
                 Category = (category != null) ? new CategoryReadModel(category) : null,
                 Subcategory = (subcategory != null) ? new SubcategoryReadModel(subcategory) : null,
                 Bids = bids,
-                Budget = dbModel.Budget,
-                Description = dbModel.Description,
-                Id = dbModel.Id.ToString(),
-                Highlited = dbModel.Highlited,
-                Location = dbModel.Location,
-                Pictures = dbModel.Pictures,
-                Requirements = dbModel.Requirements,
-                Title = dbModel.Title,
+                Budget = failDbModel.Budget,
+                Description = failDbModel.Description,
+                Id = failDbModel.Id.ToString(),
+                Highlited = failDbModel.Highlited,
+                Location = failDbModel.Location,
+                Pictures = failDbModel.Pictures,
+                Requirements = failDbModel.Requirements,
+                Title = failDbModel.Title,
                 UserInfo = new UserInfoMetaModel
                 {
-                    Email = userInfo.Email,
-                    Company = userInfo.Company,
-                    MobileNumber = userInfo.MobileNumber,
-                    Name = userInfo.Name,
-                    RatingCount = userInfo.RatingCount,
-                    RatingSum = userInfo.RatingSum,
-                    Id = userInfo.UserId
+                    Email = userInfoDbModel.Email,
+                    Company = userInfoDbModel.Company,
+                    MobileNumber = userInfoDbModel.MobileNumber,
+                    Name = userInfoDbModel.Name,
+                    RatingCount = userInfoDbModel.RatingCount,
+                    RatingSum = userInfoDbModel.RatingSum,
+                    Id = userInfoDbModel.UserId
                 },
-                AssignedBid = bids.FirstOrDefault(x=>x.Id == dbModel.AssignedBidId.ToString())
+                AssignedBid = bids.FirstOrDefault(x=>x.Id == failDbModel.AssignedBidId.ToString())
             };
 
             return Ok(read);
@@ -137,17 +162,18 @@ namespace ZreperujTo.Web.Controllers.Api
         [ProducesResponseType(typeof(FailReadModel), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Post([FromBody]FailWriteModel writeModel)
         {
-            ObjectId categoryId, subcategoryId;
-            var categories = await _zreperujDb.GetCategoriesAsync();
-            var subcategories = await _zreperujDb.GetSubcategoriesAsync();
-            CategoryDbModel category;
-            SubcategoryDbModel subcategory;
-
             if (writeModel == null)
             {
-                ModelState.AddModelError("writeModel","Request BODY cannot be empty");
+                ModelState.AddModelError("writeModel", "Request BODY cannot be empty");
                 return BadRequest(ModelState);
             }
+
+            ObjectId categoryId, subcategoryId;
+            CategoryDbModel category;
+            SubcategoryDbModel subcategory;
+            UserInfoDbModel userInfo;
+            string userId = User.GetSubId();
+
             if (!ObjectId.TryParse(writeModel.CategoryId, out categoryId))
             {
                 ModelState.AddModelError("CategoryId", "Invalid or empty 'CategoryId'");
@@ -156,6 +182,27 @@ namespace ZreperujTo.Web.Controllers.Api
             {
                 ModelState.AddModelError("SubcategoryId", "Invalid or empty 'SubcategoryId'");
             }
+            if (writeModel.AuctionValidThrough < DateTime.Now)
+            {
+                ModelState.AddModelError("AuctionValidThrough", "The DateTime cannot be earlier than now");
+            }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            List<CategoryDbModel> categories;
+            List<SubcategoryDbModel> subcategories;
+            {
+                var _categoriesTask = _zreperujDb.GetCategoriesAsync();
+                var _subcategoriesTask = _zreperujDb.GetSubcategoriesAsync();
+                var _userInfoTask = _zreperujDb.GetUserInfoDbModelAsync(userId);
+                await Task.WhenAll(_categoriesTask, _subcategoriesTask, _userInfoTask);
+                categories = _categoriesTask.Result;
+                subcategories = _subcategoriesTask.Result;
+                userInfo = _userInfoTask.Result;
+            }
+
             if ((category = categories.FirstOrDefault(x => x.Id == categoryId)) == null)
             {
                 ModelState.AddModelError("CategoryId", "This category does not exist");
@@ -164,7 +211,6 @@ namespace ZreperujTo.Web.Controllers.Api
             {
                 ModelState.AddModelError("SubcategoryId", "This subcategory does not exist");
             }
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -172,14 +218,10 @@ namespace ZreperujTo.Web.Controllers.Api
 
             writeModel.Location = writeModel.Location.TrimStrings();
             
-            if (writeModel.AuctionValidThrough == null || writeModel.AuctionValidThrough < DateTime.Now ||
-                writeModel.AuctionValidThrough - DateTime.Now > TimeSpan.FromDays(7.0))
+            if (writeModel.AuctionValidThrough - DateTime.Now > TimeSpan.FromDays(7.0))
             {
                 writeModel.AuctionValidThrough = DateTime.Now.AddDays(7.0);
             }
-
-            string userId = User.Claims.FirstOrDefault(
-                        x => x.Type == @"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
 
             var dbModel = new FailDbModel
             {
@@ -200,7 +242,7 @@ namespace ZreperujTo.Web.Controllers.Api
             };
 
             var obj = await _zreperujDb.InsertFailDbModelAsync(dbModel);
-            var userInfo = await _zreperujDb.GetUserInfoDbModelAsync(userId);
+            
 
             var result = new FailReadModel
             {

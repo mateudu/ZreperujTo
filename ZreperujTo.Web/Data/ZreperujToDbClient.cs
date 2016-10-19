@@ -47,6 +47,13 @@ namespace ZreperujTo.Web.Data
             return res;
         }
 
+        public async Task<List<UserInfoDbModel>> GetUserInfoDbModelAsync(params string[] userIds)
+        {
+            var collection = _mongoDb.GetCollection<UserInfoDbModel>(UserInfoCollectionName);
+            var filter = Builders<UserInfoDbModel>.Filter.In(x => x.UserId, userIds);
+            return await collection.Find(filter).ToListAsync();
+        }
+
         public async Task<FailDbModel> InsertFailDbModelAsync(FailDbModel model)
         {
             var collection = _mongoDb.GetCollection<FailDbModel>(FailsCollectionName);

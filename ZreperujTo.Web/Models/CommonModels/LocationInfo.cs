@@ -36,6 +36,8 @@ namespace ZreperujTo.Web.Models.CommonModels
                     prop.SetValue(obj, value);
                 }
             }
+            obj.Latitude = this.Latitude;
+            obj.Longitude = this.Longitude;
             return obj;
         }
     }
