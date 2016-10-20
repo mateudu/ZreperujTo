@@ -75,7 +75,7 @@ namespace ZreperujTo.UWP
                 }
             }
 
-            //Mobile customization //ToDo something went wrong and 
+            //Mobile customization
             if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
             {
 
