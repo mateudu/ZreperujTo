@@ -99,6 +99,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\BoolToVis.cs" />
     <Compile Include="Helpers\ZreperujToHelper.cs" />
     <Compile Include="Models\BidModels\BidReadModel.cs" />
     <Compile Include="Models\BidModels\BidWriteModel.cs" />
