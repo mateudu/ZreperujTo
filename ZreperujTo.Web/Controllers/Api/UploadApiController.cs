@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Semantics;
 using ZreperujTo.Web.Data;
+using ZreperujTo.Web.Helpers;
 using ZreperujTo.Web.Models.FileInfoModels;
 
 namespace ZreperujTo.Web.Controllers.Api
@@ -19,14 +20,14 @@ namespace ZreperujTo.Web.Controllers.Api
     [Route("api/Upload")]
     public class UploadApiController : Controller
     {
-        private readonly ZreperujToDbClient _zreperujDb;
+        private readonly IZreperujToService _serviceCore;
         private const int MaxPixels = 1800;
         private const int ThumbnailMaxPixels = 300;
         private const int CompressionRatio = 75;
 
-        public UploadApiController(ZreperujToDbClient zreperujDb)
+        public UploadApiController(ZreperujToDbClient serviceCore)
         {
-            _zreperujDb = zreperujDb;
+            _serviceCore = serviceCore;
         }
 
         [HttpPost]
@@ -56,7 +57,7 @@ namespace ZreperujTo.Web.Controllers.Api
                             int width = (int)(((double)image.Width) / ratio);
                             image.Resize(width, height).SaveAsJpeg(org_ms, CompressionRatio);
                         }
-                        var _originalResultTask = _zreperujDb.UploadToBlobAsync(org_ms.ToArray(), fileName + ".jpeg");
+                        var _originalResultTask = _serviceCore.UploadPictureAsync(org_ms.ToArray(), fileName + ".jpeg");
 
                         // Thumbnail file compression and upload
                         ratio = Math.Min(((double)image.Width) / (double)ThumbnailMaxPixels, ((double)image.Height) / (double)ThumbnailMaxPixels);
@@ -70,7 +71,7 @@ namespace ZreperujTo.Web.Controllers.Api
                             int width = (int)(((double)image.Width) / ratio);
                             image.Resize(width, height).SaveAsJpeg(thumb_ms, CompressionRatio);
                         }
-                        var _thumbnailResultTask = _zreperujDb.UploadToBlobAsync(thumb_ms.ToArray(), fileName + "_thumbnail.jpeg");
+                        var _thumbnailResultTask = _serviceCore.UploadPictureAsync(thumb_ms.ToArray(), fileName + "_thumbnail.jpeg");
                         await Task.WhenAll(_originalResultTask, _thumbnailResultTask);
                         originalResult = _originalResultTask.Result;
                         thumbnailResult = _thumbnailResultTask.Result;
@@ -83,7 +84,7 @@ namespace ZreperujTo.Web.Controllers.Api
                     ThumbnailUri = thumbnailResult?.Uri.ToString()
                 };
 
-                await _zreperujDb.InsertPictureInfoDbModelAsync(dbModel);
+                await _serviceCore.InsertPictureInfoDbModelAsync(dbModel);
 
                 PictureUploadReadModel result = new PictureUploadReadModel
                 {

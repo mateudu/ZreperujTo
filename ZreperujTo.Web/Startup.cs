@@ -18,6 +18,7 @@ using Microsoft.WindowsAzure.Storage;
 using MongoDB.Driver;
 using Newtonsoft.Json.Serialization;
 using ZreperujTo.Web.Data;
+using ZreperujTo.Web.Helpers;
 using ZreperujTo.Web.Models;
 using ZreperujTo.Web.Services;
 
@@ -79,7 +80,7 @@ namespace ZreperujTo.Web
 
             services.AddTransient<IMongoClient>(provider => new MongoClient(@"mongodb://mdu01.cloudapp.net"));
             services.AddTransient<IMongoDatabase>(provider => provider.GetService<IMongoClient>().GetDatabase("local"));
-            services.AddTransient<ZreperujToDbClient>(
+            services.AddTransient<IZreperujToService>(
                 provider => new ZreperujToDbClient(
                     provider.GetService<IMongoClient>(), 
                     provider.GetService<IMongoDatabase>(),

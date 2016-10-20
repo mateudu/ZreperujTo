@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using ZreperujTo.Web.Data;
+using ZreperujTo.Web.Helpers;
 using ZreperujTo.Web.Models.CategoryModels;
 using ZreperujTo.Web.Models.CommonModels;
 
@@ -16,11 +17,11 @@ namespace ZreperujTo.Web.Controllers.Api
     [Route("api/Categories")]
     public class CategoriesApiController : Controller
     {
-        private readonly ZreperujToDbClient _zreperujDb;
+        private readonly IZreperujToService _serviceCore;
 
-        public CategoriesApiController(ZreperujToDbClient zreperujDb)
+        public CategoriesApiController(ZreperujToDbClient serviceCore)
         {
-            _zreperujDb = zreperujDb;
+            _serviceCore = serviceCore;
         }
 
         // GET: api/Categories
@@ -28,8 +29,8 @@ namespace ZreperujTo.Web.Controllers.Api
         [ProducesResponseType(typeof(List<CategoryReadModel>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Get()
         {
-            var categories = await _zreperujDb.GetCategoriesAsync();
-            var subcategories = await _zreperujDb.GetSubcategoriesAsync();
+            var categories = await _serviceCore.GetCategoriesAsync();
+            var subcategories = await _serviceCore.GetSubcategoriesAsync();
             var result = categories.Select(x=>new CategoryReadModel(x)).ToList();
             foreach (var sub in subcategories)
             {
@@ -59,7 +60,7 @@ namespace ZreperujTo.Web.Controllers.Api
                 {
                     Name = category.Name
                 };
-                await _zreperujDb.AddCategoryAsync(obj);
+                await _serviceCore.AddCategoryAsync(obj);
                 return Ok();
             }
             catch (Exception)
@@ -81,7 +82,7 @@ namespace ZreperujTo.Web.Controllers.Api
             {
                 return BadRequest(ModelState);
             }
-            var categories = await _zreperujDb.GetCategoriesAsync();
+            var categories = await _serviceCore.GetCategoriesAsync();
             var category = categories.FirstOrDefault(x => x.Id == categoryObjectId);
             if (category == null)
             {
@@ -93,7 +94,7 @@ namespace ZreperujTo.Web.Controllers.Api
                 CategoryId = categoryObjectId,
                 Name = subcategory.Name
             };
-            await _zreperujDb.AddSubcategoryAsync(model);
+            await _serviceCore.AddSubcategoryAsync(model);
             return Ok();
         }
     }
