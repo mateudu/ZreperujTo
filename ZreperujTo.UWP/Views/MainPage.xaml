@@ -22,9 +22,8 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
         <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="AdaptiveVisualStateGroup">
@@ -58,10 +57,7 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <controls:PageHeader x:Name="pageHeader" Grid.Row="0" RelativePanel.AlignLeftWithPanel="True"
-                             RelativePanel.AlignRightWithPanel="True"
-                             RelativePanel.AlignTopWithPanel="True" Text="Main Page">
-
+        <controls:PageHeader x:Name="PageHeader" Grid.Row="0" Text="{Binding LoggedProfile.Name}">
             <!--  secondary commands  -->
             <controls:PageHeader.SecondaryCommands>
                 <AppBarButton Click="{x:Bind ViewModel.GotoSettings}" Label="Settings" />
@@ -72,44 +68,91 @@
 
         </controls:PageHeader>
 
-        <Border x:Name="NameTextBlock" RelativePanel.Below="pageHeader" RelativePanel.AlignHorizontalCenterWithPanel="True" BorderThickness="1" BorderBrush="Gray" Grid.Row="1" >
-            <RelativePanel >
-                <TextBlock DataContext="{Binding LoggedProfile}" Text="{Binding Name}" RelativePanel.AlignVerticalCenterWithPanel="True" />
-            <Image Source="../Assets/Square150x150Logo.png" MaxHeight="20" Visibility="{Binding LoggedProfile.Company, Converter={StaticResource BoolToVis}}"/>
-        </RelativePanel>
-        </Border>
-
-        <ScrollViewer x:Name="ScrollViewer" DataContext="{Binding LoggedProfile}" RelativePanel.Below="NameTextBlock" Grid.Row="2">
+        <ScrollViewer x:Name="ScrollViewer" Grid.Row="1">
             <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <Grid Grid.Row="0" Column="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid Grid.Column="0">
-                        <TextBlock Text="{Binding Email}"/>
+                <Border BorderBrush="#BDBDBD" BorderThickness="0,1" >
+                    <Grid Grid.Row="0" HorizontalAlignment="Right">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="1">
+                            <TextBlock Text="{Binding LoggedProfile.Email}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="0">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding LoggedProfile.Company}" />
+                                <TextBlock Text="{Binding RatingAverage}" />
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel Grid.Row="2">
+                            <TextBlock Text="{Binding LoggedProfile.MobileNumber}" />
+                        </StackPanel>
                     </Grid>
-                    <Grid Grid.Column="1">
-                        <TextBlock Text="{Binding }"/>
-                    </Grid>
-                    <Grid Grid.Column="2">
-                        <TextBlock Text="{Binding MobileNumber}"/>
-                    </Grid>
-                    <Grid Grid.Column="3">
-                        <TextBlock Text="{Binding RatingSum}"/>
-                    </Grid>
-                </Grid>
+                </Border>
                 <Grid Grid.Row="1">
-                    
+                    <ScrollViewer HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Hidden" VerticalScrollMode="Disabled">
+                    <ItemsControl ItemsSource="{Binding LoggedProfile.Badges}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <ItemsStackPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <Image Source="{Binding ImageUrl}" MaxHeight="50"/>
+                                    <TextBlock Text="{Binding Name}" VerticalAlignment="Bottom"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+                <Grid Grid.Row="2">
+                    <ItemsControl ItemsSource="{Binding LoggedProfileFailMetaModels}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <ItemsStackPanel Orientation="Vertical"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderBrush="LightBlue" BorderThickness="2" CornerRadius="5" Margin="5" MaxHeight="150">
+                                    <Grid>
+                                        <ItemsControl ItemsSource="{Binding Pictures}">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <ItemsStackPanel Orientation="Horizontal"/>
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid>
+                                                        <Image Source="{Binding ThumbnailFileUri}" MinWidth="{Binding ElementName=ScrollViewer, Path=ActualWidth}" Stretch="UniformToFill"/>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                        <Grid VerticalAlignment="Bottom">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
+                                            <TextBlock Text="{Binding Title}" Grid.Row="0" />
+                                            <TextBlock Text="{Binding Description}" Grid.Row="1"/>
+                                        </Grid>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </Grid>
             </Grid>
         </ScrollViewer>
