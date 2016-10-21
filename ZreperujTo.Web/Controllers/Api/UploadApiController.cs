@@ -25,7 +25,7 @@ namespace ZreperujTo.Web.Controllers.Api
         private const int ThumbnailMaxPixels = 300;
         private const int CompressionRatio = 75;
 
-        public UploadApiController(ZreperujToDbClient serviceCore)
+        public UploadApiController(IZreperujToService serviceCore)
         {
             _serviceCore = serviceCore;
         }

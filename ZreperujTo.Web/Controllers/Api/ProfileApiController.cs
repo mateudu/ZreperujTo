@@ -24,7 +24,7 @@ namespace ZreperujTo.Web.Controllers.Api
     {
         private readonly IZreperujToService _serviceCore;
 
-        public ProfileApiController(ZreperujToDbClient serviceCore)
+        public ProfileApiController(IZreperujToService serviceCore)
         {
             _serviceCore = serviceCore;
         }

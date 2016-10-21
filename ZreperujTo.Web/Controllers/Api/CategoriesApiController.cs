@@ -19,7 +19,7 @@ namespace ZreperujTo.Web.Controllers.Api
     {
         private readonly IZreperujToService _serviceCore;
 
-        public CategoriesApiController(ZreperujToDbClient serviceCore)
+        public CategoriesApiController(IZreperujToService serviceCore)
         {
             _serviceCore = serviceCore;
         }
