@@ -22,8 +22,8 @@ namespace ZreperujTo.UWP.ViewModels
             {
                 LoggedProfile = new UserInfoReadModel
                 {
-                    Name = "Patryk",
-                    Email = "kozak@pind.ol",
+                    Name = "Kaźmirz",
+                    Email = "wacław@siu.siak",
                     Company = true,
                     Id = "ehwurwe8945r",
                     MobileNumber = "500500500",
@@ -33,7 +33,7 @@ namespace ZreperujTo.UWP.ViewModels
                             new Badge
                             {
                                 Description = "zgłosił 10 usterek",
-                                Name = "JanuszNaprawczyk",
+                                Name = "JanuszTuningu",
                                 Type = "dlapsujka"
                             },
                             new Badge
@@ -73,6 +73,7 @@ namespace ZreperujTo.UWP.ViewModels
                 RaisePropertyChanged();
             }
         }
+        public string RatingAverage => ((double)LoggedProfile.RatingSum/LoggedProfile.RatingCount).ToString(CultureInfo.InvariantCulture) +"/5";
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
