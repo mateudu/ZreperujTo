@@ -59,7 +59,7 @@ namespace ZreperujTo.UWP.ViewModels
                             }
                         },
                     RatingCount = 50,
-                    RatingSum = 346
+                    RatingSum = 224
                 };
 
                 LoggedProfileFailMetaModels = new List<FailMetaModel>
@@ -69,9 +69,41 @@ namespace ZreperujTo.UWP.ViewModels
                         Active = true,
                         AuctionValidThrough = DateTime.Today.AddDays(1),
                         Budget = 100,
+                        Description = "Kran mi się urwał! Kran mi się urwał! Kran mi się urwał! Kran mi się urwał! Kran mi się urwał! Kran mi się urwał! Kran mi się urwał! Kran mi się urwał! Kran mi się urwał! ",
+                        Title = "Urwany kran",
+                        Location = new LocationInfo
+                        {
+                            City = "Lublin",
+                            District = "Świt"
+                        },
+                        Requirements = new List<SpecialRequirement> {SpecialRequirement.BronzeOrMore},
+                        Highlited = false,
+                        Pictures = new List<PictureInfoReadModel>
+                        {
+                            new PictureInfoReadModel
+                            {
+                                OriginalFileUri = "http://static.urzadzone.pl/gallery/9710/0_47890dbdf0eb5ed48cbcbb236f0a507af3c6b53f.jpg",
+                                ThumbnailFileUri = "http://static.urzadzone.pl/gallery/9710/0_47890dbdf0eb5ed48cbcbb236f0a507af3c6b53f.jpg"
+                            },
+                             new PictureInfoReadModel
+                            {
+                                OriginalFileUri = "http://static.urzadzone.pl/gallery/9710/0_47890dbdf0eb5ed48cbcbb236f0a507af3c6b53f.jpg",
+                                ThumbnailFileUri = "http://static.urzadzone.pl/gallery/9710/0_47890dbdf0eb5ed48cbcbb236f0a507af3c6b53f.jpg"
+                            }
+                        }
+                    },
+                                        new FailMetaModel
+                    {
+                        Active = true,
+                        AuctionValidThrough = DateTime.Today.AddDays(1),
+                        Budget = 100,
                         Description = "Kran mi się urwał!",
                         Title = "Urwany kran",
-                        Location = new LocationInfo {City = "Lublin",},
+                        Location = new LocationInfo
+                        {
+                            City = "Lublin",
+                            District = "Świt"
+                        },
                         Requirements = new List<SpecialRequirement> {SpecialRequirement.BronzeOrMore},
                         Highlited = false,
                         Pictures = new List<PictureInfoReadModel>
@@ -116,7 +148,17 @@ namespace ZreperujTo.UWP.ViewModels
                 RaisePropertyChanged();
             }
         }
-        public string RatingAverage => ((double)LoggedProfile.RatingSum/LoggedProfile.RatingCount).ToString(CultureInfo.InvariantCulture) +"/5";
+        public string RatingAverage
+        {
+            get
+            {
+                if (LoggedProfile?.RatingSum != null)
+                    return
+                        ((double) LoggedProfile.RatingSum/LoggedProfile.RatingCount).ToString(
+                            CultureInfo.InvariantCulture) + "/5";
+                return null;
+            }
+        }
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
@@ -141,7 +183,8 @@ namespace ZreperujTo.UWP.ViewModels
             _zreperujToHelper = new ZreperujToHelper();
             LoggedProfile = await _zreperujToHelper.GetProfileInfoAsync();
             LoggedProfileFailMetaModels = await _zreperujToHelper.GetProfileFailsAsync();
-
+            // ReSharper disable once ExplicitCallerInfoArgument
+            RaisePropertyChanged(nameof(RatingAverage));
         }
 
         private async Task RetrieveTokenAsync()
