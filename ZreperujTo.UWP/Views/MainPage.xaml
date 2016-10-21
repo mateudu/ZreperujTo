@@ -126,7 +126,7 @@
                             <DataTemplate>
                                 <Border BorderBrush="LightBlue" BorderThickness="2" CornerRadius="2" MaxHeight="150">
                                     <Grid>
-                                        <ScrollViewer>
+                                        <ScrollViewer VerticalScrollMode="Disabled" HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Hidden" HorizontalSnapPointsAlignment="Center">
                                         <ItemsControl ItemsSource="{Binding Pictures}">
                                             <ItemsControl.ItemsPanel>
                                                 <ItemsPanelTemplate>
