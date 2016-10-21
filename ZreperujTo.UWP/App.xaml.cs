@@ -75,18 +75,17 @@ namespace ZreperujTo.UWP
                 }
             }
 
-            ////Mobile customization //ToDo something went wrong and 
-            //if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
-            //{
+            //Mobile customization
+            if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
+            {
 
-            //    var statusBar = StatusBar.GetForCurrentView();
-            //    if (statusBar != null)
-            //    {
-            //        statusBar.BackgroundOpacity = 1;
-            //        statusBar.BackgroundColor = CacheData.CustomColor;
-            //        statusBar.ForegroundColor = CacheData.ContrastColor;
-            //    }
-            //}
+                var statusBar = StatusBar.GetForCurrentView();
+                if (statusBar != null)
+                {
+                    statusBar.BackgroundOpacity = 1;
+                    statusBar.BackgroundColor = primaryDark;
+                }
+            }
 
 
 

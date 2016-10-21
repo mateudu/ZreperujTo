@@ -1,4 +1,4 @@
-using Template10.Mvvm;
+﻿using Template10.Mvvm;
 using System.Collections.Generic;
 using System;
 using System.Globalization;
@@ -9,6 +9,7 @@ using Windows.Security.Authentication.Web;
 using Template10.Services.NavigationService;
 using Windows.UI.Xaml.Navigation;
 using ZreperujTo.UWP.Helpers;
+using ZreperujTo.UWP.Models.CommonModels;
 using ZreperujTo.UWP.Models.UserInfoModels;
 
 namespace ZreperujTo.UWP.ViewModels
@@ -19,7 +20,43 @@ namespace ZreperujTo.UWP.ViewModels
         {
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
             {
-                LoggedProfile = new UserInfoReadModel {Name = "janusz", Email = "heheszek"};
+                LoggedProfile = new UserInfoReadModel
+                {
+                    Name = "Patryk",
+                    Email = "kozak@pind.ol",
+                    Company = true,
+                    Id = "ehwurwe8945r",
+                    MobileNumber = "500500500",
+                    Badges =
+                        new List<Badge>
+                        {
+                            new Badge
+                            {
+                                Description = "zgłosił 10 usterek",
+                                Name = "JanuszNaprawczyk",
+                                Type = "dlapsujka"
+                            },
+                            new Badge
+                            {
+                                Name = "ustermajster",
+                                Type = "dlanaprawcu",
+                                Description = "ładny odpis dla ustereczek"
+                            }
+                        },
+                    Ratings =
+                        new List<Rating>
+                        {
+                            new Rating
+                            {
+                                Points = 5,
+                                Description = "polecam cieplutko tego hydraulika",
+                                UserId = "halynkaidjej124234",
+                                BidId = "idbida135ngfd"
+                            }
+                        },
+                    RatingCount = 50,
+                    RatingSum = 48
+                };
             }
         }
 
@@ -59,7 +96,7 @@ namespace ZreperujTo.UWP.ViewModels
         {
             _zreperujToHelper = new ZreperujToHelper();
             var prof = await _zreperujToHelper.GetProfileInfoAsync();
-            _loggedProfile = prof;
+            LoggedProfile = prof;
 
         }
 

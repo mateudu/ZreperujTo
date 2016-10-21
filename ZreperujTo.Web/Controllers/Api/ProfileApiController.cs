@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NuGet.Protocol.Core.v3;
 using ZreperujTo.Web.Data;
+using ZreperujTo.Web.Helpers;
 using ZreperujTo.Web.Models.BidModels;
 using ZreperujTo.Web.Models.FailModels;
 using ZreperujTo.Web.Models.UserInfoModels;
@@ -21,11 +22,11 @@ namespace ZreperujTo.Web.Controllers.Api
     [Route("api/Profile")]
     public class ProfileApiController : Controller
     {
-        private readonly ZreperujToDbClient _zreperujDb;
+        private readonly IZreperujToService _serviceCore;
 
-        public ProfileApiController(ZreperujToDbClient zreperujDb)
+        public ProfileApiController(ZreperujToDbClient serviceCore)
         {
-            _zreperujDb = zreperujDb;
+            _serviceCore = serviceCore;
         }
 
         [HttpGet]
@@ -43,7 +44,7 @@ namespace ZreperujTo.Web.Controllers.Api
                         x => x.Type == @"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
             if (!String.IsNullOrWhiteSpace(userId))
             {
-                var obj = await _zreperujDb.GetUserInfoDbModelAsync(userId);
+                var obj = await _serviceCore.GetUserInfoDbModelAsync(userId);
                 var result = new UserInfoReadModel
                 {
                     Email = obj.Email,
@@ -67,7 +68,7 @@ namespace ZreperujTo.Web.Controllers.Api
         {
             string userId = User.Claims.FirstOrDefault(
                         x => x.Type == @"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
-            var obj = await _zreperujDb.GetBidsAsync(userId);
+            var obj = await _serviceCore.GetBidDbModelsAsync(userId);
             return Ok(obj);
         }
 
@@ -77,7 +78,7 @@ namespace ZreperujTo.Web.Controllers.Api
         {
             string userId = User.Claims.FirstOrDefault(
                         x => x.Type == @"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
-            var fails = await _zreperujDb.GetFailsMetaAsync(userId);
+            var fails = await _serviceCore.GetUserFailsMetaAsync(userId);
             return Ok(fails);
         }
     }
