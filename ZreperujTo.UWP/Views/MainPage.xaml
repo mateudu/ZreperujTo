@@ -29,7 +29,7 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <!--  TODO: change properties for narrow view  -->
-                        <Setter Target="stateTextBox.Text" Value="Narrow Visual State" />
+                        <!--<Setter Target="stateTextBox.Text" Value="Narrow Visual State" />-->
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="VisualStateNormal">
@@ -38,7 +38,7 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <!--  TODO: change properties for normal view  -->
-                        <Setter Target="stateTextBox.Text" Value="Normal Visual State" />
+                        <!--<Setter Target="stateTextBox.Text" Value="Normal Visual State" />-->
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="VisualStateWide">
@@ -47,7 +47,7 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <!--  TODO: change properties for wide view  -->
-                        <Setter Target="stateTextBox.Text" Value="Wide Visual State" />
+                        <!--<Setter Target="stateTextBox.Text" Value="Wide Visual State" />-->
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
@@ -67,51 +67,64 @@
 
         </controls:PageHeader>
 
-
-        <StackPanel x:Name="NameTextBlock" RelativePanel.Below="pageHeader" RelativePanel.AlignHorizontalCenterWithPanel="True" Orientation="Horizontal">
-            <TextBlock  DataContext="{Binding LoggedProfile}" Text="{Binding Name}" />
+        <Border x:Name="NameTextBlock" RelativePanel.Below="pageHeader" RelativePanel.AlignHorizontalCenterWithPanel="True" BorderThickness="1" BorderBrush="Gray" >
+            <RelativePanel >
+                <TextBlock DataContext="{Binding LoggedProfile}" Text="{Binding Name}" RelativePanel.AlignVerticalCenterWithPanel="True" />
             <Image Source="../Assets/Square150x150Logo.png" MaxHeight="20" Visibility="{Binding LoggedProfile.Company, Converter={StaticResource BoolToVis}}"/>
-        </StackPanel>
-        
+        </RelativePanel>
+        </Border>
 
-        <ScrollViewer x:Name="ScrollViewer" DataContext="{Binding LoggedProfile}" RelativePanel.Below="NameTextBlock" RelativePanel.AlignHorizontalCenterWithPanel="True" HorizontalAlignment="Stretch">
-            <StackPanel>
-                <TextBlock Text="{Binding Email}"/>
-                <TextBlock Text="{Binding MobileNumber}"/>
-                <TextBlock Text="{Binding RatingSum}"/>
-            </StackPanel>
+        <ScrollViewer x:Name="ScrollViewer" DataContext="{Binding LoggedProfile}" RelativePanel.Below="NameTextBlock">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0" Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <TextBlock Text="{Binding Email}"/>
+                    </Grid>
+                    <Grid Grid.Column="1">
+                        <TextBlock Text="{Binding }"/>
+                    </Grid>
+                    <Grid Grid.Column="2">
+                        <TextBlock Text="{Binding MobileNumber}"/>
+                    </Grid>
+                    <Grid Grid.Column="3">
+                        <TextBlock Text="{Binding RatingSum}"/>
+                    </Grid>
+                </Grid>
+                <Grid Grid.Row="1">
+                    
+                </Grid>
+            </Grid>
         </ScrollViewer>
         
-        <controls:Resizer x:Name="parameterResizer" Margin="16,16,16,0"
+        <!--<controls:Resizer x:Name="parameterResizer" Margin="16,16,16,0"
                           RelativePanel.AlignLeftWithPanel="True"
                           RelativePanel.Below="ScrollViewer">
 
-            <TextBox MinWidth="150" MinHeight="62"
-                     Header="Parameter to pass"
-                     Text="{Binding LoggedProfile.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                     TextWrapping="Wrap">
-                <Interactivity:Interaction.Behaviors>
+
+                --><!--<Interactivity:Interaction.Behaviors>
                     <Behaviors:KeyBehavior Key="Enter">
                         <Core:CallMethodAction MethodName="GotoDetailsPage" TargetObject="{Binding}" />
                     </Behaviors:KeyBehavior>
                     <Core:EventTriggerBehavior>
                         <Behaviors:FocusAction />
                     </Core:EventTriggerBehavior>
-                </Interactivity:Interaction.Behaviors>
-            </TextBox>
+                </Interactivity:Interaction.Behaviors>--><!--
 
-        </controls:Resizer>
+        </controls:Resizer>-->
 
-
-        <Button x:Name="submitButton"
-                Click="{x:Bind ViewModel.GotoDetailsPage}" Content="Submit"
-                RelativePanel.AlignBottomWith="parameterResizer"
-                RelativePanel.RightOf="parameterResizer" />
-
-        <TextBlock x:Name="stateTextBox" Margin="16,16,0,0"
-                   RelativePanel.AlignLeftWith="parameterResizer"
-                   RelativePanel.Below="parameterResizer"
-                   Text="Current Visual State" />
 
     </RelativePanel>
 </Page>
