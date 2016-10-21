@@ -193,6 +193,11 @@ textarea {
   }
 }
 
+.fa-button {
+  background: none;
+  padding: 0px;
+  border: none;
+}
 
 .social {
     margin: 0;
