@@ -10,6 +10,8 @@ using Template10.Services.NavigationService;
 using Windows.UI.Xaml.Navigation;
 using ZreperujTo.UWP.Helpers;
 using ZreperujTo.UWP.Models.CommonModels;
+using ZreperujTo.UWP.Models.FailModels;
+using ZreperujTo.UWP.Models.FileInfoModels;
 using ZreperujTo.UWP.Models.UserInfoModels;
 
 namespace ZreperujTo.UWP.ViewModels
@@ -22,25 +24,27 @@ namespace ZreperujTo.UWP.ViewModels
             {
                 LoggedProfile = new UserInfoReadModel
                 {
-                    Name = "Kaźmirz",
-                    Email = "wacław@siu.siak",
+                    Name = "Piotr",
+                    Email = "arapio@gmail.com",
                     Company = true,
-                    Id = "ehwurwe8945r",
-                    MobileNumber = "500500500",
+                    Id = "",
+                    MobileNumber = "+48534959123",
                     Badges =
                         new List<Badge>
                         {
                             new Badge
                             {
-                                Description = "zgłosił 10 usterek",
-                                Name = "JanuszTuningu",
-                                Type = "dlapsujka"
+                                Description = "Zgłosił 10 usterek samochodu",
+                                Name = "Janusz Tuningu",
+                                Type = "",
+                                ImageUrl = "http://pngimg.com/upload/car_logo_PNG1641.png"
                             },
                             new Badge
                             {
-                                Name = "ustermajster",
-                                Type = "dlanaprawcu",
-                                Description = "ładny odpis dla ustereczek"
+                                Name = "Elektromajster",
+                                Type = "",
+                                Description = "Naprawił 365 usterek z kategorii elektronarzędzia",
+                                ImageUrl = "http://img06.deviantart.net/1501/i/2014/298/f/a/energy_lightning_power_electric_electricity_logo_by_andrea_perry-d840ydr.png"
                             }
                         },
                     Ratings =
@@ -49,13 +53,41 @@ namespace ZreperujTo.UWP.ViewModels
                             new Rating
                             {
                                 Points = 5,
-                                Description = "polecam cieplutko tego hydraulika",
-                                UserId = "halynkaidjej124234",
-                                BidId = "idbida135ngfd"
+                                Description = "Solidna firma, mistrz świata w naprawianiu szliferki kątowej firmy Booble",
+                                UserId = "",
+                                BidId = ""
                             }
                         },
                     RatingCount = 50,
-                    RatingSum = 48
+                    RatingSum = 346
+                };
+
+                LoggedProfileFailMetaModels = new List<FailMetaModel>
+                {
+                    new FailMetaModel
+                    {
+                        Active = true,
+                        AuctionValidThrough = DateTime.Today.AddDays(1),
+                        Budget = 100,
+                        Description = "Kran mi się urwał!",
+                        Title = "Urwany kran",
+                        Location = new LocationInfo {City = "Lublin",},
+                        Requirements = new List<SpecialRequirement> {SpecialRequirement.BronzeOrMore},
+                        Highlited = false,
+                        Pictures = new List<PictureInfoReadModel>
+                        {
+                            new PictureInfoReadModel
+                            {
+                                OriginalFileUri = "http://static.urzadzone.pl/gallery/9710/0_47890dbdf0eb5ed48cbcbb236f0a507af3c6b53f.jpg",
+                                ThumbnailFileUri = "http://static.urzadzone.pl/gallery/9710/0_47890dbdf0eb5ed48cbcbb236f0a507af3c6b53f.jpg"
+                            },
+                             new PictureInfoReadModel
+                            {
+                                OriginalFileUri = "http://static.urzadzone.pl/gallery/9710/0_47890dbdf0eb5ed48cbcbb236f0a507af3c6b53f.jpg",
+                                ThumbnailFileUri = "http://static.urzadzone.pl/gallery/9710/0_47890dbdf0eb5ed48cbcbb236f0a507af3c6b53f.jpg"
+                            }
+                        }
+                    }
                 };
             }
         }
@@ -63,6 +95,7 @@ namespace ZreperujTo.UWP.ViewModels
         private readonly string _resourceName = Windows.ApplicationModel.Package.Current.DisplayName;
         private ZreperujToHelper _zreperujToHelper;
         private UserInfoReadModel _loggedProfile;
+        private List<FailMetaModel> _loggedProfileFailMetaModels;
 
         public UserInfoReadModel LoggedProfile
         {
@@ -70,6 +103,16 @@ namespace ZreperujTo.UWP.ViewModels
             set
             {
                 _loggedProfile = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public List<FailMetaModel> LoggedProfileFailMetaModels
+        {
+            get { return _loggedProfileFailMetaModels; }
+            set
+            {
+                _loggedProfileFailMetaModels = value;
                 RaisePropertyChanged();
             }
         }
@@ -96,8 +139,8 @@ namespace ZreperujTo.UWP.ViewModels
         private async Task LoadProfile()
         {
             _zreperujToHelper = new ZreperujToHelper();
-            var prof = await _zreperujToHelper.GetProfileInfoAsync();
-            LoggedProfile = prof;
+            LoggedProfile = await _zreperujToHelper.GetProfileInfoAsync();
+            LoggedProfileFailMetaModels = await _zreperujToHelper.GetProfileFailsAsync();
 
         }
 
