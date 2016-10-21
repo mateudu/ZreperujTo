@@ -60,9 +60,9 @@
         <controls:PageHeader x:Name="PageHeader" Grid.Row="0" Text="{Binding LoggedProfile.Name}">
             <!--  secondary commands  -->
             <controls:PageHeader.SecondaryCommands>
-                <AppBarButton Click="{x:Bind ViewModel.GotoSettings}" Label="Settings" />
-                <AppBarButton Click="{x:Bind ViewModel.GotoPrivacy}" Label="Privacy" />
-                <AppBarButton Click="{x:Bind ViewModel.GotoAbout}" Label="About" />
+                <AppBarButton Click="{x:Bind ViewModel.GotoSettings}" Label="Ustawienia" />
+                <AppBarButton Click="{x:Bind ViewModel.GotoPrivacy}" Label="Regulamin" />
+                <AppBarButton Click="{x:Bind ViewModel.GotoAbout}" Label="O aplikacji" />
                 <AppBarButton Click="{x:Bind ViewModel.LogOut}" Label="Wyloguj siê" />
             </controls:PageHeader.SecondaryCommands>
 
@@ -124,7 +124,7 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Border BorderBrush="LightBlue" BorderThickness="2" CornerRadius="5" Margin="5" MaxHeight="150">
+                                <Border BorderBrush="LightBlue" BorderThickness="2" CornerRadius="2" MaxHeight="150">
                                     <Grid>
                                         <ItemsControl ItemsSource="{Binding Pictures}">
                                             <ItemsControl.ItemsPanel>
@@ -140,13 +140,27 @@
                                                 </DataTemplate>
                                             </ItemsControl.ItemTemplate>
                                         </ItemsControl>
-                                        <Grid VerticalAlignment="Bottom">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="*"/>
-                                            </Grid.RowDefinitions>
-                                            <TextBlock Text="{Binding Title}" Grid.Row="0" />
-                                            <TextBlock Text="{Binding Description}" Grid.Row="1"/>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <Grid VerticalAlignment="Bottom" Column="1">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto" />
+                                                </Grid.RowDefinitions>
+                                                <TextBlock Text="{Binding Location.City}" />
+                                                <TextBlock Text="{Binding Location.District}" Grid.Row="1" />
+                                            </Grid>
+                                            <Grid VerticalAlignment="Bottom">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="*" />
+                                                </Grid.RowDefinitions>
+                                                <TextBlock Text="{Binding Title}" Grid.Row="0" />
+                                                <TextBlock Text="{Binding Description}" Grid.Row="1" />
+                                            </Grid>
                                         </Grid>
                                     </Grid>
                                 </Border>
