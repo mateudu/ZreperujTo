@@ -8,7 +8,7 @@
     ViewData["Title"] = "Log in";
 }
 
-<h2>@ViewData["Title"].</h2>
+@*<h2>@ViewData["Title"].</h2>
 <div class="row">
     <div class="col-md-8">
         <section>
@@ -85,7 +85,49 @@
             }
         </section>
     </div>
+</div>*@
+
+<div class="container">
+    <div class="form">
+        <div class="thumbnail"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/169963/hat.svg" /></div>
+        @*<form class="register-form">
+            
+            <input type="text" placeholder="name"/>
+            <input type="password" placeholder="password"/>
+            <input type="text" placeholder="email address"/>
+            <button>create</button>
+            <p class="message">Already registered? <a href="#">Sign In</a>
+            </p>
+        </form>*@
+        <form asp-controller="Account" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="login-form">
+            @*<div asp-validation-summary="All" class="text-danger"></div>*@
+
+            <span asp-validation-for="Email" class="text-danger"></span>
+            <input asp-for="Email" placeholder="Email"/>
+
+            <span asp-validation-for="Password" class="text-danger"></span>
+            <input asp-for="Password" placeholder="Hasło"/>
+
+            <button type="submit">Zaloguj</button>
+
+            <p class="message">Nie masz konta?
+                <a asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]">Zarejestruj się!</a>
+            </p>
+            <p class="message">
+                <a asp-action="ForgotPassword">Nie pamiętam hasła</a>
+            </p>
+
+            @*<div class="checkbox">
+                <label asp-for="RememberMe">
+                    <input asp-for="RememberMe" />
+                    @Html.DisplayNameFor(m => m.RememberMe)
+                </label>
+            </div>*@
+        </form>
+    </div>
 </div>
+
+
 
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
