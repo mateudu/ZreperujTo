@@ -19,8 +19,13 @@
         <converters:BooleanToVisibilityConverter x:Key="BoolToVis" />
     </Page.Resources>
 
-    <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="AdaptiveVisualStateGroup">
                 <VisualState x:Name="VisualStateNarrow">
@@ -53,7 +58,7 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <controls:PageHeader x:Name="pageHeader" RelativePanel.AlignLeftWithPanel="True"
+        <controls:PageHeader x:Name="pageHeader" Grid.Row="0" RelativePanel.AlignLeftWithPanel="True"
                              RelativePanel.AlignRightWithPanel="True"
                              RelativePanel.AlignTopWithPanel="True" Text="Main Page">
 
@@ -67,14 +72,14 @@
 
         </controls:PageHeader>
 
-        <Border x:Name="NameTextBlock" RelativePanel.Below="pageHeader" RelativePanel.AlignHorizontalCenterWithPanel="True" BorderThickness="1" BorderBrush="Gray" >
+        <Border x:Name="NameTextBlock" RelativePanel.Below="pageHeader" RelativePanel.AlignHorizontalCenterWithPanel="True" BorderThickness="1" BorderBrush="Gray" Grid.Row="1" >
             <RelativePanel >
                 <TextBlock DataContext="{Binding LoggedProfile}" Text="{Binding Name}" RelativePanel.AlignVerticalCenterWithPanel="True" />
             <Image Source="../Assets/Square150x150Logo.png" MaxHeight="20" Visibility="{Binding LoggedProfile.Company, Converter={StaticResource BoolToVis}}"/>
         </RelativePanel>
         </Border>
 
-        <ScrollViewer x:Name="ScrollViewer" DataContext="{Binding LoggedProfile}" RelativePanel.Below="NameTextBlock">
+        <ScrollViewer x:Name="ScrollViewer" DataContext="{Binding LoggedProfile}" RelativePanel.Below="NameTextBlock" Grid.Row="2">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -126,6 +131,6 @@
         </controls:Resizer>-->
 
 
-    </RelativePanel>
+    </Grid>
 </Page>
 
