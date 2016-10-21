@@ -27,7 +27,7 @@ namespace ZreperujTo.Web.Controllers
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
         private readonly IIdentityServerInteractionService _interaction;
-        private readonly ZreperujToDbClient _zreperujDb;
+        private readonly IZreperujToService _serviceCore;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
@@ -36,7 +36,7 @@ namespace ZreperujTo.Web.Controllers
             ISmsSender smsSender,
             ILoggerFactory loggerFactory,
             IIdentityServerInteractionService interaction,
-            ZreperujToDbClient zreperujDb)
+            IZreperujToService serviceCore)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -44,7 +44,7 @@ namespace ZreperujTo.Web.Controllers
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
             _interaction = interaction;
-            _zreperujDb = zreperujDb;
+            _serviceCore = serviceCore;
         }
 
         //
@@ -137,7 +137,7 @@ namespace ZreperujTo.Web.Controllers
                         RatingSum = 0,
                         ReportCount = 0
                     };
-                    await _zreperujDb.AddUserInfoAsync(userInfo);
+                    await _serviceCore.AddUserInfoAsync(userInfo);
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User created a new account with password.");

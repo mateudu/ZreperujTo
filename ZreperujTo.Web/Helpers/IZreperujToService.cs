@@ -10,7 +10,7 @@ using ZreperujTo.Web.Models.FileInfoModels;
 
 namespace ZreperujTo.Web.Helpers
 {
-    interface IZreperujToService
+    public interface IZreperujToService
     {
         Task<bool> AddUserInfoAsync(UserInfoDbModel model);
         Task<UserInfoDbModel> GetUserInfoDbModelAsync(string userId);
