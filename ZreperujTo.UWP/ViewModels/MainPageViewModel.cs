@@ -81,10 +81,16 @@ namespace ZreperujTo.UWP.ViewModels
                 //Value = suspensionState[nameof(Value)]?.ToString();
             }
             await Task.CompletedTask;
+            LogInAsync();
+        }
 
-            await LogInToApp();
+        private async void LogInAsync()
+        {
+            if (ZreperujToHelper.IsLogged == false) await RetrieveTokenAsync();
             await LoadProfile();
         }
+
+
 
         private async Task LoadProfile()
         {
@@ -94,48 +100,72 @@ namespace ZreperujTo.UWP.ViewModels
 
         }
 
-        private async Task LogInToApp()
+        private async Task RetrieveTokenAsync()
         {
             var token = GetCredentialFromLocker();
 
             if (token == null || Convert.ToDateTime(token.UserName) < DateTime.Now)
             {
-
-                await Authorization();
+                await AuthorizeAndGetTokenAsync();
             }
             token = GetCredentialFromLocker();
             token?.RetrievePassword();
             ZreperujToHelper.Token = token?.Password;
+            ZreperujToHelper.IsLogged = true;
+        }
+
+        public void LogOut()
+        {
+            FlushLocker();
+            ZreperujToHelper.Token = null;
+            ZreperujToHelper.IsLogged = false;
+            LogInAsync();
+        }
+
+        private void FlushLocker()
+        {
+            try
+            {
+                var vault = new Windows.Security.Credentials.PasswordVault();
+                var credentialList = vault.FindAllByResource(_resourceName);
+
+                // When there are multiple tokens
+                while (credentialList.Count > 0) vault.Remove(credentialList[0]);
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
         }
 
         private Windows.Security.Credentials.PasswordCredential GetCredentialFromLocker()
         {
             try
             {
-            Windows.Security.Credentials.PasswordCredential credential;
+                Windows.Security.Credentials.PasswordCredential credential;
 
-            var vault = new Windows.Security.Credentials.PasswordVault();
-            var credentialList = vault.FindAllByResource(_resourceName);
-            if (credentialList.Count <= 0) return null;
-            if (credentialList.Count == 1)
-            {
-                credential = credentialList[0];
-            }
-            else
-            {
-                // When there are multiple tokens
-                while (credentialList.Count > 1)
+                var vault = new Windows.Security.Credentials.PasswordVault();
+                var credentialList = vault.FindAllByResource(_resourceName);
+                if (credentialList.Count <= 0) return null;
+                if (credentialList.Count == 1)
                 {
-                    vault.Remove(Convert.ToDateTime(credentialList[0].UserName) >
-                                 Convert.ToDateTime(credentialList[1].UserName)
-                        ? credentialList[1]
-                        : credentialList[0]);
+                    credential = credentialList[0];
+                }
+                else
+                {
+                    // When there are multiple tokens
+                    while (credentialList.Count > 1)
+                    {
+                        vault.Remove(Convert.ToDateTime(credentialList[0].UserName) >
+                                     Convert.ToDateTime(credentialList[1].UserName)
+                            ? credentialList[1]
+                            : credentialList[0]);
+                    }
+
+                    credential = credentialList[0];
                 }
 
-                credential = credentialList[0];
-            }
-
-            return credential;
+                return credential;
             }
             catch (Exception)
             {
@@ -158,7 +188,7 @@ namespace ZreperujTo.UWP.ViewModels
             await Task.CompletedTask;
         }
 
-        public async Task Authorization()
+        public async Task AuthorizeAndGetTokenAsync()
         {
 
             var callback = new Uri(@"https://zreperujto.azurewebsites.net/api/Profile");
