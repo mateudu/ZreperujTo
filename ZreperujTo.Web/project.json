@@ -51,7 +51,8 @@
     "Swashbuckle": "6.0.0-beta902",
     "MongoDB.Driver": "2.4.0-beta1",
     "WindowsAzure.Storage": "7.2.1",
-    "Ngonzalez.ImageProcessorCore": "0.0.1"
+    "Ngonzalez.ImageProcessorCore": "0.0.1",
+    "Microsoft.AspNetCore.Authentication.Facebook": "1.0.0"
   },
 
   "tools": {
