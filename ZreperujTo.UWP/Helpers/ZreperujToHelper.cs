@@ -18,6 +18,7 @@ namespace ZreperujTo.UWP.Helpers
         private readonly HttpClient _client = new HttpClient();
 
         public static string Token { get; set; }
+        public static bool IsLogged { get; set; }
         public ZreperujToHelper(string token)
         {
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
