@@ -157,6 +157,12 @@ namespace ZreperujTo.Web
                 Audience = Config.App_URL + "/resources",
                 RequireHttpsMetadata = false
             });
+            app.UseFacebookAuthentication(new FacebookOptions
+            {
+                ClientId = "test1",
+                AppId = "test1",
+                ClientSecret = "test1"
+            });
 
             app.UseSwagger();
             app.UseSwaggerUi();

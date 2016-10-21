@@ -148,7 +148,17 @@ namespace ZreperujTo.UWP.ViewModels
                 RaisePropertyChanged();
             }
         }
-        public string RatingAverage => ((double)LoggedProfile.RatingSum/LoggedProfile.RatingCount).ToString(CultureInfo.InvariantCulture) +"/5";
+        public string RatingAverage
+        {
+            get
+            {
+                if (LoggedProfile?.RatingSum != null)
+                    return
+                        ((double) LoggedProfile.RatingSum/LoggedProfile.RatingCount).ToString(
+                            CultureInfo.InvariantCulture) + "/5";
+                return null;
+            }
+        }
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
