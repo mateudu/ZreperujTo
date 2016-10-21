@@ -126,6 +126,7 @@
                             <DataTemplate>
                                 <Border BorderBrush="LightBlue" BorderThickness="2" CornerRadius="2" MaxHeight="150">
                                     <Grid>
+                                        <ScrollViewer>
                                         <ItemsControl ItemsSource="{Binding Pictures}">
                                             <ItemsControl.ItemsPanel>
                                                 <ItemsPanelTemplate>
@@ -135,11 +136,12 @@
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
                                                     <Grid>
-                                                        <Image Source="{Binding ThumbnailFileUri}" MinWidth="{Binding ElementName=ScrollViewer, Path=ActualWidth}" Stretch="UniformToFill"/>
+                                                        <Image Source="{Binding ThumbnailFileUri}" MaxWidth="{Binding ElementName=ScrollViewer, Path=ActualWidth}" Stretch="UniformToFill"/>
                                                     </Grid>
                                                 </DataTemplate>
                                             </ItemsControl.ItemTemplate>
                                         </ItemsControl>
+                                        </ScrollViewer>
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition />
@@ -159,7 +161,7 @@
                                                     <RowDefinition Height="*" />
                                                 </Grid.RowDefinitions>
                                                 <TextBlock Text="{Binding Title}" Grid.Row="0" />
-                                                <TextBlock Text="{Binding Description}" Grid.Row="1" />
+                                                <TextBlock Text="{Binding Description}" TextWrapping="WrapWholeWords" Grid.Row="1" />
                                             </Grid>
                                         </Grid>
                                     </Grid>

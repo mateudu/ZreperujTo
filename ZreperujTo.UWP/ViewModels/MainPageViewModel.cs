@@ -69,7 +69,7 @@ namespace ZreperujTo.UWP.ViewModels
                         Active = true,
                         AuctionValidThrough = DateTime.Today.AddDays(1),
                         Budget = 100,
-                        Description = "Kran mi się urwał!",
+                        Description = "Kran mi się urwał! Kran mi się urwał! Kran mi się urwał! Kran mi się urwał! Kran mi się urwał! Kran mi się urwał! Kran mi się urwał! Kran mi się urwał! Kran mi się urwał! ",
                         Title = "Urwany kran",
                         Location = new LocationInfo
                         {
