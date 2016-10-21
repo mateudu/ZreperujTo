@@ -82,16 +82,21 @@
                             <RowDefinition />
                             <RowDefinition />
                         </Grid.RowDefinitions>
-                        <StackPanel Grid.Row="1">
+                        <StackPanel Grid.Row="1" Orientation="Horizontal">
+                            <SymbolIcon Symbol="Mail" />
                             <TextBlock Text="{Binding LoggedProfile.Email}" />
                         </StackPanel>
                         <StackPanel Grid.Row="0">
                             <StackPanel Orientation="Horizontal">
+                                <SymbolIcon Symbol="Comment" />
                                 <TextBlock Text="{Binding LoggedProfile.Company}" />
+
                                 <TextBlock Text="{Binding RatingAverage}" />
+                                <SymbolIcon Symbol="SolidStar" />
                             </StackPanel>
                         </StackPanel>
-                        <StackPanel Grid.Row="2">
+                        <StackPanel Grid.Row="2" Orientation="Horizontal">
+                            <SymbolIcon Symbol="Phone" />
                             <TextBlock Text="{Binding LoggedProfile.MobileNumber}" />
                         </StackPanel>
                     </Grid>

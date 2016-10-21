@@ -183,7 +183,8 @@ namespace ZreperujTo.UWP.ViewModels
             _zreperujToHelper = new ZreperujToHelper();
             LoggedProfile = await _zreperujToHelper.GetProfileInfoAsync();
             LoggedProfileFailMetaModels = await _zreperujToHelper.GetProfileFailsAsync();
-
+            // ReSharper disable once ExplicitCallerInfoArgument
+            RaisePropertyChanged(nameof(RatingAverage));
         }
 
         private async Task RetrieveTokenAsync()
