@@ -1,0 +1,98 @@
+﻿@model ZreperujTo.Web.Controllers.FailsController.BrowseFailsViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@*<h2>Usterki</h2>*@
+
+@*<p>
+        <a asp-action="Create">Create New</a>
+    </p>*@
+<div class="visible-sm">
+
+</div>
+<div class="row">
+    <div class="dropdown" style="position:relative">
+        <a href="#" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Wybierz kategorię <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+            @foreach (var category in Model.Categories)
+            {
+                <li>
+                    <a class="trigger right-caret">@category.Name</a>
+                    <ul class="dropdown-menu sub-menu">
+                        @if (category.Subcategories != null && category.Subcategories.Any())
+                        {
+                            foreach (var subcategory in category.Subcategories)
+                            {
+                                <li>
+                                    <a asp-controller="Fails" asp-action="Browse" asp-route-categoryId="@category.Id"
+                                       asp-route-subcategoryId="@subcategory.Id">@subcategory.Name</a>
+                                </li>
+                            }
+                            <li class="divider"></li>
+                        }
+                        <li><a asp-controller="Fails" asp-action="Browse" asp-route-categoryId="@category.Id">Wszystkie</a></li>
+                    </ul>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+
+
+
+<br />
+<table class="table table-striped">
+    <thead>
+
+    </thead>
+    <tbody>
+        @if (Model.Fails == null || !Model.Fails.Any())
+        {
+            <h3>Brak ofert to wyświetlenia</h3>
+        }
+        else
+        {
+            foreach (var item in Model.Fails)
+            {
+                <tr>
+                    <td class="hidden-xs">
+                        @if (item.Pictures != null && item.Pictures.Any())
+                        {
+                            <a asp-controller="Fails" asp-action="Details" asp-route-id="@item.Id">
+                                <div class="center-cropped"
+                                     style="background-image: url('@item.Pictures[0].ThumbnailFileUri');">
+                                </div>
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-controller="Fails" asp-action="Details" asp-route-id="@item.Id">
+                                <div class="center-cropped">
+                                </div>
+                            </a>
+                        }
+                    </td>
+                    <td>
+                        <h4>
+                            <b>
+                                <a asp-controller="Fails" asp-action="Details" asp-route-id="@item.Id">
+                                    @Html.DisplayFor(modelItem => item.Title)
+                                </a>
+                            </b>
+                        </h4>
+                        <br />
+                        <p>@Html.DisplayFor(modelItem => item.Description)</p>
+                    </td>
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>*@
+                    <td class="text-right">
+                        <h3>@Html.DisplayFor(modelItem => item.Budget)PLN</h3>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

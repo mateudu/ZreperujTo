@@ -1,0 +1,110 @@
+﻿@using ZreperujTo.Web.Controllers
+@model ZreperujTo.Web.Controllers.UserController.UserInfoViewModel
+
+<div class="row">
+    <div class="col-md-3">
+        <h2>@Model.User.Name</h2>
+        <h5>@Model.User.RatingSum <i class="fa fa-star-o" aria-hidden="true"></i></h5>
+        <p>
+            @Model.User.Email<br/>
+            @Model.User.MobileNumber
+        </p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-8 col-lg-8 col-md-8">
+        <h3>Moje zgłoszenia</h3>
+        @if (Model.Fails == null || !Model.Fails.Any())
+        {
+            <p>Brak zgłoszeń :)</p>
+        }
+        else
+        {
+            <table class="table table-striped">
+                <thead>
+
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Fails)
+                    {
+                        <tr>
+                            <td class="hidden-xs">
+                                @if (item.Pictures != null && item.Pictures.Any())
+                                {
+                                    <a asp-controller="Fails" asp-action="Details" asp-route-id="@item.Id">
+                                        <div class="center-cropped"
+                                             style="background-image: url('@item.Pictures[0].ThumbnailFileUri');">
+                                        </div>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a asp-controller="Fails" asp-action="Details" asp-route-id="@item.Id">
+                                        <div class="center-cropped">
+                                        </div>
+                                    </a>
+                                }
+                            </td>
+                            <td>
+                                <h4>
+                                    <b>
+                                        <a asp-controller="Fails" asp-action="Details" asp-route-id="@item.Id">
+                                            @Html.DisplayFor(modelItem => item.Title)
+                                        </a>
+                                    </b>
+                                </h4>
+                                <br />
+                                <p>
+                                    @Html.DisplayFor(modelItem => item.Description)<br/>
+                                    Oferta: @item.Budget PLN
+                                </p>
+                            </td>
+                            @*<td>
+                                    @Html.DisplayFor(modelItem => item.Description)
+                                </td>*@
+                            <td class="text-right">
+                                <h3>@Html.DisplayFor(modelItem => item.Budget)PLN</h3>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+    <div class="col-sm-4 col-lg-4 col-md-4">
+        <h3>Moje oferty:</h3>
+        @if (Model.BidAndFails == null || !Model.BidAndFails.Any())
+        {
+            <p>Brak ofert :)</p>
+        }
+        else
+        {
+            <table class="table">
+                <thead>
+
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.BidAndFails)
+                    {
+                        <tr class="@UserController.GetBidBackground(item.Key)">
+                            <td>
+                                <h4>
+                                    <b>
+                                        <a asp-controller="Fails" asp-action="Details" asp-route-id="@item.Value.Id">
+                                            @item.Value.Title
+                                        </a>
+                                    </b>
+                                </h4>
+                                <br />
+                                <p>
+                                    @item.Key.Description<br/>
+                                    Oferta: @item.Key.Budget PLN
+                                </p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>

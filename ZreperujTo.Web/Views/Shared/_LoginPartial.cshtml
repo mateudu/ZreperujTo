@@ -8,10 +8,13 @@
 {
     <form asp-area="" asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm" class="navbar-right">
         <ul class="nav navbar-nav navbar-right">
-            <li class="page-scroll">
-                <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Witaj, @UserManager.GetUserName(User)!</a>
+            <li>
+                <a asp-area="" asp-controller="User" asp-action="Index" title="Manage"><i class="fa fa-user" aria-hidden="true"></i> Profil</a>
             </li>
-            <li class="page-scroll">
+            <li>
+                <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> Ustawienia</a>
+            </li>
+            <li>
                 <button type="submit" class="btn btn-link navbar-btn navbar-link">Wyloguj</button>
             </li>
         </ul>

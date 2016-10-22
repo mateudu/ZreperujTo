@@ -18,19 +18,19 @@ using ZreperujTo.Web.Models.FailModels;
 namespace ZreperujTo.Web.Controllers
 {
     [Route("Fails")]
-    public class FailController : Controller
+    public class FailsController : Controller
     {
         private readonly IZreperujToService _serviceCore;
 
-        public FailController(IZreperujToService serviceCore)
+        public FailsController(IZreperujToService serviceCore)
         {
-            _serviceCore = serviceCore;    
+            _serviceCore = serviceCore;
         }
 
         [HttpGet("Browse")]
         [HttpGet("Browse/{categoryId}")]
         [HttpGet("Browse/{categoryId}/{subcategoryId}")]
-        public async Task<IActionResult> Index(
+        public async Task<IActionResult> Browse(
             string categoryId,
             string subcategoryId,
             [FromQuery] string city,

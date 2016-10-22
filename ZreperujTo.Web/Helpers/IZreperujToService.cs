@@ -32,6 +32,7 @@ namespace ZreperujTo.Web.Helpers
             int pageNumber = 1);
 
         Task<List<FailMetaModel>> GetUserFailsMetaAsync(string userId);
+        Task<List<FailMetaModel>> GetFailsMetaAsync(List<ObjectId> failIds);
         Task<FailReadModel> GetFailReadModelAsync(ObjectId objId);
         Task<FailDbModel> GetFailDbModelAsync(ObjectId objId);
 

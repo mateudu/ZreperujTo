@@ -1,0 +1,11 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using ZreperujTo.Web.Models
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <li><a asp-area="" asp-controller="User" asp-action="">Zgłoszenia</a></li>
+    <li><a asp-area="" asp-controller="User" asp-action="">Oferty</a></li>
+}

@@ -239,6 +239,49 @@ namespace ZreperujTo.Web.Helpers
             return result;
         }
 
+        public async Task<List<FailMetaModel>> GetFailsMetaAsync(List<ObjectId> failIds)
+        {
+            var collection = _mongoDb.GetCollection<FailDbModel>(FailsCollectionName);
+            var filter = Builders<FailDbModel>.Filter.In(x => x.Id, failIds);
+
+            var categories = GetCategoriesAsync();
+            var subcategories = GetSubcategoriesAsync();
+            var _findTask = collection.FindAsync(filter);
+
+            await Task.WhenAll(_findTask, categories, subcategories);
+            var fails = await _findTask.Result.ToListAsync();
+            var result = new List<FailMetaModel>();
+
+
+            foreach (var e in fails)
+            {
+                var category = categories.Result.FirstOrDefault(x => x.Id == e.CategoryId);
+                var subcategory = subcategories.Result.FirstOrDefault(x => x.Id == e.SubcategoryId);
+
+                result.Add(new FailMetaModel
+                {
+                    Active = e.Active,
+                    Category = (category != null) ? new CategoryReadModel(category) : null,
+                    Subcategory = (subcategory != null) ? new SubcategoryReadModel(subcategory) : null,
+                    AuctionValidThrough = e.AuctionValidThrough,
+                    Budget = e.Budget,
+                    Description = e.Description,
+                    Id = e.Id.ToString(),
+                    Highlited = e.Highlited,
+                    Location = new LocationInfo
+                    {
+                        City = e.Location.City,
+                        District = e.Location.District,
+                        PostalCode = e.Location.PostalCode
+                    },
+                    Pictures = e.Pictures,
+                    Title = e.Title,
+                    Requirements = e.Requirements
+                });
+            }
+            return result;
+        }
+
         public async Task<List<FailMetaModel>> GetUserFailsMetaAsync(string userId)
         {
             var collection = _mongoDb.GetCollection<FailDbModel>(FailsCollectionName)

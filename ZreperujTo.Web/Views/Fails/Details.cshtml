@@ -58,6 +58,10 @@
         <div class="col-lg-8 col-sm-6">
             <h3><b>Budżet: @Model.Budget PLN</b></h3>
             <h4>@Model.Description</h4>
+            <p>
+                Lokalizacja: @Model.Location.City, @Model.Location.District<br/>
+                Ważne do: @Model.AuctionValidThrough.Day.@Model.AuctionValidThrough.Month.@Model.AuctionValidThrough.Year
+            </p>
         </div>
         <div class="col-lg-4 col-sm-6 text-right text-uppercase">
             <h3>Użytkownik:</h3>
@@ -66,7 +70,7 @@
                 @Model.UserInfo.MobileNumber<br/>
                 @Model.UserInfo.Email
             </p>
-            <a class="btn btn-makebid">Napraw</a>
+            <a class="btn btn-primary btn-makebid">Złóż ofertę!</a>
         </div>
     </div>
     
