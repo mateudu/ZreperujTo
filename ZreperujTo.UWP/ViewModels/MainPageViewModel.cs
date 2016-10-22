@@ -139,6 +139,8 @@ namespace ZreperujTo.UWP.ViewModels
             }
         }
 
+        public IsCompany IsCompany => LoggedProfile.Company ? new IsCompany {SymbolIconText = "Shop", TextBlockText = "Firmowe"} : new IsCompany { SymbolIconText = "Contact", TextBlockText = "Prywatny" };
+
         public List<FailMetaModel> LoggedProfileFailMetaModels
         {
             get { return _loggedProfileFailMetaModels; }
@@ -156,7 +158,7 @@ namespace ZreperujTo.UWP.ViewModels
                     return
                         ((double) LoggedProfile.RatingSum/LoggedProfile.RatingCount).ToString(
                             CultureInfo.InvariantCulture) + "/5";
-                return null;
+                return "5/5";
             }
         }
 
@@ -338,8 +340,8 @@ namespace ZreperujTo.UWP.ViewModels
             }
         }
 
-        public void GotoDetailsPage() =>
-            NavigationService.Navigate(typeof(Views.DetailPage), null);
+        public void GotoDetailsPage(FailMetaModel failMetaModel) =>
+            NavigationService.Navigate(typeof(Views.DetailPage), failMetaModel);
 
         public void GotoSettings() =>
             NavigationService.Navigate(typeof(Views.SettingsPage), 0);
@@ -350,6 +352,11 @@ namespace ZreperujTo.UWP.ViewModels
         public void GotoAbout() =>
             NavigationService.Navigate(typeof(Views.SettingsPage), 2);
 
+    }
+    public class IsCompany
+    {
+        public string SymbolIconText { get; set; }
+        public string TextBlockText { get; set; }
     }
 }
 

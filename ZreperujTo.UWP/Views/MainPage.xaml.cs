@@ -4,6 +4,8 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using System.Collections.ObjectModel;
+using Windows.UI.Xaml.Input;
+using ZreperujTo.UWP.Models.FailModels;
 
 namespace ZreperujTo.UWP.Views
 {
@@ -13,6 +15,14 @@ namespace ZreperujTo.UWP.Views
         {
             InitializeComponent();
             NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
+        }
+
+        private void UIElement_OnTapped(object sender, TappedRoutedEventArgs e)
+        {
+            var r = (Border) sender;
+            var x = r.DataContext as FailMetaModel;
+            var dc = DataContext as MainPageViewModel;
+            dc?.GotoDetailsPage(x);
         }
     }
 }
