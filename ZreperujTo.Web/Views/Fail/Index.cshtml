@@ -1,0 +1,78 @@
+@model ZreperujTo.Web.Controllers.FailController.BrowseFailsViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@*<h2>Usterki</h2>*@
+
+@*<p>
+    <a asp-action="Create">Create New</a>
+</p>*@
+<div class="visible-sm">
+    
+</div>
+<div class="row">
+    @foreach (var category in Model.Categories)
+    {
+        <div class="dropdown">
+            <button class="dropbtn">@category.Name</button>
+            <div class="dropdown-content">
+                @if (category.Subcategories != null)
+                {
+                    foreach (var subcategory in category.Subcategories)
+                    {
+                        <a asp-controller="Fail" asp-action="Index" asp-route-categoryId="@subcategory.CategoryId"
+                           asp-route-subcategoryId="@subcategory.Id">@subcategory.Name</a>
+                    }
+                }
+                <a asp-controller="Fail" asp-action="Index" asp-route-categoryId="@category.Id">Wszystkie</a>
+            </div>
+        </div>
+    }
+</div>
+
+
+
+<br/>
+<table class="table">
+    <thead>
+        
+    </thead>
+    <tbody>
+@foreach (var item in Model.Fails) {
+        <tr>
+            <td>
+                @if (item.Pictures != null && item.Pictures.Any())
+                {
+                    <a asp-controller="Fail" asp-action="Details" asp-route-id="@item.Id">
+                        <div class="center-cropped"
+                             style="background-image: url('@item.Pictures[0].ThumbnailFileUri');">
+                        </div>
+                    </a>
+                }
+                else
+                {
+                    <a asp-controller="Fail" asp-action="Details" asp-route-id="@item.Id">
+                        <div class="center-cropped">
+                        </div>
+                    </a>
+                }
+            </td>
+            <td>
+                <h4><b><a asp-controller="Fail" asp-action="Details" asp-route-id="@item.Id">
+                    @Html.DisplayFor(modelItem => item.Title)
+                </a></b></h4>
+                <br/>
+                <p>@Html.DisplayFor(modelItem => item.Description)</p>
+            </td>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>*@
+            <td>
+                <h3>@Html.DisplayFor(modelItem => item.Budget)PLN</h3> 
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

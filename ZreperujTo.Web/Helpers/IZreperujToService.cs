@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 using ZreperujTo.Web.Models.BidModels;
+using ZreperujTo.Web.Models.CategoryModels;
 using ZreperujTo.Web.Models.CommonModels;
 using ZreperujTo.Web.Models.DbModels;
 using ZreperujTo.Web.Models.FailModels;
@@ -38,6 +39,7 @@ namespace ZreperujTo.Web.Helpers
         Task<List<SubcategoryDbModel>> GetSubcategoriesAsync();
         Task<bool> AddCategoryAsync(CategoryDbModel cat);
         Task<bool> AddSubcategoryAsync(SubcategoryDbModel cat);
+        Task<List<CategoryReadModel>> GetCategoryReadModelsAsync();
 
         Task<bool> AddBidAsync(BidDbModel bid);
         Task<List<BidDbModel>> GetBidDbModelsAsync();

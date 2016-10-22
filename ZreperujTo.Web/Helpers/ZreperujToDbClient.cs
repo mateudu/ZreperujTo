@@ -528,5 +528,27 @@ namespace ZreperujTo.Web.Helpers
             var query = Builders<PictureInfoDbModel>.Filter.In(x => x.BaseName, ids);
             return await (await bidsCollection.FindAsync(query)).ToListAsync();
         }
+
+        public async Task<List<CategoryReadModel>> GetCategoryReadModelsAsync()
+        {
+            var categories = GetCategoriesAsync();
+            var subcategories = GetSubcategoriesAsync();
+            await Task.WhenAll(categories, subcategories);
+
+            var result = categories.Result.Select(x => new CategoryReadModel(x)).ToList();
+            foreach (var sub in subcategories.Result)
+            {
+                var obj = result.FirstOrDefault(x => x.Id == sub.CategoryId.ToString());
+                if (obj != null)
+                {
+                    if (obj.Subcategories == null)
+                    {
+                        obj.Subcategories = new List<SubcategoryReadModel>();
+                    }
+                    obj.Subcategories.Add(new SubcategoryReadModel(sub));
+                }
+            }
+            return result;
+        }
     }
 }
