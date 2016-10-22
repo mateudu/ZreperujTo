@@ -144,7 +144,7 @@
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
                                                         <Grid>
-                                                            <Image Source="{Binding ThumbnailFileUri}" MaxWidth="{Binding ElementName=ScrollViewer, Path=ActualWidth}" Stretch="UniformToFill"/>
+                                                            <Image Source="{Binding ThumbnailFileUri}" MaxWidth="{Binding ElementName=PageHeader, Path=ActualWidth}" Stretch="UniformToFill"/>
                                                     </Grid>
                                                 </DataTemplate>
                                             </ItemsControl.ItemTemplate>
@@ -163,7 +163,7 @@
                                                 <TextBlock Text="{Binding Location.City}" />
                                                 <TextBlock Text="{Binding Location.District}" Grid.Row="1" />
                                             </Grid>
-                                            <Grid VerticalAlignment="Bottom">
+                                            <Grid Grid.Column="0" VerticalAlignment="Bottom">
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="Auto" />
                                                     <RowDefinition Height="*" />

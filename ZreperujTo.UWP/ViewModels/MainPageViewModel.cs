@@ -139,7 +139,9 @@ namespace ZreperujTo.UWP.ViewModels
             }
         }
 
-        public IsCompany IsCompany => LoggedProfile.Company ? new IsCompany {SymbolIconText = "Shop", TextBlockText = "Firmowe"} : new IsCompany { SymbolIconText = "Contact", TextBlockText = "Prywatny" };
+        public IsCompany IsCompany => LoggedProfile != null && LoggedProfile.Company
+            ? new IsCompany {SymbolIconText = "Shop", TextBlockText = "Firmowe"}
+            : new IsCompany {SymbolIconText = "Contact", TextBlockText = "Prywatny"};
 
         public List<FailMetaModel> LoggedProfileFailMetaModels
         {

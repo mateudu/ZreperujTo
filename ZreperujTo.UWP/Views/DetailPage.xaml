@@ -50,7 +50,7 @@
         <controls:PageHeader x:Name="pageHeader" Frame="{x:Bind Frame}"
                              RelativePanel.AlignLeftWithPanel="True"
                              RelativePanel.AlignRightWithPanel="True"
-                             RelativePanel.AlignTopWithPanel="True" Text="Detail Page" />
+                             RelativePanel.AlignTopWithPanel="True" Text="{Binding DetailedFailModel.Title}" />
 
         <!--  content  -->
         <ScrollViewer RelativePanel.AlignBottomWithPanel="True"
@@ -59,8 +59,67 @@
                       RelativePanel.Below="pageHeader"
                       VerticalScrollBarVisibility="Auto">
             <StackPanel>
-                <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="You passed:" />
-                <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="{x:Bind ViewModel.Value, Mode=OneWay, FallbackValue=DesigntimeValue}" />
+                <ScrollViewer VerticalScrollMode="Disabled" HorizontalScrollMode="Enabled"
+                              HorizontalScrollBarVisibility="Hidden" HorizontalSnapPointsAlignment="Center">
+                    <ItemsControl ItemsSource="{Binding DetailedFailModel.Pictures}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <ItemsStackPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Image Source="{Binding OriginalFileUri}"
+                                           MaxWidth="{Binding ElementName=pageHeader, Path=ActualWidth}"
+                                           Stretch="UniformToFill" Tapped="UIElement_OnTapped"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+                <TextBlock Text="{Binding DetailedFailModel.Budget}"/>
+                <TextBlock Text="{Binding DetailedFailModel.Title}"/>
+                <TextBlock Text="{Binding DetailedFailModel.Description}" TextWrapping="WrapWholeWords"/>
+                <TextBlock Text="{Binding DetailedFailModel.UserInfo.Name}"/>
+                <TextBlock Text="{Binding DetailedFailModel.Location.City}"/>
+                <TextBlock Text="{Binding DetailedFailModel.Category.Name}"/>
+                <TextBlock Text="{Binding DetailedFailModel.Subcategory.Name}"/>
+                <ItemsControl ItemsSource="{Binding DetailedFailModel.Requirements}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <ItemsStackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderThickness="4" CornerRadius="2">
+                                <StackPanel>
+                                    <TextBlock Text="{Binding}"/>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <ItemsControl ItemsSource="{Binding DetailedFailModel.Bids}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <ItemsStackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderThickness="4" CornerRadius="2">
+                                <StackPanel>
+                                    <TextBlock Text="{Binding UserInfo.Name}"/>
+                                    <TextBlock Text="{Binding Budget}"/>
+                                    <TextBlock Text="{Binding  Description}"/>
+                                    <TextBlock Text="{Binding  Active}"/>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </StackPanel>
         </ScrollViewer>
 

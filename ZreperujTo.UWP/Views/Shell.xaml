@@ -1,4 +1,4 @@
-<Page x:Class="ZreperujTo.UWP.Views.Shell"
+﻿<Page x:Class="ZreperujTo.UWP.Views.Shell"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:Controls="using:Template10.Controls"
@@ -20,9 +20,19 @@
                                           >
                 <StackPanel Orientation="Horizontal">
                     <SymbolIcon Width="48" Height="48"
-                                Symbol="Home" />
+                                Symbol="Contact" />
                     <TextBlock Margin="12,0,0,0" VerticalAlignment="Center"
                                Text="Profil" />
+                </StackPanel>
+            </Controls:HamburgerButtonInfo>
+            <Controls:HamburgerButtonInfo PageType="views:FailsByCategoriesViewModel" 
+                                          AutomationProperties.Name="Jerry"
+                                          >
+                <StackPanel Orientation="Horizontal">
+                    <SymbolIcon Width="48" Height="48"
+                                Symbol="SelectAll" />
+                    <TextBlock Margin="12,0,0,0" VerticalAlignment="Center"
+                               Text="Zgłoszone usterki" />
                 </StackPanel>
             </Controls:HamburgerButtonInfo>
         </Controls:HamburgerMenu.PrimaryButtons>

@@ -8,56 +8,74 @@ using Template10.Mvvm;
 using Template10.Services.NavigationService;
 using Windows.UI.Xaml.Navigation;
 using ZreperujTo.UWP.Helpers;
+using ZreperujTo.UWP.Models.CategoryModels;
 using ZreperujTo.UWP.Models.FailModels;
 
 namespace ZreperujTo.UWP.ViewModels
 {
-    public class DetailPageViewModel : ViewModelBase
+    public class FailsByCategoriesViewModel : ViewModelBase
     {
-        public DetailPageViewModel()
+        public FailsByCategoriesViewModel()
         {
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
             {
                 if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
                 {
-                    DetailedFailModel = new FailReadModel
-                    {
-                        Budget = 254
-                    };
                 }
             }
         }
 
-        private string _Value = "Default";
+        private string _value = "Default";
 
         public string Value
         {
-            get { return _Value; }
-            set { Set(ref _Value, value); }
+            get { return _value; }
+            set { Set(ref _value, value); }
         }
 
         private ZreperujToHelper _zreperujToHelper;
-        private FailReadModel _detailedFailModel;
 
+        List<FailMetaModel> _failMetaModels;
+
+        private List<CategoryReadModel> _categoryReadModels;
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
             await Task.CompletedTask;
-            await LoadInfoAboutFailAsync( (FailMetaModel) parameter);
+            await LoadFailsByCategoriesAsync();
         }
 
-        private async Task LoadInfoAboutFailAsync(FailMetaModel failMetaModel)
+        private async Task LoadFailsByCategoriesAsync()
         {
             _zreperujToHelper = new ZreperujToHelper();
-            DetailedFailModel = await _zreperujToHelper.GetFailDetailAsync(failMetaModel);
+
+            FailMetaModels = await _zreperujToHelper.BrowseFailsAsync();
+            await _zreperujToHelper.GetCategoriesAsync();
 
         }
 
-        public FailReadModel DetailedFailModel
+
+        public List<FailMetaModel> FailMetaModels
         {
-            get { return _detailedFailModel; }
+            get
+            {
+                return _failMetaModels;
+            }
             set
             {
-                _detailedFailModel = value;
+                _failMetaModels = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public List<CategoryReadModel> CategoryReadModels
+        {
+            get
+            {;
+                return _categoryReadModels;
+            }
+            set
+            {
+                _categoryReadModels = value;
                 RaisePropertyChanged();
             }
         }
