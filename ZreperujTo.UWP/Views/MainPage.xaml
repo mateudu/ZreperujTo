@@ -88,8 +88,11 @@
                         </StackPanel>
                         <StackPanel Grid.Row="0">
                             <StackPanel Orientation="Horizontal">
-                                <SymbolIcon Symbol="Comment" />
-                                <TextBlock Text="{Binding LoggedProfile.Company}" />
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding LoggedProfile.Company , Converter={StaticResource BoolToVis}}">
+                                    <SymbolIcon Symbol="{Binding IsCompany.SymbolIconText}"/>
+                                    <TextBlock Text="{Binding IsCompany.TextBlockText}" />
+                                </StackPanel>
+
 
                                 <TextBlock Text="{Binding RatingAverage}" />
                                 <SymbolIcon Symbol="SolidStar" />
@@ -129,7 +132,7 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Border BorderBrush="LightBlue" BorderThickness="2" CornerRadius="2" MaxHeight="150">
+                                <Border BorderBrush="LightBlue" BorderThickness="2" CornerRadius="2" MaxHeight="250" Tapped="UIElement_OnTapped" >
                                     <Grid>
                                         <ScrollViewer VerticalScrollMode="Disabled" HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Hidden" HorizontalSnapPointsAlignment="Center">
                                         <ItemsControl ItemsSource="{Binding Pictures}">
@@ -140,8 +143,8 @@
                                             </ItemsControl.ItemsPanel>
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
-                                                    <Grid>
-                                                        <Image Source="{Binding ThumbnailFileUri}" MaxWidth="{Binding ElementName=ScrollViewer, Path=ActualWidth}" Stretch="UniformToFill"/>
+                                                        <Grid>
+                                                            <Image Source="{Binding ThumbnailFileUri}" MaxWidth="{Binding ElementName=ScrollViewer, Path=ActualWidth}" Stretch="UniformToFill"/>
                                                     </Grid>
                                                 </DataTemplate>
                                             </ItemsControl.ItemTemplate>
