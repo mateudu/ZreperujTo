@@ -12,7 +12,7 @@
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
       mc:Ignorable="d" x:Name="ShellPage">
 
-    <Controls:HamburgerMenu x:Name="MyHamburgerMenu" Padding="0,0,0,20">
+    <Controls:HamburgerMenu x:Name="MyHamburgerMenu">
 
         <Controls:HamburgerMenu.PrimaryButtons>
             <!--  mainpage button  -->
@@ -36,9 +36,6 @@
                                Text="Zgłoszone usterki" />
                 </StackPanel>
             </Controls:HamburgerButtonInfo>
-        </Controls:HamburgerMenu.PrimaryButtons>
-
-        <Controls:HamburgerMenu.SecondaryButtons>
             <!--  settingspage button  -->
             <Controls:HamburgerButtonInfo x:Name="SettingsButton" PageParameter="0"
                                           PageType="views:SettingsPage">
@@ -51,8 +48,8 @@
                     <TextBlock Margin="12,0,0,0" VerticalAlignment="Center"
                                Text="Settings" />
                 </StackPanel>
-            </Controls:HamburgerButtonInfo>
-        </Controls:HamburgerMenu.SecondaryButtons>
+                </Controls:HamburgerButtonInfo>
+        </Controls:HamburgerMenu.PrimaryButtons>
 
     </Controls:HamburgerMenu>
 
