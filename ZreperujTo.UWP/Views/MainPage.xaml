@@ -10,7 +10,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:vm="using:ZreperujTo.UWP.ViewModels"
       xmlns:converters="using:ZreperujTo.UWP.Converters"
-      mc:Ignorable="d">
+      mc:Ignorable="d" x:Name="MainPageView">
 
     <Page.DataContext>
         <vm:MainPageViewModel x:Name="ViewModel" />
@@ -19,8 +19,10 @@
         <converters:BooleanToVisibilityConverter x:Key="BoolToVis" />
     </Page.Resources>
     <Page.BottomAppBar>
-        <AppBar IsOpen="True" IsSticky="True">
-            <AppBarButton Icon="Add" Label="Zgłoś usterkę" IsCompact="False" />
+        <AppBar IsOpen="True" IsSticky="True" >
+            <Grid>
+                <AppBarButton Icon="Add" Label="Zgłoś usterkę" IsCompact="False" Click="{x:Bind ViewModel.GoToReportFail}" />
+            </Grid>
         </AppBar>
     </Page.BottomAppBar>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">

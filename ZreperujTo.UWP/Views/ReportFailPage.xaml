@@ -1,4 +1,4 @@
-﻿<Page x:Class="ZreperujTo.UWP.Views.SubcategoriesPage"
+<Page x:Class="ZreperujTo.UWP.Views.ReportFailPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:Behaviors="using:Template10.Behaviors"
@@ -8,11 +8,11 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="using:ZreperujTo.UWP.Views"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      xmlns:vm="using:ZreperujTo.UWP.ViewModels"
+      xmlns:vm="using:ZreperujTo.UWP.ViewModels" x:Name="ReportFail"
       mc:Ignorable="d">
 
     <Page.DataContext>
-        <vm:SubcategoriesViewModel x:Name="ViewModel" />
+        <vm:ReporFailViewModel x:Name="ViewModel" />
     </Page.DataContext>
 
     <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -50,7 +50,7 @@
         <controls:PageHeader x:Name="pageHeader" Frame="{x:Bind Frame}"
                              RelativePanel.AlignLeftWithPanel="True"
                              RelativePanel.AlignRightWithPanel="True"
-                             RelativePanel.AlignTopWithPanel="True" Text="Podkategorie" />
+                             RelativePanel.AlignTopWithPanel="True" Text="{Binding DetailedFailModel.Title}" />
 
         <!--  content  -->
         <ScrollViewer RelativePanel.AlignBottomWithPanel="True"
@@ -58,9 +58,11 @@
                       RelativePanel.AlignRightWithPanel="True"
                       RelativePanel.Below="pageHeader"
                       VerticalScrollBarVisibility="Auto">
-            <ListView ItemsSource="{Binding SubcategoryReadModels}" DisplayMemberPath="Name" SelectionMode="Single" SelectionChanged="{x:Bind ViewModel.GoToFailsPage}" SelectedItem="{Binding SelectedSubcategory, Mode=TwoWay}"/>
-        </ScrollViewer>
+            <StackPanel>
+                <Image x:Name="imageControl" Width="200" Height="200"/>
 
+            </StackPanel>
+        </ScrollViewer>
     </RelativePanel>
 </Page>
 

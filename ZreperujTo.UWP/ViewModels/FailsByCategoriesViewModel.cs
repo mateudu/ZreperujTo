@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Template10.Mvvm;
@@ -64,10 +63,8 @@ namespace ZreperujTo.UWP.ViewModels
 
         }
 
-        public void GoToCategoriesSelection()
-        {
-            NavigationService.Navigate(typeof(Views.CategoriesPage));
-        }
+        public void GoToCategoriesSelection() => NavigationService.Navigate(typeof(Views.CategoriesPage));
+        public void GoToReportFail() => NavigationService.Navigate(typeof(Views.ReportFailPage));
 
         public List<FailMetaModel> FailMetaModels
         {

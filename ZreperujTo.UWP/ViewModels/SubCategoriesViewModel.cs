@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Template10.Mvvm;
@@ -7,9 +8,9 @@ using ZreperujTo.UWP.Models.CategoryModels;
 
 namespace ZreperujTo.UWP.ViewModels
 {
-    public class SubCategoriesViewModel : ViewModelBase
+    public class SubcategoriesViewModel : ViewModelBase
     {
-        public SubCategoriesViewModel()
+        public SubcategoriesViewModel()
         {
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
             {
@@ -20,6 +21,7 @@ namespace ZreperujTo.UWP.ViewModels
         }
 
         private List<SubcategoryReadModel> _subcategoryReadModels;
+        private SubcategoryReadModel _selectedSubcategory;
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
@@ -47,7 +49,15 @@ namespace ZreperujTo.UWP.ViewModels
 
         private CategoryReadModel SelectedCategory { get; set; }
 
-        public SubcategoryReadModel SelectedSubcategory { get; }
+        public SubcategoryReadModel SelectedSubcategory
+        {
+            get { return _selectedSubcategory; }
+            set
+            {
+                _selectedSubcategory = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public override async Task OnNavigatedFromAsync(IDictionary<string, object> suspensionState, bool suspending)
         {
@@ -64,9 +74,9 @@ namespace ZreperujTo.UWP.ViewModels
             await Task.CompletedTask;
         }
 
-        public void GoToFailsPage()
+        public async void GoToFailsPage()
         {
-
+            while (SelectedSubcategory == null) await Task.Delay(TimeSpan.FromMilliseconds(50));
             if (SelectedCategory.Id== "1" && SelectedSubcategory.Id == "1") NavigationService.Navigate(typeof(Views.FailsByCategoriesPage));
             else if(SelectedCategory.Id != "1" && SelectedSubcategory.Id == "1") NavigationService.Navigate(typeof(Views.FailsByCategoriesPage), SelectedCategory);
             else NavigationService.Navigate(typeof(Views.FailsByCategoriesPage), SelectedSubcategory);

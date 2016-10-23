@@ -4,9 +4,9 @@ using Windows.UI.Xaml.Input;
 
 namespace ZreperujTo.UWP.Views
 {
-    public sealed partial class FailsByCategoriesPage : Page
+    public sealed partial class ReportFailPage : Page
     {
-        public FailsByCategoriesPage()
+        public ReportFailPage()
         {
             InitializeComponent();
             NavigationCacheMode = NavigationCacheMode.Disabled;
@@ -15,7 +15,7 @@ namespace ZreperujTo.UWP.Views
         private void UIElement_OnTapped(object sender, TappedRoutedEventArgs e)
         {
             var im = sender as Image;
-            //var uri = im.Source;//ToDo make fullscreen
+            var uri = im.Source;//ToDo make fullscreen
         }
     }
 }

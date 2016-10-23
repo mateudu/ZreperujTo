@@ -16,8 +16,8 @@
     </Page.DataContext>
     <Page.BottomAppBar>
         <AppBar IsOpen="True" IsSticky="True">
-            <StackPanel Orientation="Horizontal">
-            <AppBarButton Icon="Add" Label="Zgłoś usterkę" IsCompact="False" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <AppBarButton Icon="Add" Label="Zgłoś usterkę" IsCompact="False" Click="{x:Bind ViewModel.GoToReportFail}" />
             <AppBarButton Icon="Filter" Label="Filtruj" IsCompact="False" Click="{x:Bind ViewModel.GoToCategoriesSelection}" />
             </StackPanel>
         </AppBar>

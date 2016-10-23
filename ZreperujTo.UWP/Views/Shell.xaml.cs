@@ -4,7 +4,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace ZreperujTo.UWP.Views
 {
-    public sealed partial class Shell : Page
+    public sealed partial class Shell
     {
         public static Shell Instance { get; set; }
         public static HamburgerMenu HamburgerMenu => Instance.MyHamburgerMenu;

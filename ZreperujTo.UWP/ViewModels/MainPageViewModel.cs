@@ -155,7 +155,7 @@ namespace ZreperujTo.UWP.ViewModels
         {
             get
             {
-                if (LoggedProfile?.RatingSum != null)
+                if (LoggedProfile?.RatingSum != null || LoggedProfile?.RatingCount > 0)
                     return
                         ((double) LoggedProfile.RatingSum/LoggedProfile.RatingCount).ToString(
                             CultureInfo.InvariantCulture) + "/5";
@@ -352,6 +352,8 @@ namespace ZreperujTo.UWP.ViewModels
 
         public void GotoAbout() =>
             NavigationService.Navigate(typeof(Views.SettingsPage), 2);
+        public void GoToReportFail() => NavigationService.Navigate(typeof(Views.ReportFailPage));
+
 
     }
     public class IsCompany
