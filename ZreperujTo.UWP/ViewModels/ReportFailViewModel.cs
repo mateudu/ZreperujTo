@@ -23,6 +23,7 @@ namespace ZreperujTo.UWP.ViewModels
         public ObservableCollection<CategoryReadModel> Categories = new ObservableCollection<CategoryReadModel>();
         public ObservableCollection<SubcategoryReadModel> Subcategories = new ObservableCollection<SubcategoryReadModel>();
         private bool _sendEnabled = false;
+        private object _imageSource;
 
         public bool SendEnabled
         {
@@ -79,7 +80,12 @@ namespace ZreperujTo.UWP.ViewModels
 
         public object ImageSource
         {
-            get { throw new System.NotImplementedException(); }
+            get { return _imageSource; }
+            set
+            {
+                _imageSource = value;
+                RaisePropertyChanged();
+            }
         }
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
