@@ -21,11 +21,11 @@
     <Page.BottomAppBar>
         <AppBar IsOpen="True" IsSticky="True" >
             <Grid>
-                <AppBarButton Icon="Add" Label="Zgłoś usterkę" IsCompact="False" Click="{x:Bind ViewModel.GoToReportFail}" />
+                <AppBarButton Icon="Add" Label="Zgłoś usterkę" IsCompact="False" Click="{x:Bind ViewModel.GoToReportFail}" HorizontalAlignment="Center" />
             </Grid>
         </AppBar>
     </Page.BottomAppBar>
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Margin="0,0,0,40" >
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -69,17 +69,18 @@
                 <AppBarButton Click="{x:Bind ViewModel.GotoSettings}" Label="Ustawienia" />
                 <AppBarButton Click="{x:Bind ViewModel.GotoPrivacy}" Label="Regulamin" />
                 <AppBarButton Click="{x:Bind ViewModel.GotoAbout}" Label="O aplikacji" />
-                <AppBarButton Click="{x:Bind ViewModel.LogOut}" Label="Wyloguj siê" />
+                <AppBarButton Click="{x:Bind ViewModel.LogOut}" Label="Wyloguj się" />
             </controls:PageHeader.SecondaryCommands>
 
         </controls:PageHeader>
 
-        <ScrollViewer x:Name="ScrollViewer" Grid.Row="1">
+        <ScrollViewer x:Name="ScrollViewer" Grid.Row="1" VerticalScrollBarVisibility="Hidden">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
+                    <RowDefinition />
                 </Grid.RowDefinitions>
                 <Border BorderBrush="#BDBDBD" BorderThickness="0,1" >
                     <Grid Grid.Row="0" HorizontalAlignment="Right" Margin="1,5">
@@ -184,59 +185,35 @@
                     </ItemsControl>
                 </Grid>
                 <Grid Grid.Row="3">
-                    <ItemsControl ItemsSource="{Binding LoggedProfileBids}"> <!--ToDo BiDS!-->
+                    <ItemsControl ItemsSource="{Binding LoggedProfileBids}" HorizontalAlignment="Stretch">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <ItemsStackPanel Orientation="Vertical"/>
+                                <StackPanel Orientation="Vertical" />
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Border BorderBrush="Green" BorderThickness="2" Margin="3,2" CornerRadius="2" MaxHeight="250" Tapped="UIElement_OnTapped" >
-                                    <Grid>
-                                        <ScrollViewer VerticalScrollMode="Disabled" HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Hidden" HorizontalSnapPointsAlignment="Near" HorizontalSnapPointsType="Mandatory" ZoomMode="Disabled">
-                                            <ItemsControl ItemsSource="{Binding Pictures}">
-                                                <ItemsControl.ItemsPanel>
-                                                    <ItemsPanelTemplate>
-                                                        <ItemsStackPanel Orientation="Horizontal"/>
-                                                    </ItemsPanelTemplate>
-                                                </ItemsControl.ItemsPanel>
-                                                <ItemsControl.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <Grid>
-                                                            <Image Source="{Binding ThumbnailFileUri}" MaxWidth="{Binding ElementName=PageHeader, Path=ActualWidth}" Stretch="UniformToFill"/>
-                                                        </Grid>
-                                                    </DataTemplate>
-                                                </ItemsControl.ItemTemplate>
-                                            </ItemsControl>
-                                        </ScrollViewer>
-                                        <Grid Margin="10">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition />
-                                                <ColumnDefinition Width="Auto" />
-                                            </Grid.ColumnDefinitions>
-                                            <Grid VerticalAlignment="Bottom" Column="1">
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="Auto"/>
-                                                    <RowDefinition Height="Auto" />
-                                                </Grid.RowDefinitions>
-                                                <TextBlock Text="{Binding Location.District}" FontSize="36" Foreground="White" />
-                                                <TextBlock Text="{Binding Location.City}" Grid.Row="1" FontSize="24" Foreground="WhiteSmoke" />
-                                            </Grid>
-                                            <Grid Grid.Column="0" VerticalAlignment="Bottom" Margin="0,0,5,0" >
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="Auto" />
-                                                    <RowDefinition Height="*" />
-                                                </Grid.RowDefinitions>
-                                                <TextBlock Text="{Binding Title}" Grid.Row="0" FontSize="24" FontWeight="Bold" Foreground="White" />
-                                                <TextBlock Text="{Binding Description}" TextWrapping="WrapWholeWords" Grid.Row="1" FontSize="18" Foreground="WhiteSmoke" />
-                                            </Grid>
-                                        </Grid>
+                                <Border BorderThickness="2,4,4,4" CornerRadius="2" BorderBrush="Purple" HorizontalAlignment="Stretch" Margin="0,4" Width="400" >
+                                    <Grid Margin="10,5" >
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Text="{Binding UserInfo.Name}" Foreground="#FF212121"  Grid.Row="0" FontSize="20"/>
+                                        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
+                                            <TextBlock Text="{Binding Budget}" Foreground="#FF212121"   FontSize="24"/>
+                                            <TextBlock Text="zł"  FontSize="20" Foreground="#FF212121" Margin="0,3,0,0"/>
+                                        </StackPanel>
+                                        <TextBlock Text="{Binding  Description}" Foreground="#FF212121" Grid.Row="2" FontSize="16" TextWrapping="WrapWholeWords"/>
+                                        <TextBlock Grid.Row="3" Text="{Binding  Active}"/>
                                     </Grid>
                                 </Border>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
+
                 </Grid>
             </Grid>
         </ScrollViewer>

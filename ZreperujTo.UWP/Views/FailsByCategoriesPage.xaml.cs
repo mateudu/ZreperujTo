@@ -1,6 +1,8 @@
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
+using ZreperujTo.UWP.Models.FailModels;
+using ZreperujTo.UWP.ViewModels;
 
 namespace ZreperujTo.UWP.Views
 {
@@ -14,8 +16,10 @@ namespace ZreperujTo.UWP.Views
 
         private void UIElement_OnTapped(object sender, TappedRoutedEventArgs e)
         {
-            var im = sender as Image;
-            //var uri = im.Source;//ToDo make fullscreen
+            var r = (Border)sender;
+            var x = r.DataContext as FailMetaModel;
+            var dc = DataContext as FailsByCategoriesViewModel;
+            dc?.GotoDetailsPage(x);
         }
     }
 }

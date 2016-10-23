@@ -1,4 +1,4 @@
-<Page x:Class="ZreperujTo.UWP.Views.DetailPage"
+﻿<Page x:Class="ZreperujTo.UWP.Views.DetailPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:Behaviors="using:Template10.Behaviors"
@@ -79,14 +79,21 @@
                     </ItemsControl>
                 </ScrollViewer><StackPanel Orientation="Horizontal" >
                     <TextBlock Text="{Binding DetailedFailModel.Budget}" Margin="0,3" FontSize="48" Foreground="#FF212121"/>
-                    <TextBlock Text="z�" VerticalAlignment="Bottom" FontSize="36" Padding="0,0,0,8" Foreground="#FF212121"/>
+                    <TextBlock Text="zł" VerticalAlignment="Bottom" FontSize="36" Padding="0,0,0,8" Foreground="#FF212121"/>
                 </StackPanel>
-                <TextBlock Text="{Binding DetailedFailModel.Title}" Foreground="#FF212121"/>
-                <TextBlock Text="{Binding DetailedFailModel.Description}" TextWrapping="WrapWholeWords" Foreground="#FF212121"/>
-                <TextBlock Text="{Binding DetailedFailModel.UserInfo.Name}" Foreground="#FF212121"/>
-                <TextBlock Text="{Binding DetailedFailModel.Location.City}" Foreground="#FF212121"/>
-                <TextBlock Text="{Binding DetailedFailModel.Category.Name}"/>
-                <TextBlock Text="{Binding DetailedFailModel.Subcategory.Name}"/>
+                <TextBlock Text="{Binding DetailedFailModel.Title}" Foreground="#FF212121" FontSize="36"/>
+                <TextBlock Text="{Binding DetailedFailModel.Description}" TextWrapping="WrapWholeWords" Foreground="#FF212121" FontSize="24"/>
+                <TextBlock Text="{Binding DetailedFailModel.UserInfo.Name}" Foreground="#FF212121" FontSize="22"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding DetailedFailModel.Location.City}" Foreground="#FF212121" FontSize="18" Margin="0,0,5,0"/>
+                    <TextBlock Text="{Binding DetailedFailModel.Location.District}" Foreground="#FF212121" FontSize="18" Margin="0,0,5,0"/>
+                    <TextBlock Text="{Binding DetailedFailModel.Location.Street}" Foreground="#FF212121" FontSize="18" Margin="0,0,2,0"/>
+                    <TextBlock Text="{Binding DetailedFailModel.Location.Apartment}" Foreground="#FF212121" FontSize="18"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding DetailedFailModel.Category.Name}" Foreground="#FF212121" Margin="0,0,10,0" FontSize="18"/>
+                <TextBlock Text="{Binding DetailedFailModel.Subcategory.Name}" Foreground="#FF212121" FontSize="18"/>
+                </StackPanel>
                 <ItemsControl ItemsSource="{Binding DetailedFailModel.Requirements}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -97,27 +104,36 @@
                         <DataTemplate>
                             <Border BorderThickness="4" CornerRadius="2">
                                 <StackPanel>
-                                    <TextBlock Text="{Binding}"/>
+                                    <TextBlock Text="{Binding}" Margin="0,0,5,0"/>
                                 </StackPanel>
                             </Border>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-                <ItemsControl ItemsSource="{Binding DetailedFailModel.Bids}">
+                <ItemsControl ItemsSource="{Binding DetailedFailModel.Bids}" HorizontalAlignment="Stretch">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <ItemsStackPanel Orientation="Vertical" />
+                            <StackPanel Orientation="Vertical" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border BorderThickness="4" CornerRadius="2">
-                                <StackPanel>
-                                    <TextBlock Text="{Binding UserInfo.Name}"/>
-                                    <TextBlock Text="{Binding Budget}"/>
-                                    <TextBlock Text="{Binding  Description}"/>
-                                    <TextBlock Text="{Binding  Active}"/>
-                                </StackPanel>
+                            <Border BorderThickness="2,4,4,4" CornerRadius="2" BorderBrush="Purple" HorizontalAlignment="Stretch" Margin="0,4" Width="400" >
+                                <Grid Margin="10,5" >
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Text="{Binding UserInfo.Name}" Foreground="#FF212121"  Grid.Row="0" FontSize="20"/>
+                                    <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <TextBlock Text="{Binding Budget}" Foreground="#FF212121"   FontSize="24"/>
+                                        <TextBlock Text="zł"  FontSize="20" Foreground="#FF212121" Margin="0,3,0,0"/>
+                                    </StackPanel>
+                                    <TextBlock Text="{Binding  Description}" Foreground="#FF212121" Grid.Row="2" FontSize="16" TextWrapping="WrapWholeWords"/>
+                                    <TextBlock Grid.Row="3" Text="{Binding  Active}"/>
+                                </Grid>
                             </Border>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>

@@ -20,6 +20,11 @@ namespace ZreperujTo.UWP.Views
             var im = sender as Image;
             var uri = im.Source; //ToDo make fullscreen
         }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
     }
 }
 
