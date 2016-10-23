@@ -8,6 +8,7 @@ using Windows.Security.Authentication.Web;
 using Template10.Services.NavigationService;
 using Windows.UI.Xaml.Navigation;
 using ZreperujTo.UWP.Helpers;
+using ZreperujTo.UWP.Models.BidModels;
 using ZreperujTo.UWP.Models.CommonModels;
 using ZreperujTo.UWP.Models.FailModels;
 using ZreperujTo.UWP.Models.FileInfoModels;
@@ -127,6 +128,7 @@ namespace ZreperujTo.UWP.ViewModels
         private ZreperujToHelper _zreperujToHelper;
         private UserInfoReadModel _loggedProfile;
         private List<FailMetaModel> _loggedProfileFailMetaModels;
+        private List<BidReadModel> _loggedProfileBids;
 
         public UserInfoReadModel LoggedProfile
         {
@@ -165,6 +167,16 @@ namespace ZreperujTo.UWP.ViewModels
             }
         }
 
+        public List<BidReadModel> LoggedProfileBids
+        {
+            get { return _loggedProfileBids; }
+            set
+            {
+                _loggedProfileBids = value; 
+                RaisePropertyChanged();
+            }
+        }
+
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
             if (suspensionState.Any())
@@ -186,8 +198,13 @@ namespace ZreperujTo.UWP.ViewModels
         private async Task LoadProfile()
         {
             _zreperujToHelper = new ZreperujToHelper();
-            LoggedProfile = await _zreperujToHelper.GetProfileInfoAsync();
-            LoggedProfileFailMetaModels = await _zreperujToHelper.GetProfileFailsAsync();
+            var profileTask = _zreperujToHelper.GetProfileInfoAsync();
+            var bidsTask = _zreperujToHelper.GetProfileBidsAsync();
+            var failsTask = _zreperujToHelper.GetProfileFailsAsync();
+            await Task.WhenAll(profileTask, bidsTask, failsTask);
+            LoggedProfile = profileTask.Result;
+            LoggedProfileBids = bidsTask.Result;
+            LoggedProfileFailMetaModels = failsTask.Result;
             // ReSharper disable once ExplicitCallerInfoArgument
             RaisePropertyChanged(nameof(RatingAverage));
         }
