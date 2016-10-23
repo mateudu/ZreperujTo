@@ -70,7 +70,54 @@
                 @Model.UserInfo.MobileNumber<br/>
                 @Model.UserInfo.Email
             </p>
-            <a class="btn btn-primary btn-makebid">Złóż ofertę!</a>
+            <a class="btn btn-primary btn-makebid" id="contact">Złóż ofertę!</a>
+            <div class="messagepop pop text-right">
+                    <input type="hidden" name="FailId" value="@Model.Id">
+                    <p>
+                        <label for="Budget">Cena:</label><textarea rows="6" name="Budget" id="Budget" cols="35"></textarea>
+                    </p>
+                    <p>
+                        <label for="Description">Opis:</label><input type="text" size="30" name="Description" id="Description" />
+                    </p>
+                    <p>
+                        <a class="btn btn-primary text-uppercase" id="sendBid">Złóż ofertę</a>
+                        <a class="btn btn-primary close text-uppercase" href="/">Anuluj</a>
+                        @*<input type="submit" value="Send Message" name="commit" id="message_submit" /> or <a class="close" href="/">Cancel</a>*@
+                        <script>
+                            $("#sendBid").click(function() {
+                                $.ajax({
+                                    contentType: "application/json",
+                                    type: "POST",
+                                    url: window.location.protocol + "//" + window.location.host + "/" + 'api/Fails/Details/@Model.Id/Bids/MakeBid',
+                                    data: JSON.stringify({
+                                        FailId: "@Model.Id",
+                                        Description: $("#Description").val(),
+                                        Budget: $("#Budget").val()
+                                    }),
+                                    success: function (result) {
+                                        $().redirect(window.location.protocol + "//" + window.location.host + "/" + 'Fails/Details/@Model.Id');
+                                    },
+                                    dataType: "json"
+                                });
+
+                                @*$.post(window.location.protocol + "//" + window.location.host + "/" + 'api/Fails/Details/@Model.Id/Bids/MakeBid',
+                                        {
+                                            "FailId": "@Model.Id",
+                                            "Description": $("#Description").val(),
+                                            "Budget": $("#Budget").val()
+                                        },
+                                        function(result) {
+                                            $().redirect(window.location.protocol + "//" + window.location.host + "/" + 'Fails/Details/@Model.Id');
+                                        },
+                                        "application/json"
+                                        );*@
+                                }
+
+                            );
+                        </script>
+                    </p>
+            </div>
+
         </div>
     </div>
     @if (Model.Bids != null && Model.Bids.Any())
@@ -112,7 +159,6 @@
             </div>
         </div>
     }
-    
     
     <div></div>
     <dl class="dl-horizontal">

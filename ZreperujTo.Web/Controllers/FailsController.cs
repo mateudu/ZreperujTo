@@ -64,7 +64,7 @@ namespace ZreperujTo.Web.Controllers
             return View(obj);
         }
 
-        // GET: Fail/Details/5
+        // GET: Fails/Details/5
         [HttpGet("Details/{id}")]
         public async Task<IActionResult> Details(string id)
         {
@@ -115,6 +115,58 @@ namespace ZreperujTo.Web.Controllers
             //}
             //return View(applicationUser);
             return RedirectToAction("Index");
+        }
+        
+        // POST: Fails/MakeBid
+        [HttpPost("MakeBid")]
+        public async Task<IActionResult> MakeBid([Bind("FailId,Description,Budget")]BidWriteModel bid)
+        {
+            ObjectId failId;
+            if (bid == null)
+            {
+                ModelState.AddModelError("bid", "Request body cannot be empty");
+            }
+            if (!ObjectId.TryParse(bid.FailId, out failId))
+            {
+                ModelState.AddModelError("id", "Invalid 'id' of fail");
+            }
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            try
+            {
+                string userId = User.GetSubId();
+                var dbModel = new BidDbModel
+                {
+                    Active = true,
+                    Assigned = false,
+                    Budget = bid.Budget,
+                    Description = bid.Description,
+                    FailId = failId,
+                    UserId = userId
+                };
+                await _serviceCore.AddBidAsync(dbModel);
+            }
+            catch (FailDoesNotExistException)
+            {
+                ModelState.AddModelError("id", "The fail does not exist");
+            }
+            catch (FailAlreadyAssignedException)
+            {
+                ModelState.AddModelError("id", "The fail is already assigned");
+            }
+            catch (InactiveFailException)
+            {
+                ModelState.AddModelError("id", "The fail is inactive");
+            }
+            catch (Exception)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            return RedirectToAction("Details", new {id = failId.ToString()});
         }
 
         public class BrowseFailsViewModel

@@ -6,11 +6,13 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing.Constraints;
 using MongoDB.Bson;
 using ZreperujTo.Web.Data;
 using ZreperujTo.Web.Helpers;
+using ZreperujTo.Web.Models;
 using ZreperujTo.Web.Models.BidModels;
 using ZreperujTo.Web.Models.CategoryModels;
 using ZreperujTo.Web.Models.CommonModels;
@@ -26,10 +28,17 @@ namespace ZreperujTo.Web.Controllers.Api
     public class FailsApiController : Controller
     {
         private readonly IZreperujToService _serviceCore;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public FailsApiController(IZreperujToService serviceCore)
+
+        public FailsApiController(IZreperujToService serviceCore,
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager)
         {
             _serviceCore = serviceCore;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
         
         // GET: api/Fails/Browse/{categoryId?}/{subcategoryId?}
@@ -92,7 +101,7 @@ namespace ZreperujTo.Web.Controllers.Api
 
         // POST: api/Fails/Create
         [HttpPost("Create")]
-        [Authorize(ActiveAuthenticationSchemes = "Bearer")]
+        [Authorize]
         [ProducesResponseType(typeof(FailReadModel), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Post([FromBody]FailWriteModel writeModel)
         {
@@ -183,7 +192,7 @@ namespace ZreperujTo.Web.Controllers.Api
 
         // POST: api/Fails/Details/5/MakeBid
         [HttpPost("Details/{id}/Bids/MakeBid")]
-        [Authorize(ActiveAuthenticationSchemes = "Bearer")]
+        [Authorize]
         public async Task<IActionResult> MakeBid(string id, [FromBody]BidWriteModel bid)
         {
             ObjectId failId;
@@ -200,6 +209,10 @@ namespace ZreperujTo.Web.Controllers.Api
             try
             {
                 string userId = User.GetSubId();
+                if (String.IsNullOrWhiteSpace(userId))
+                {
+                    userId = _userManager.GetUserId(User);
+                }
                 var dbModel = new BidDbModel
                 {
                     Active = true,
