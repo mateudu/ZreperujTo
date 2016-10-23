@@ -69,17 +69,18 @@
                 <AppBarButton Click="{x:Bind ViewModel.GotoSettings}" Label="Ustawienia" />
                 <AppBarButton Click="{x:Bind ViewModel.GotoPrivacy}" Label="Regulamin" />
                 <AppBarButton Click="{x:Bind ViewModel.GotoAbout}" Label="O aplikacji" />
-                <AppBarButton Click="{x:Bind ViewModel.LogOut}" Label="Wyloguj siê" />
+                <AppBarButton Click="{x:Bind ViewModel.LogOut}" Label="Wyloguj się" />
             </controls:PageHeader.SecondaryCommands>
 
         </controls:PageHeader>
 
-        <ScrollViewer x:Name="ScrollViewer" Grid.Row="1">
+        <ScrollViewer x:Name="ScrollViewer" Grid.Row="1" VerticalScrollBarVisibility="Hidden">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
+                    <RowDefinition />
                 </Grid.RowDefinitions>
                 <Border BorderBrush="#BDBDBD" BorderThickness="0,1" >
                     <Grid Grid.Row="0" HorizontalAlignment="Right" Margin="1,5">
