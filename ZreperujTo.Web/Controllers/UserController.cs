@@ -33,7 +33,7 @@ namespace ZreperujTo.Web.Controllers
         }
 
         [HttpGet("")]
-        [HttpGet("userId")]
+        [HttpGet("{userId}")]
         public async Task<IActionResult> Index(string userId=null)
         {
             bool isOwner = false;
