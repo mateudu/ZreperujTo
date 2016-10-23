@@ -201,10 +201,10 @@ namespace ZreperujTo.UWP.ViewModels
             var profileTask = _zreperujToHelper.GetProfileInfoAsync();
             var bidsTask = _zreperujToHelper.GetProfileBidsAsync();
             var failsTask = _zreperujToHelper.GetProfileFailsAsync();
-            await Task.WhenAll(profileTask, bidsTask, failsTask);
-            LoggedProfile = profileTask.Result;
-            LoggedProfileBids = bidsTask.Result;
-            LoggedProfileFailMetaModels = failsTask.Result;
+            //await Task.WhenAll(profileTask, bidsTask, failsTask);
+            LoggedProfile = await profileTask;
+            LoggedProfileFailMetaModels = await failsTask;
+            LoggedProfileBids = await bidsTask;
             // ReSharper disable once ExplicitCallerInfoArgument
             RaisePropertyChanged(nameof(RatingAverage));
         }
