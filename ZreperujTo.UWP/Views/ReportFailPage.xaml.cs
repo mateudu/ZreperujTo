@@ -1,6 +1,8 @@
+using System;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
+using ZreperujTo.UWP.Models.CategoryModels;
 
 namespace ZreperujTo.UWP.Views
 {
@@ -15,7 +17,7 @@ namespace ZreperujTo.UWP.Views
         private void UIElement_OnTapped(object sender, TappedRoutedEventArgs e)
         {
             var im = sender as Image;
-            var uri = im.Source;//ToDo make fullscreen
+            var uri = im.Source; //ToDo make fullscreen
         }
     }
 }

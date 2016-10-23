@@ -12,5 +12,9 @@ namespace ZreperujTo.UWP.Models.CategoryModels
         public string Name { get; set; }
 
         public List<SubcategoryReadModel> Subcategories { get; set; }
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

@@ -39,6 +39,7 @@ namespace ZreperujTo.UWP.ViewModels
             _zreperujToHelper = new ZreperujToHelper();
             
             var x = await _zreperujToHelper.GetCategoriesAsync();
+            Cache.Categories = x.ToList();
             var y = x.ToList();
             var allsubs = new List<SubcategoryReadModel>();
             foreach (var vr in y)

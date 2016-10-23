@@ -101,6 +101,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Cache.cs" />
     <Compile Include="Converters\BoolToVis.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Helpers\ZreperujToHelper.cs" />
