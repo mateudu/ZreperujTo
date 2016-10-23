@@ -32,14 +32,14 @@ namespace ZreperujTo.UWP.Helpers
             var output = JsonConvert.SerializeObject(obj);
             return new StringContent(output, Encoding.UTF8, "application/json");
         }
-        public async Task<List<CategoryReadModel>> GetCategoriesAsync()
+        public async Task<CategoryReadModel[]> GetCategoriesAsync()
         {
             try
             {
                 var url = new Uri($"{_apiUrl}/Categories");
                 var result = await _client.GetAsync(url);
                 var response = await result.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<List<CategoryReadModel>>(response);
+                return JsonConvert.DeserializeObject<CategoryReadModel[]>(response);
             }
             catch (Exception)
             {

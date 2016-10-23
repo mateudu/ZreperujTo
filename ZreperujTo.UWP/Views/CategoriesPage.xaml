@@ -58,7 +58,10 @@
                       RelativePanel.AlignRightWithPanel="True"
                       RelativePanel.Below="pageHeader"
                       VerticalScrollBarVisibility="Auto">
-            <ListView ItemsSource="{Binding CategoryReadModels}" DisplayMemberPath="Name" SelectionMode="Single" ItemClick="{x:Bind ViewModel.GoToSubcategoriesPage}" SelectedItem="{Binding SelectedCategory}"/>
+            <Grid>
+            <ListView ItemsSource="{Binding CategoryReadModels}" DisplayMemberPath="Name" SelectionMode="Single" SelectedItem="{Binding SelectedCategory}"/>
+                <Button Click="{x:Bind ViewModel.GoToSubcategoriesPage}" Content="Dalej"/>
+            </Grid>
         </ScrollViewer>
 
     </RelativePanel>

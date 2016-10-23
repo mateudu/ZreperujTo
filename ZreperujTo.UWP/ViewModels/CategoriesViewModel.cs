@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.Devices.Sensors;
 using Template10.Mvvm;
 using Template10.Services.NavigationService;
 using Windows.UI.Xaml.Navigation;
@@ -37,19 +39,24 @@ namespace ZreperujTo.UWP.ViewModels
             _zreperujToHelper = new ZreperujToHelper();
             
             var x = await _zreperujToHelper.GetCategoriesAsync();
+            var y = x.ToList();
             var allsubs = new List<SubcategoryReadModel>();
-            foreach (var vr in x)
+            foreach (var vr in y)
             {
                 if (vr.Subcategories.Count > 1) allsubs.AddRange(vr.Subcategories);
                 if (vr.Subcategories.Count == 1) allsubs.Add(vr.Subcategories.First());
             }
-            x.Insert(0, new CategoryReadModel {Name = "Wszystkie", Subcategories = allsubs , Id = "1"});
-            CategoryReadModels = x;
+           y.Insert(0, new CategoryReadModel {Name = "Wszystkie", Subcategories = allsubs , Id = "1"});
+            CategoryReadModels = y;
 
         }
 
-        public void GoToSubcategoriesPage()
+        public async void GoToSubcategoriesPage()
         {
+            while (SelectedCategory == null)
+            {
+                await Task.Delay(TimeSpan.FromMilliseconds(50));
+            }
             NavigationService.Navigate(typeof(Views.SubcategoriesPage), SelectedCategory);
         }
 
@@ -67,7 +74,7 @@ namespace ZreperujTo.UWP.ViewModels
             }
         }
 
-        public CategoryReadModel SelectedCategory { get; }
+        public CategoryReadModel SelectedCategory { get; set; }
 
         public override async Task OnNavigatedFromAsync(IDictionary<string, object> suspensionState, bool suspending)
         {
