@@ -91,7 +91,7 @@ namespace ZreperujTo.UWP.ViewModels
                             }
                         }
                     },
-                                        new FailMetaModel
+                    new FailMetaModel
                     {
                         Active = true,
                         AuctionValidThrough = DateTime.Today.AddDays(1),
@@ -147,7 +147,7 @@ namespace ZreperujTo.UWP.ViewModels
         public List<FailMetaModel> LoggedProfileFailMetaModels
         {
             get { return _loggedProfileFailMetaModels; }
-            set
+            private set
             {
                 _loggedProfileFailMetaModels = value;
                 RaisePropertyChanged();

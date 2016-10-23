@@ -18,6 +18,21 @@ namespace ZreperujTo.UWP.ViewModels
             {
                 if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
                 {
+                    CategoryReadModels = new List<CategoryReadModel>
+                    {
+                        new CategoryReadModel
+                        {
+                            Name = "Mechanika"
+                        },
+                        new CategoryReadModel
+                        {
+                            Name = "Hydraulika"
+                        },
+                        new CategoryReadModel
+                        {
+                            Name = "Technika Grzewcza"
+                        }
+                    };
                 }
             }
         }

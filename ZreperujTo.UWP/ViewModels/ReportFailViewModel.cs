@@ -77,6 +77,11 @@ namespace ZreperujTo.UWP.ViewModels
             }
         }
 
+        public object ImageSource
+        {
+            get { throw new System.NotImplementedException(); }
+        }
+
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
             CameraCaptureUI dialog = new CameraCaptureUI();
