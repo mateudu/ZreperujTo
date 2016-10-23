@@ -26,7 +26,7 @@
                                Text="Profil" />
                 </StackPanel>
             </Controls:HamburgerButtonInfo>
-            <Controls:HamburgerButtonInfo PageType="viewModels:FailsByCategoriesViewModel" 
+            <Controls:HamburgerButtonInfo PageType="views:FailsByCategoriesPage" 
                                           AutomationProperties.Name="Jerry"
                                           >
                 <StackPanel Orientation="Horizontal">

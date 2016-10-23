@@ -64,6 +64,10 @@ namespace ZreperujTo.UWP.ViewModels
 
         }
 
+        public void GoToCategoriesSelection()
+        {
+            NavigationService.Navigate(typeof(Views.CategoriesPage));
+        }
 
         public List<FailMetaModel> FailMetaModels
         {

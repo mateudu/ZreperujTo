@@ -18,7 +18,7 @@
         <AppBar IsOpen="True" IsSticky="True">
             <StackPanel Orientation="Horizontal">
             <AppBarButton Icon="Add" Label="Zgłoś usterkę" IsCompact="False" />
-            <AppBarButton Icon="Filter" Label="Filtruj" IsCompact="False" />
+            <AppBarButton Icon="Filter" Label="Filtruj" IsCompact="False" Click="{x:Bind ViewModel.GoToCategoriesSelection}" />
             </StackPanel>
         </AppBar>
     </Page.BottomAppBar>

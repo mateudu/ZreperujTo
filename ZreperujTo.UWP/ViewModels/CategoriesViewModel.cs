@@ -37,7 +37,12 @@ namespace ZreperujTo.UWP.ViewModels
             _zreperujToHelper = new ZreperujToHelper();
             
             var x = await _zreperujToHelper.GetCategoriesAsync();
-            var allsubs = x.SelectMany(model => model.Subcategories).ToList();
+            var allsubs = new List<SubcategoryReadModel>();
+            foreach (var vr in x)
+            {
+                if (vr.Subcategories.Count > 1) allsubs.AddRange(vr.Subcategories);
+                if (vr.Subcategories.Count == 1) allsubs.Add(vr.Subcategories.First());
+            }
             x.Insert(0, new CategoryReadModel {Name = "Wszystkie", Subcategories = allsubs , Id = "1"});
             CategoryReadModels = x;
 
