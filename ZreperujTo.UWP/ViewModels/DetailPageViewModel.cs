@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Windows.UI;
+using Windows.UI.Xaml.Media;
 using Template10.Mvvm;
 using Template10.Services.NavigationService;
 using Windows.UI.Xaml.Navigation;
@@ -75,16 +78,22 @@ namespace ZreperujTo.UWP.ViewModels
             }
         }
 
-        private string _Value = "Default";
+        private object _Value ;
 
-        public string Value
+
+        public object BackgroundColor
         {
-            get { return _Value; }
-            set { Set(ref _Value, value); }
+            get { return _backgroundColor; }
+            set
+            {
+                _backgroundColor = value;
+                RaisePropertyChanged();
+            }
         }
 
         private ZreperujToHelper _zreperujToHelper;
         private FailReadModel _detailedFailModel;
+        private object _backgroundColor;
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
@@ -113,7 +122,7 @@ namespace ZreperujTo.UWP.ViewModels
         {
             if (suspending)
             {
-                suspensionState[nameof(Value)] = Value;
+                //suspensionState[nameof(Value)] = Value;
             }
             await Task.CompletedTask;
         }
@@ -122,6 +131,12 @@ namespace ZreperujTo.UWP.ViewModels
         {
             args.Cancel = false;
             await Task.CompletedTask;
+        }
+        public async void AcceptBid()
+        {
+            await _zreperujToHelper.AcceptBidAsync(DetailedFailModel, DetailedFailModel.Bids.First());
+            BackgroundColor = new SolidColorBrush(Color.FromArgb(0xFF, 0, 0xFF, 0)); 
+
         }
     }
 }

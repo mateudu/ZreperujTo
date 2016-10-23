@@ -139,6 +139,8 @@ namespace ZreperujTo.UWP.ViewModels
                 RaisePropertyChanged();
                 // ReSharper disable once ExplicitCallerInfoArgument
                 RaisePropertyChanged(nameof(RatingAverage));
+                // ReSharper disable once ExplicitCallerInfoArgument
+                RaisePropertyChanged(nameof(IsCompany));
             }
         }
 
@@ -159,10 +161,10 @@ namespace ZreperujTo.UWP.ViewModels
         {
             get
             {
-                if (LoggedProfile?.RatingSum != null || LoggedProfile?.RatingCount > 0)
-                    return
-                        ((double) LoggedProfile.RatingSum/LoggedProfile.RatingCount).ToString(
-                            CultureInfo.InvariantCulture) + "/5";
+                //if (LoggedProfile?.RatingSum != null || LoggedProfile?.RatingCount > 0)
+                //    return
+                //        ((double) LoggedProfile.RatingSum/LoggedProfile.RatingCount).ToString(
+                //            CultureInfo.InvariantCulture) + "/5";
                 return "5/5";
             }
         }
@@ -281,6 +283,8 @@ namespace ZreperujTo.UWP.ViewModels
                 return null;
             }
         }
+
+
 
         public override async Task OnNavigatedFromAsync(IDictionary<string, object> suspensionState, bool suspending)
         {

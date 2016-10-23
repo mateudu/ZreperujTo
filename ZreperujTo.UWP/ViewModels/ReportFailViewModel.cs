@@ -94,10 +94,10 @@ namespace ZreperujTo.UWP.ViewModels
 
         public object ImageSource
         {
-            get { return _imageSource; }
+            get { return photo; }
             set
             {
-                _imageSource = value;
+                photo = value as StorageFile;
                 RaisePropertyChanged();
             }
         }
