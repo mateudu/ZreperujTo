@@ -93,6 +93,8 @@ namespace ZreperujTo.UWP.ViewModels
             args.Cancel = false;
             await Task.CompletedTask;
         }
+        public void GotoDetailsPage(FailMetaModel failMetaModel) =>
+    NavigationService.Navigate(typeof(Views.DetailPage), failMetaModel);
     }
 }
 

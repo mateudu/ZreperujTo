@@ -131,7 +131,7 @@
                                     <TextBlock Text="{Binding Budget}" Foreground="#FF212121"   FontSize="24"/>
                                         <TextBlock Text="zł"  FontSize="20" Foreground="#FF212121" Margin="0,3,0,0"/>
                                     </StackPanel>
-                                    <TextBlock Text="{Binding  Description}" Foreground="#FF212121" Grid.Row="2" FontSize="16"/>
+                                    <TextBlock Text="{Binding  Description}" Foreground="#FF212121" Grid.Row="2" FontSize="16" TextWrapping="WrapWholeWords"/>
                                     <TextBlock Grid.Row="3" Text="{Binding  Active}"/>
                                 </Grid>
                             </Border>

@@ -58,17 +58,19 @@
                       RelativePanel.AlignRightWithPanel="True"
                       RelativePanel.Below="pageHeader"
                       VerticalScrollBarVisibility="Auto">
-            <StackPanel>
-                <Image x:Name="imageControl" Width="200" Height="200"/>
-                <ComboBox ItemsSource="{x:Bind ViewModel.Categories}" 
-                          SelectionChanged="{x:Bind ViewModel.CategorySelector_OnSelectionChanged}" Header="Kategoria">
-                </ComboBox>
-                <Button IsEnabled="{x:Bind ViewModel.SendEnabled, Mode=TwoWay}">Wyślij</Button>
-                <ComboBox Header="Podkategoria" ItemsSource="{x:Bind ViewModel.Subcategories}"
-                          SelectionChanged="{x:Bind ViewModel.SubcategorySelector_OnSelectionChanged}"></ComboBox>
-                <TextBox Header="Tytuł"></TextBox>
-                <TextBox Header="Opis"></TextBox>
-                <CheckBox Content="Czy pilne?"></CheckBox>
+            <StackPanel Margin="10">
+                <Image x:Name="imageControl" Width="200" Height="200" />
+                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                    <ComboBox ItemsSource="{x:Bind ViewModel.Categories}"
+                              SelectionChanged="{x:Bind ViewModel.CategorySelector_OnSelectionChanged}"
+                              Header="Kategoria" Margin="0,0,19,0" />
+                    <ComboBox Header="Podkategoria" ItemsSource="{x:Bind ViewModel.Subcategories}"
+                              SelectionChanged="{x:Bind ViewModel.SubcategorySelector_OnSelectionChanged}" />
+                </StackPanel>
+                <TextBox Header="Tytuł" />
+                <TextBox Header="Opis" TextChanged="TextBox_TextChanged" MinHeight="100" TextWrapping="Wrap" />
+                <CheckBox Content="Czy pilne?" />
+                <Button IsEnabled="{x:Bind ViewModel.SendEnabled, Mode=TwoWay}" Content="Wyślij" HorizontalAlignment="Center" FontSize="36"/>
             </StackPanel>
         </ScrollViewer>
     </RelativePanel>
