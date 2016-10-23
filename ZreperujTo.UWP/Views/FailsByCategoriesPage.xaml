@@ -1,4 +1,4 @@
-﻿<Page x:Class="ZreperujTo.UWP.Views.FailsByCategoriesViewModel"
+﻿<Page x:Class="ZreperujTo.UWP.Views.FailsByCategoriesPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:Behaviors="using:Template10.Behaviors"
@@ -8,12 +8,20 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="using:ZreperujTo.UWP.Views"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      xmlns:vm="using:ZreperujTo.UWP.ViewModels" x:Name="FailsByCategories"
+      xmlns:vm="using:ZreperujTo.UWP.ViewModels"
       mc:Ignorable="d">
 
     <Page.DataContext>
         <vm:FailsByCategoriesViewModel x:Name="ViewModel" />
     </Page.DataContext>
+    <Page.BottomAppBar>
+        <AppBar IsOpen="True" IsSticky="True">
+            <StackPanel Orientation="Horizontal">
+            <AppBarButton Icon="Add" Label="Zgłoś usterkę" IsCompact="False" />
+            <AppBarButton Icon="Filter" Label="Filtruj" IsCompact="False" />
+            </StackPanel>
+        </AppBar>
+    </Page.BottomAppBar>
 
     <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 

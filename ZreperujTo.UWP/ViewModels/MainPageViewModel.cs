@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System;
 using System.Globalization;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Windows.Security.Authentication.Web;
 using Template10.Services.NavigationService;

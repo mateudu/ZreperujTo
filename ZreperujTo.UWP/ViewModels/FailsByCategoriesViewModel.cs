@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Template10.Common;
 using Template10.Mvvm;
 using Template10.Services.NavigationService;
 using Windows.UI.Xaml.Navigation;
@@ -37,11 +34,26 @@ namespace ZreperujTo.UWP.ViewModels
 
         List<FailMetaModel> _failMetaModels;
 
-        private List<CategoryReadModel> _categoryReadModels;
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
             await Task.CompletedTask;
-            await LoadFailsByCategoriesAsync();
+            if (parameter is CategoryReadModel) await LoadFailsByCategoriesAsync((CategoryReadModel)parameter);
+            else if (parameter is SubcategoryReadModel) await LoadFailsByCategoriesAsync((SubcategoryReadModel)parameter);
+            else await LoadFailsByCategoriesAsync();
+        }
+
+        private async Task LoadFailsByCategoriesAsync(CategoryReadModel categoryReadModel)
+        {
+            _zreperujToHelper = new ZreperujToHelper();
+
+            FailMetaModels = await _zreperujToHelper.BrowseFailsAsync(categoryReadModel);
+        }
+
+        private async Task LoadFailsByCategoriesAsync(SubcategoryReadModel subcategoryReadModel)
+        {
+            _zreperujToHelper = new ZreperujToHelper();
+
+            FailMetaModels = await _zreperujToHelper.BrowseFailsAsync(subcategoryReadModel);
         }
 
         private async Task LoadFailsByCategoriesAsync()
@@ -49,7 +61,6 @@ namespace ZreperujTo.UWP.ViewModels
             _zreperujToHelper = new ZreperujToHelper();
 
             FailMetaModels = await _zreperujToHelper.BrowseFailsAsync();
-            await _zreperujToHelper.GetCategoriesAsync();
 
         }
 
@@ -63,19 +74,6 @@ namespace ZreperujTo.UWP.ViewModels
             set
             {
                 _failMetaModels = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public List<CategoryReadModel> CategoryReadModels
-        {
-            get
-            {;
-                return _categoryReadModels;
-            }
-            set
-            {
-                _categoryReadModels = value;
                 RaisePropertyChanged();
             }
         }

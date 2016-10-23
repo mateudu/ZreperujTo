@@ -1,4 +1,4 @@
-<Page x:Class="ZreperujTo.UWP.Views.MainPage"
+﻿<Page x:Class="ZreperujTo.UWP.Views.MainPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:Behaviors="using:Template10.Behaviors"
@@ -18,7 +18,11 @@
     <Page.Resources>
         <converters:BooleanToVisibilityConverter x:Key="BoolToVis" />
     </Page.Resources>
-
+    <Page.BottomAppBar>
+        <AppBar IsOpen="True" IsSticky="True">
+            <AppBarButton Icon="Add" Label="Zgłoś usterkę" IsCompact="False" />
+        </AppBar>
+    </Page.BottomAppBar>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
         <Grid.RowDefinitions>
@@ -63,7 +67,7 @@
                 <AppBarButton Click="{x:Bind ViewModel.GotoSettings}" Label="Ustawienia" />
                 <AppBarButton Click="{x:Bind ViewModel.GotoPrivacy}" Label="Regulamin" />
                 <AppBarButton Click="{x:Bind ViewModel.GotoAbout}" Label="O aplikacji" />
-                <AppBarButton Click="{x:Bind ViewModel.LogOut}" Label="Wyloguj si�" />
+                <AppBarButton Click="{x:Bind ViewModel.LogOut}" Label="Wyloguj siê" />
             </controls:PageHeader.SecondaryCommands>
 
         </controls:PageHeader>
@@ -106,6 +110,7 @@
                 </Border>
                 <Grid Grid.Row="1">
                     <ScrollViewer HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Hidden" VerticalScrollMode="Disabled">
+                        
                     <ItemsControl ItemsSource="{Binding LoggedProfile.Badges}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>

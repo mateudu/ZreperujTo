@@ -4,9 +4,9 @@ using Windows.UI.Xaml.Input;
 
 namespace ZreperujTo.UWP.Views
 {
-    public sealed partial class DetailPage : Page
+    public sealed partial class SubcategoriesPage : Page
     {
-        public DetailPage()
+        public SubcategoriesPage()
         {
             InitializeComponent();
             NavigationCacheMode = NavigationCacheMode.Disabled;

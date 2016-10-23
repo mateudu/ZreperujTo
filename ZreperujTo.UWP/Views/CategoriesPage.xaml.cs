@@ -1,13 +1,12 @@
-using ZreperujTo.UWP.ViewModels;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 
 namespace ZreperujTo.UWP.Views
 {
-    public sealed partial class FailsByCategoriesViewModel : Page
+    public sealed partial class CategoriesPage : Page
     {
-        public FailsByCategoriesViewModel()
+        public CategoriesPage()
         {
             InitializeComponent();
             NavigationCacheMode = NavigationCacheMode.Disabled;

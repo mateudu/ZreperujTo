@@ -8,6 +8,7 @@
       xmlns:local="using:ZreperujTo.UWP.Views"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:views="using:ZreperujTo.UWP.Views"
+      xmlns:viewModels="using:ZreperujTo.UWP.ViewModels"
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
       mc:Ignorable="d">
 
@@ -25,7 +26,7 @@
                                Text="Profil" />
                 </StackPanel>
             </Controls:HamburgerButtonInfo>
-            <Controls:HamburgerButtonInfo PageType="views:FailsByCategoriesViewModel" 
+            <Controls:HamburgerButtonInfo PageType="viewModels:FailsByCategoriesViewModel" 
                                           AutomationProperties.Name="Jerry"
                                           >
                 <StackPanel Orientation="Horizontal">

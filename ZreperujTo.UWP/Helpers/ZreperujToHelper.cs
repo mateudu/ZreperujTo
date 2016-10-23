@@ -102,11 +102,11 @@ namespace ZreperujTo.UWP.Helpers
                 return null;
             }
         }
-        public async Task<List<FailMetaModel>> BrowseFailsAsync(CategoryReadModel categoryReadModel, SubcategoryReadModel subcategoryReadModel)
+        public async Task<List<FailMetaModel>> BrowseFailsAsync(SubcategoryReadModel subcategoryReadModel)
         {
             try
             {
-                var url = new Uri($"{_apiUrl}/Fails/Browse/{categoryReadModel.Id}/{subcategoryReadModel.Id}");
+                var url = new Uri($"{_apiUrl}/Fails/Browse/{subcategoryReadModel.CategoryId}/{subcategoryReadModel.Id}");
                 var result = await _client.GetAsync(url);
                 var response = await result.Content.ReadAsStringAsync();
                 var obj = JsonConvert.DeserializeObject<List<FailMetaModel>>(response);
