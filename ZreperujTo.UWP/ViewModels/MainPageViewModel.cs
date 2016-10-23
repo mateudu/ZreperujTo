@@ -131,10 +131,12 @@ namespace ZreperujTo.UWP.ViewModels
         public UserInfoReadModel LoggedProfile
         {
             get { return _loggedProfile; }
-            set
+            private set
             {
                 _loggedProfile = value;
                 RaisePropertyChanged();
+                // ReSharper disable once ExplicitCallerInfoArgument
+                RaisePropertyChanged(nameof(RatingAverage));
             }
         }
 
