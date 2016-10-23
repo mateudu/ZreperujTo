@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Media.Capture;
 using Windows.Storage;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Template10.Mvvm;
 using Template10.Services.NavigationService;
@@ -77,6 +79,18 @@ namespace ZreperujTo.UWP.ViewModels
                 }
             }
         }
+        public async void SendButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            Stream stream = await photo.OpenStreamForReadAsync();
+            byte[] bytes;
+            using (var ms = new MemoryStream())
+            {
+                await stream.CopyToAsync(ms);
+                bytes = ms.ToArray();
+            }
+            var result = await helper.UploadPictureAsync(bytes);
+            int a;
+        }
 
         public object ImageSource
         {
@@ -94,9 +108,9 @@ namespace ZreperujTo.UWP.ViewModels
             Size aspectRatio = new Size(16, 9);
             dialog.PhotoSettings.CroppedAspectRatio = aspectRatio;
             var categories = helper.GetCategoriesAsync();
-            var file = await dialog.CaptureFileAsync(CameraCaptureUIMode.Photo);
+            photo = await dialog.CaptureFileAsync(CameraCaptureUIMode.Photo);
             
-            if (file == null)
+            if (photo == null)
             {
                 NavigationService.GoBack();
             }
