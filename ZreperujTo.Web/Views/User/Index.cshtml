@@ -13,7 +13,14 @@
 </div>
 <div class="row">
     <div class="col-sm-8 col-lg-8 col-md-8">
-        <h3>Moje zgłoszenia</h3>
+        @if (Model.IsOwner)
+        {
+            <h3>Moje zgłoszenia:</h3>
+        }
+        else
+        {
+            <h3>Zgłoszenia użytkownika:</h3>
+        }
         @if (Model.Fails == null || !Model.Fails.Any())
         {
             <p>Brak zgłoszeń :)</p>
@@ -72,7 +79,15 @@
         }
     </div>
     <div class="col-sm-4 col-lg-4 col-md-4">
-        <h3>Moje oferty:</h3>
+        @if (Model.IsOwner)
+        {
+            <h3>Moje oferty:</h3>
+        }
+        else
+        {
+            <h3>Oferty użytkownika:</h3>
+        }
+
         @if (Model.BidAndFails == null || !Model.BidAndFails.Any())
         {
             <p>Brak ofert :)</p>

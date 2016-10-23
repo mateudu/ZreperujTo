@@ -15,6 +15,7 @@ using ZreperujTo.Web.Models.FailModels;
 namespace ZreperujTo.Web.Controllers
 {
     [Authorize]
+    [Route("User")]
     public class UserController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -31,12 +32,19 @@ namespace ZreperujTo.Web.Controllers
             _serviceCore = serviceCore;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Index()
+        [HttpGet("")]
+        [HttpGet("userId")]
+        public async Task<IActionResult> Index(string userId=null)
         {
-            var user = _serviceCore.GetUserInfoDbModelAsync(_userManager.GetUserId(User));
-            var bids = _serviceCore.GetBidDbModelsAsync(_userManager.GetUserId(User));
-            var fails = _serviceCore.GetUserFailsMetaAsync(_userManager.GetUserId(User));
+            bool isOwner = false;
+            if (String.IsNullOrWhiteSpace(userId))
+            {
+                userId = _userManager.GetUserId(User);
+                isOwner = true;
+            }
+            var user = _serviceCore.GetUserInfoDbModelAsync(userId);
+            var bids = _serviceCore.GetBidDbModelsAsync(userId);
+            var fails = _serviceCore.GetUserFailsMetaAsync(userId);
             await Task.WhenAll(user, bids, fails);
             var userBidFails = await _serviceCore.GetFailsMetaAsync(bids.Result.Select(x => x.FailId).ToList());
 
@@ -50,7 +58,8 @@ namespace ZreperujTo.Web.Controllers
             {
                 User = user.Result,
                 BidAndFails = list,
-                Fails = fails.Result
+                Fails = fails.Result,
+                IsOwner = isOwner
             };
 
             return View(result);
@@ -61,6 +70,7 @@ namespace ZreperujTo.Web.Controllers
             public UserInfoDbModel User { get; set; }
             public List<KeyValuePair<BidDbModel, FailMetaModel>> BidAndFails { get; set; }
             public List<FailMetaModel> Fails { get; set; }
+            public bool IsOwner { get; set; }
         }
 
         public static string GetBidBackground(BidDbModel model)

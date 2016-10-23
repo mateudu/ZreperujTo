@@ -10,10 +10,12 @@ using MongoDB.Bson;
 using ZreperujTo.Web.Data;
 using ZreperujTo.Web.Helpers;
 using ZreperujTo.Web.Models;
+using ZreperujTo.Web.Models.BidModels;
 using ZreperujTo.Web.Models.CategoryModels;
 using ZreperujTo.Web.Models.CommonModels;
 using ZreperujTo.Web.Models.DbModels;
 using ZreperujTo.Web.Models.FailModels;
+using ZreperujTo.Web.Models.UserInfoModels;
 
 namespace ZreperujTo.Web.Controllers
 {

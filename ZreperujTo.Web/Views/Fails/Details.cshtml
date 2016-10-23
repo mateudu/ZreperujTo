@@ -65,7 +65,7 @@
         </div>
         <div class="col-lg-4 col-sm-6 text-right text-uppercase">
             <h3>Użytkownik:</h3>
-            <h4>@Model.UserInfo.Name</h4>
+            <h4><a asp-controller="User" asp-action="Index" asp-route-userId="@Model.UserInfo.Id">@Model.UserInfo.Name</a></h4>
             <p>
                 @Model.UserInfo.MobileNumber<br/>
                 @Model.UserInfo.Email
@@ -73,6 +73,46 @@
             <a class="btn btn-primary btn-makebid">Złóż ofertę!</a>
         </div>
     </div>
+    @if (Model.Bids != null && Model.Bids.Any())
+    {
+        <div class="row">
+            <div class="col-l6">
+                <h3>Oferty:</h3>
+                <table class="table">
+                    <thead>
+
+                    </thead>
+                    <tbody>
+                        @foreach (var bid in Model.Bids)
+                        {
+                            <tr>
+                                <td>
+                                    <h4>
+                                        <b>
+                                            <a asp-controller="User" asp-action="Index" asp-route-userId="@bid.UserId">
+                                                @bid.UserInfo.Name
+                                            </a>
+                                        </b>, @bid.UserInfo.RatingSum <i class="fa fa-star-o" aria-hidden="true"></i>
+                                    </h4>
+                                    <p>
+                                        @bid.Description
+                                    </p>
+                                </td>
+                                <td>
+                                    @bid.Budget PLN
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                @foreach (var bid in Model.Bids)
+                {
+                    
+                }
+            </div>
+        </div>
+    }
+    
     
     <div></div>
     <dl class="dl-horizontal">
