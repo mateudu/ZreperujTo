@@ -1,10 +1,14 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Template10.Mvvm;
 using Template10.Services.NavigationService;
 using Windows.UI.Xaml.Navigation;
 using ZreperujTo.UWP.Helpers;
+using ZreperujTo.UWP.Models.BidModels;
+using ZreperujTo.UWP.Models.CommonModels;
 using ZreperujTo.UWP.Models.FailModels;
+using ZreperujTo.UWP.Models.FileInfoModels;
 
 namespace ZreperujTo.UWP.ViewModels
 {
@@ -18,7 +22,54 @@ namespace ZreperujTo.UWP.ViewModels
                 {
                     DetailedFailModel = new FailReadModel
                     {
-                        Budget = 254
+                        Active = true,
+                        AuctionValidThrough = DateTime.Today.AddDays(1),
+                        Budget = 100,
+                        Description =
+                            "Kran mi siê urwa³! Kran mi siê urwa³! Kran mi siê urwa³! Kran mi siê urwa³! Kran mi siê urwa³! Kran mi siê urwa³! Kran mi siê urwa³! Kran mi siê urwa³! Kran mi siê urwa³! ",
+                        Title = "Urwany kran",
+                        Location = new LocationInfo
+                        {
+                            City = "Lublin",
+                            District = "Œwit"
+                        },
+                        Requirements = new List<SpecialRequirement> {SpecialRequirement.BronzeOrMore},
+                        Highlited = false,
+                        
+                        Pictures = new List<PictureInfoReadModel>
+                        {
+                            new PictureInfoReadModel
+                            {
+                                OriginalFileUri =
+                                    "http://static.urzadzone.pl/gallery/9710/0_47890dbdf0eb5ed48cbcbb236f0a507af3c6b53f.jpg",
+                                ThumbnailFileUri =
+                                    "http://static.urzadzone.pl/gallery/9710/0_47890dbdf0eb5ed48cbcbb236f0a507af3c6b53f.jpg"
+                            },
+                            new PictureInfoReadModel
+                            {
+                                OriginalFileUri =
+                                    "http://static.urzadzone.pl/gallery/9710/0_47890dbdf0eb5ed48cbcbb236f0a507af3c6b53f.jpg",
+                                ThumbnailFileUri =
+                                    "http://static.urzadzone.pl/gallery/9710/0_47890dbdf0eb5ed48cbcbb236f0a507af3c6b53f.jpg"
+                            }
+                        },
+                        Bids=new List<BidReadModel>
+                        {
+                            new BidReadModel
+                            {
+                                Active = true,
+                                Assigned = true,
+                                Budget = 230,
+                                Description = "Panie marianie ja to zrobiê"
+                            },
+                            new BidReadModel
+                            {
+                                Active = true,
+                                Assigned = true,
+                                Budget = 230,
+                                Description = "Panie marianie ja to zrobiê"
+                            }
+                        }
                     };
                 }
             }

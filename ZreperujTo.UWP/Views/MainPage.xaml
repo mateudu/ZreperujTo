@@ -82,30 +82,28 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Border BorderBrush="#BDBDBD" BorderThickness="0,1" >
-                    <Grid Grid.Row="0" HorizontalAlignment="Right">
+                    <Grid Grid.Row="0" HorizontalAlignment="Right" Margin="1,5">
                         <Grid.RowDefinitions>
                             <RowDefinition />
                             <RowDefinition />
                             <RowDefinition />
                         </Grid.RowDefinitions>
-                        <StackPanel Grid.Row="1" Orientation="Horizontal">
-                            <SymbolIcon Symbol="Mail" />
-                            <TextBlock Text="{Binding LoggedProfile.Email}" />
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="5,1" HorizontalAlignment="Right">
+                            <SymbolIcon Symbol="Mail" Margin="0,0,2,0" />
+                            <TextBlock Text="{Binding LoggedProfile.Email}" Margin="0" />
                         </StackPanel>
-                        <StackPanel Grid.Row="0">
-                            <StackPanel Orientation="Horizontal">
-                                <StackPanel Orientation="Horizontal" Visibility="{Binding LoggedProfile.Company , Converter={StaticResource BoolToVis}}">
-                                    <SymbolIcon Symbol="{Binding IsCompany.SymbolIconText}"/>
+                        <StackPanel Grid.Row="0" Margin="3,1">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding LoggedProfile.Company , Converter={StaticResource BoolToVis}}" Margin="0,0,5,0">
+                                    <SymbolIcon Symbol="{Binding IsCompany.SymbolIconText}" Margin="0,0,2,0"/>
                                     <TextBlock Text="{Binding IsCompany.TextBlockText}" />
                                 </StackPanel>
-
-
                                 <TextBlock Text="{Binding RatingAverage}" />
-                                <SymbolIcon Symbol="SolidStar" />
+                                <SymbolIcon Symbol="SolidStar" Margin="2,0,0,0" />
                             </StackPanel>
                         </StackPanel>
-                        <StackPanel Grid.Row="2" Orientation="Horizontal">
-                            <SymbolIcon Symbol="Phone" />
+                        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="3,1" HorizontalAlignment="Right">
+                            <SymbolIcon Symbol="Phone" Margin="0,0,2,0" />
                             <TextBlock Text="{Binding LoggedProfile.MobileNumber}" />
                         </StackPanel>
                     </Grid>
@@ -121,7 +119,7 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel>
+                                <StackPanel Margin="3">
                                     <Image Source="{Binding ImageUrl}" MaxHeight="50"/>
                                     <TextBlock Text="{Binding Name}" VerticalAlignment="Bottom"/>
                                 </StackPanel>
@@ -139,9 +137,9 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Border BorderBrush="LightBlue" BorderThickness="2" CornerRadius="2" MaxHeight="250" Tapped="UIElement_OnTapped" >
+                                <Border BorderBrush="Green" BorderThickness="2" Margin="3,2" CornerRadius="2" MaxHeight="250" Tapped="UIElement_OnTapped" >
                                     <Grid>
-                                        <ScrollViewer VerticalScrollMode="Disabled" HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Hidden" HorizontalSnapPointsAlignment="Center">
+                                        <ScrollViewer VerticalScrollMode="Disabled" HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Hidden" HorizontalSnapPointsAlignment="Near" HorizontalSnapPointsType="Mandatory" ZoomMode="Disabled">
                                         <ItemsControl ItemsSource="{Binding Pictures}">
                                             <ItemsControl.ItemsPanel>
                                                 <ItemsPanelTemplate>
@@ -157,7 +155,7 @@
                                             </ItemsControl.ItemTemplate>
                                         </ItemsControl>
                                         </ScrollViewer>
-                                        <Grid>
+                                        <Grid Margin="10">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition />
                                                 <ColumnDefinition Width="Auto" />
@@ -167,16 +165,71 @@
                                                     <RowDefinition Height="Auto"/>
                                                     <RowDefinition Height="Auto" />
                                                 </Grid.RowDefinitions>
-                                                <TextBlock Text="{Binding Location.City}" />
-                                                <TextBlock Text="{Binding Location.District}" Grid.Row="1" />
+                                                <TextBlock Text="{Binding Location.District}" FontSize="36" Foreground="White" />
+                                                <TextBlock Text="{Binding Location.City}" Grid.Row="1" FontSize="24" Foreground="WhiteSmoke" />
                                             </Grid>
-                                            <Grid Grid.Column="0" VerticalAlignment="Bottom">
+                                            <Grid Grid.Column="0" VerticalAlignment="Bottom" Margin="0,0,5,0" >
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="Auto" />
                                                     <RowDefinition Height="*" />
                                                 </Grid.RowDefinitions>
-                                                <TextBlock Text="{Binding Title}" Grid.Row="0" />
-                                                <TextBlock Text="{Binding Description}" TextWrapping="WrapWholeWords" Grid.Row="1" />
+                                                <TextBlock Text="{Binding Title}" Grid.Row="0" FontSize="24" FontWeight="Bold" Foreground="White" />
+                                                <TextBlock Text="{Binding Description}" TextWrapping="WrapWholeWords" Grid.Row="1" FontSize="18" Foreground="WhiteSmoke" />
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
+                <Grid Grid.Row="3">
+                    <ItemsControl ItemsSource="{Binding LoggedProfileBids}"> <!--ToDo BiDS!-->
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <ItemsStackPanel Orientation="Vertical"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderBrush="Green" BorderThickness="2" Margin="3,2" CornerRadius="2" MaxHeight="250" Tapped="UIElement_OnTapped" >
+                                    <Grid>
+                                        <ScrollViewer VerticalScrollMode="Disabled" HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Hidden" HorizontalSnapPointsAlignment="Near" HorizontalSnapPointsType="Mandatory" ZoomMode="Disabled">
+                                            <ItemsControl ItemsSource="{Binding Pictures}">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <ItemsStackPanel Orientation="Horizontal"/>
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Grid>
+                                                            <Image Source="{Binding ThumbnailFileUri}" MaxWidth="{Binding ElementName=PageHeader, Path=ActualWidth}" Stretch="UniformToFill"/>
+                                                        </Grid>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </ScrollViewer>
+                                        <Grid Margin="10">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <Grid VerticalAlignment="Bottom" Column="1">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto" />
+                                                </Grid.RowDefinitions>
+                                                <TextBlock Text="{Binding Location.District}" FontSize="36" Foreground="White" />
+                                                <TextBlock Text="{Binding Location.City}" Grid.Row="1" FontSize="24" Foreground="WhiteSmoke" />
+                                            </Grid>
+                                            <Grid Grid.Column="0" VerticalAlignment="Bottom" Margin="0,0,5,0" >
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="*" />
+                                                </Grid.RowDefinitions>
+                                                <TextBlock Text="{Binding Title}" Grid.Row="0" FontSize="24" FontWeight="Bold" Foreground="White" />
+                                                <TextBlock Text="{Binding Description}" TextWrapping="WrapWholeWords" Grid.Row="1" FontSize="18" Foreground="WhiteSmoke" />
                                             </Grid>
                                         </Grid>
                                     </Grid>

@@ -58,9 +58,9 @@
                       RelativePanel.AlignRightWithPanel="True"
                       RelativePanel.Below="pageHeader"
                       VerticalScrollBarVisibility="Auto">
-            <StackPanel>
+            <StackPanel Margin="10">
                 <ScrollViewer VerticalScrollMode="Disabled" HorizontalScrollMode="Enabled"
-                              HorizontalScrollBarVisibility="Hidden" HorizontalSnapPointsAlignment="Center">
+                              HorizontalScrollBarVisibility="Hidden" HorizontalSnapPointsAlignment="Near" HorizontalSnapPointsType="Mandatory" ZoomMode="Disabled" >
                     <ItemsControl ItemsSource="{Binding DetailedFailModel.Pictures}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -77,12 +77,14 @@
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
-                </ScrollViewer>
-                <TextBlock Text="{Binding DetailedFailModel.Budget}"/>
-                <TextBlock Text="{Binding DetailedFailModel.Title}"/>
-                <TextBlock Text="{Binding DetailedFailModel.Description}" TextWrapping="WrapWholeWords"/>
-                <TextBlock Text="{Binding DetailedFailModel.UserInfo.Name}"/>
-                <TextBlock Text="{Binding DetailedFailModel.Location.City}"/>
+                </ScrollViewer><StackPanel Orientation="Horizontal" >
+                    <TextBlock Text="{Binding DetailedFailModel.Budget}" Margin="0,3" FontSize="48" Foreground="#FF212121"/>
+                    <TextBlock Text="z³" VerticalAlignment="Bottom" FontSize="36" Padding="0,0,0,8" Foreground="#FF212121"/>
+                </StackPanel>
+                <TextBlock Text="{Binding DetailedFailModel.Title}" Foreground="#FF212121"/>
+                <TextBlock Text="{Binding DetailedFailModel.Description}" TextWrapping="WrapWholeWords" Foreground="#FF212121"/>
+                <TextBlock Text="{Binding DetailedFailModel.UserInfo.Name}" Foreground="#FF212121"/>
+                <TextBlock Text="{Binding DetailedFailModel.Location.City}" Foreground="#FF212121"/>
                 <TextBlock Text="{Binding DetailedFailModel.Category.Name}"/>
                 <TextBlock Text="{Binding DetailedFailModel.Subcategory.Name}"/>
                 <ItemsControl ItemsSource="{Binding DetailedFailModel.Requirements}">
@@ -104,7 +106,7 @@
                 <ItemsControl ItemsSource="{Binding DetailedFailModel.Bids}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <ItemsStackPanel Orientation="Horizontal" />
+                            <ItemsStackPanel Orientation="Vertical" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
