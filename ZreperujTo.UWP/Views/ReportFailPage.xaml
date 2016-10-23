@@ -59,7 +59,7 @@
                       RelativePanel.Below="pageHeader"
                       VerticalScrollBarVisibility="Auto">
             <StackPanel Margin="10">
-                <Image x:Name="imageControl" Width="200" Height="200" />
+                <Image x:Name="imageControl" Width="200" Height="200" Source="{Binding ImageSource}"/>
                 <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                     <ComboBox ItemsSource="{x:Bind ViewModel.Categories}"
                               SelectionChanged="{x:Bind ViewModel.CategorySelector_OnSelectionChanged}"
