@@ -63,7 +63,8 @@
                 <ComboBox ItemsSource="{x:Bind ViewModel.Categories}" 
                           SelectionChanged="{x:Bind ViewModel.CategorySelector_OnSelectionChanged}" Header="Kategoria">
                 </ComboBox>
-                <Button IsEnabled="{x:Bind ViewModel.SendEnabled, Mode=TwoWay}">Wyślij</Button>
+                <Button IsEnabled="{x:Bind ViewModel.SendEnabled, Mode=TwoWay}"
+                        Click="{x:Bind ViewModel.SendButton_OnClick}">Wyślij</Button>
                 <ComboBox Header="Podkategoria" ItemsSource="{x:Bind ViewModel.Subcategories}"
                           SelectionChanged="{x:Bind ViewModel.SubcategorySelector_OnSelectionChanged}"></ComboBox>
                 <TextBox Header="Tytuł"></TextBox>

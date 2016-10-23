@@ -4,10 +4,12 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Devices.Bluetooth.Advertisement;
 using Newtonsoft.Json;
 using ZreperujTo.UWP.Models.BidModels;
 using ZreperujTo.UWP.Models.CategoryModels;
 using ZreperujTo.UWP.Models.FailModels;
+using ZreperujTo.UWP.Models.FileInfoModels;
 using ZreperujTo.UWP.Models.UserInfoModels;
 
 namespace ZreperujTo.UWP.Helpers
@@ -230,6 +232,18 @@ namespace ZreperujTo.UWP.Helpers
             {
                 return null;
             }
+        }
+
+        public async Task<PictureUploadReadModel> UploadPictureAsync(byte[] picture)
+        {
+            MultipartFormDataContent form = new MultipartFormDataContent();
+            form.Add(new ByteArrayContent(picture,0,picture.Length),"file", "file");
+            var msg = new HttpRequestMessage(HttpMethod.Post, $"{_apiUrl}Upload");
+            msg.Content = form;
+
+            var response = await _client.SendAsync(msg);
+            var result = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<PictureUploadReadModel>(result);
         }
     }
 }
