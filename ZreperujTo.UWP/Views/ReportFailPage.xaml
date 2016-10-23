@@ -50,7 +50,7 @@
         <controls:PageHeader x:Name="pageHeader" Frame="{x:Bind Frame}"
                              RelativePanel.AlignLeftWithPanel="True"
                              RelativePanel.AlignRightWithPanel="True"
-                             RelativePanel.AlignTopWithPanel="True" Text="{Binding DetailedFailModel.Title}" />
+                             RelativePanel.AlignTopWithPanel="True" Text="Zgłoś usterkę" />
 
         <!--  content  -->
         <ScrollViewer RelativePanel.AlignBottomWithPanel="True"
@@ -59,7 +59,7 @@
                       RelativePanel.Below="pageHeader"
                       VerticalScrollBarVisibility="Auto">
             <StackPanel Margin="10">
-                <Image x:Name="imageControl" Width="200" Height="200" Source="{Binding ImageSource}"/>
+                <Image x:Name="imageControl" Width="200" Height="200" Source="{Binding ImageSource, Mode=TwoWay}"/>
                 <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                     <ComboBox ItemsSource="{x:Bind ViewModel.Categories}"
                               SelectionChanged="{x:Bind ViewModel.CategorySelector_OnSelectionChanged}"

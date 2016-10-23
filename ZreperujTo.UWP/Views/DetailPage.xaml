@@ -118,9 +118,11 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border BorderThickness="2,4,4,4" CornerRadius="2" BorderBrush="Purple" HorizontalAlignment="Stretch" Margin="0,4" Width="400" >
+                            <Border BorderThickness="2,4,4,4" CornerRadius="2" BorderBrush="Purple" HorizontalAlignment="Stretch" Margin="0,4" Width="400"  Background="{x:Bind ViewModel.BackgroundColor}" >
+                            
                                 <Grid Margin="10,5" >
                                     <Grid.RowDefinitions>
+                                        <RowDefinition />
                                         <RowDefinition />
                                         <RowDefinition />
                                         <RowDefinition />
@@ -133,6 +135,8 @@
                                     </StackPanel>
                                     <TextBlock Text="{Binding  Description}" Foreground="#FF212121" Grid.Row="2" FontSize="16" TextWrapping="WrapWholeWords"/>
                                     <TextBlock Grid.Row="3" Text="{Binding  Active}"/>
+
+                                    <Button Grid.Row="4" Content="Akceptuj" Click="{x:Bind ViewModel.AcceptBid}"/>
                                 </Grid>
                             </Border>
                         </DataTemplate>
